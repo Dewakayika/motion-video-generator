@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EOI Dashboard Explainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+:root{
+  --chrome-bg:#E9EEF5; --chrome-fg:#0B2A4A; --chrome-muted:#5B6B80; --chrome-panel:#FFFFFF; --chrome-line:#D5DDE8;
+  --bg:#050A16; --panel:#0E1729; --panel2:#131F36; --line:rgba(148,178,230,.16);
+  --fg:#EAF1FB; --mut:#93A4BF; --blue:#3B82F6; --sky:#60A5FA;
+  box-sizing:border-box;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --chrome-bg:#06111F; --chrome-fg:#E6F0FA; --chrome-muted:#8EA0BD; --chrome-panel:#0C1A2E; --chrome-line:#1B2C4A; }
+}
+:root[data-theme="dark"]{ --chrome-bg:#06111F; --chrome-fg:#E6F0FA; --chrome-muted:#8EA0BD; --chrome-panel:#0C1A2E; --chrome-line:#1B2C4A; }
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--chrome-bg);color:var(--chrome-fg);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px}
+#viewport{position:relative;width:min(calc(100vw - 32px),calc((100vh - 130px) * 16 / 9));aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:var(--bg);box-shadow:0 20px 60px rgba(4,12,28,.35)}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--fg);background:var(--bg)}
+
+/* controls */
+#controls{width:min(calc(100vw - 32px),calc((100vh - 130px) * 16 / 9));display:flex;align-items:center;gap:14px;background:var(--chrome-panel);border:1px solid var(--chrome-line);border-radius:12px;padding:10px 14px}
+#controls button{font:inherit;font-size:14px;font-weight:600;color:var(--chrome-fg);background:transparent;border:1px solid var(--chrome-line);border-radius:999px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+#controls button:focus-visible,#scrub:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#time{font-variant-numeric:tabular-nums;font-size:14px;color:var(--chrome-muted);min-width:92px}
+#track{position:relative;flex:1;display:flex;align-items:center}
+#scrub{width:100%;accent-color:var(--blue);margin:0}
+#marks{position:absolute;left:0;right:0;top:-9px;height:6px;pointer-events:none}
+#marks i{position:absolute;top:0;width:2px;height:6px;background:var(--chrome-muted);opacity:.6;border-radius:1px}
+#sceneName{font-size:13px;color:var(--chrome-muted);min-width:170px;text-align:right}
+@media (max-width:700px){#sceneName{display:none}}
+
+/* background */
+.bg{position:absolute;inset:0}
+.blob{position:absolute;border-radius:50%;filter:blur(110px)}
+#blobA{left:-300px;top:-340px;width:1000px;height:1000px;background:rgba(59,130,246,.12)}
+#blobB{display:none}
+#grid{display:none;position:absolute;inset:0;background-image:radial-gradient(rgba(96,165,250,.16) 1.5px,transparent 1.5px);background-size:44px 44px;-webkit-mask-image:radial-gradient(70% 60% at 50% 50%,#000 20%,transparent 75%);mask-image:radial-gradient(70% 60% at 50% 50%,#000 20%,transparent 75%)}
+
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden}
+.w{display:inline-block;opacity:0;will-change:transform}
+.eyebrow{display:inline-flex;align-items:center;font-size:20px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--mut);opacity:0}
+.h{margin:0;font-size:80px;font-weight:600;letter-spacing:-.03em;line-height:1.08;color:var(--fg)}
+.h em{font-style:normal;color:var(--sky)}
+
+/* 1 Intro */
+#s1 .c{position:absolute;left:0;right:0;top:300px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:30px}
+#s1 .sub{font-size:30px;color:var(--mut);opacity:0}
+#s1 .sub b{color:var(--fg);font-weight:600}
+#logo1{position:absolute;left:50%;top:150px;height:58px;transform:translateX(-50%);opacity:0}
+
+/* 2 What is an EOI */
+#eoiCard{position:absolute;left:150px;top:170px;width:660px;padding:42px 46px;border-radius:30px;background:linear-gradient(180deg,#121D33,#0C1528);border:1px solid var(--line);box-shadow:0 40px 90px rgba(0,0,0,.45);opacity:0;visibility:hidden}
+#eoiCard .k{font-size:18px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+#eoiCard .ttl{display:flex;align-items:center;justify-content:space-between;margin-bottom:30px}
+#eoiCard .ttl b{font-size:30px;font-weight:600;letter-spacing:-.01em}
+#eoiCard .ttl span{font-size:18px;font-weight:500;color:var(--mut);padding:8px 14px;border-radius:999px;border:1px solid var(--line)}
+.fld{display:flex;justify-content:space-between;align-items:center;padding:20px 0;border-top:1px solid var(--line);opacity:0}
+.fld .v{font-size:28px;font-weight:600;color:var(--fg)}
+.fld .v small{font-size:20px;color:var(--mut);font-weight:600;margin-right:10px}
+.chips{display:flex;gap:10px}
+.chips span{font-size:20px;font-weight:500;padding:6px 14px;border-radius:10px;border:1px solid var(--line);color:var(--fg)}
+#eoiFoot{margin-top:26px;font-size:20px;color:var(--mut);opacity:0}
+#flowT{position:absolute;left:930px;top:180px;opacity:0}
+#flowT .h{font-size:56px}
+#flow{position:absolute;left:930px;top:330px;width:860px;display:grid;grid-template-columns:repeat(4,1fr);gap:0}
+.node{position:relative;display:flex;flex-direction:column;align-items:flex-start;padding-right:22px;opacity:0}
+.node .dot{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:500;color:var(--fg);background:var(--panel);border:1px solid rgba(148,178,230,.3)}
+.node:first-child .dot{background:var(--blue);border-color:var(--blue);color:#fff}
+.node b{margin-top:22px;font-size:28px;font-weight:600;color:var(--fg)}
+.node span{margin-top:8px;font-size:19px;line-height:1.35;color:var(--mut)}
+.node:not(:last-child)::after{content:"";position:absolute;left:76px;right:8px;top:30px;height:3px;border-radius:2px;background:linear-gradient(90deg,var(--line),rgba(148,178,230,.45))}
+#hold{position:absolute;left:930px;top:620px;display:flex;align-items:center;gap:14px;padding:14px 22px;border-radius:16px;background:var(--panel);border:1px dashed rgba(148,178,230,.35);font-size:21px;color:var(--mut);opacity:0}
+#hold b{color:var(--fg);font-weight:500}
+#notVisa{position:absolute;left:930px;top:720px;display:inline-flex;align-items:center;gap:16px;padding:20px 30px;border-radius:18px;background:var(--panel);border:1px solid var(--line);font-size:30px;font-weight:500;color:var(--fg);opacity:0;visibility:hidden}
+#notVisa svg{width:34px;height:34px;flex:none;color:var(--sky)}
+
+/* dashboard window + camera */
+#win{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:50% 50%;border-radius:22px;overflow:hidden;background:#0A0F1C;box-shadow:0 50px 120px rgba(0,0,0,.6),0 0 0 1px rgba(148,178,230,.18);opacity:0;visibility:hidden}
+#view{position:absolute;left:0;top:0;width:1920px;height:1080px;overflow:hidden;background:#080C17}
+#cam{position:absolute;left:0;top:0;width:1920px;transform-origin:0 0}
+.shot{position:absolute;left:0;top:0;width:1920px;display:block;opacity:0;visibility:hidden}
+.spot{position:absolute;border-radius:14px;border:1.5px solid var(--sky);box-shadow:0 0 0 6000px rgba(3,6,16,.68);opacity:0;visibility:hidden;pointer-events:none}
+
+/* callouts (screen space) */
+#cos{position:absolute;inset:0;pointer-events:none}
+.co{position:absolute;padding:24px 28px;border-radius:18px;background:rgba(12,19,34,.96);border:1px solid rgba(255,255,255,.1);box-shadow:0 24px 60px rgba(0,0,0,.45);opacity:0;visibility:hidden}
+.co .k{display:flex;align-items:center;gap:10px;font-size:16px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--mut)}
+.co .k i{width:8px;height:8px;border-radius:50%;background:var(--sky)}
+.co b{display:block;margin-top:10px;font-size:30px;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.co p{margin:10px 0 0;font-size:21px;line-height:1.45;color:#B7C5DB}
+.co p em{font-style:normal;color:var(--fg);font-weight:500}
+.sum{display:flex;align-items:center;flex-wrap:wrap;gap:12px;margin-top:16px;font-size:22px;font-weight:600;color:var(--mut)}
+.sum span{display:inline-flex;flex-direction:column;padding:10px 16px;border-radius:12px;background:#0A1222;border:1px solid var(--line);color:var(--fg)}
+.sum span small{font-size:15px;color:var(--mut);font-weight:600;letter-spacing:.06em}
+.sum span.tot{background:rgba(59,130,246,.18);border-color:rgba(96,165,250,.5)}
+#cursor{position:absolute;left:0;top:0;width:40px;height:40px;opacity:0;visibility:hidden;filter:drop-shadow(0 6px 10px rgba(0,0,0,.5))}
+#cursor svg{width:100%;height:100%;display:block}
+#ripple{position:absolute;left:0;top:0;width:70px;height:70px;margin:-35px 0 0 -35px;border-radius:50%;border:3px solid var(--sky);opacity:0;visibility:hidden}
+
+/* outro */
+#s12 .c{position:absolute;left:0;right:0;top:140px;display:flex;flex-direction:column;align-items:center;text-align:center}
+#s12 .h{font-size:72px}
+#rules{display:grid;grid-template-columns:repeat(3,500px);gap:30px;margin-top:64px}
+.rule{padding:36px 36px 38px;border-radius:26px;background:var(--panel);border:1px solid var(--line);text-align:left;opacity:0;visibility:hidden}
+.rule .n{width:52px;height:52px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:500;color:var(--fg);border:1px solid rgba(148,178,230,.3)}
+.rule b{display:block;margin-top:24px;font-size:32px;font-weight:600;letter-spacing:-.02em;line-height:1.15}
+.rule p{margin:12px 0 0;font-size:22px;line-height:1.45;color:var(--mut)}
+#logo12{height:52px;margin-top:70px;opacity:0}
+
+/* captions: always on */
+#caps{position:absolute;left:0;right:0;bottom:44px;height:100px;pointer-events:none}
+.cap{position:absolute;left:50%;bottom:0;transform:translateX(-50%);max-width:1560px;width:max-content;padding:18px 36px;border-radius:16px;background:rgba(6,10,20,.86);border:1px solid rgba(255,255,255,.08);font-size:34px;font-weight:500;line-height:1.3;letter-spacing:-.01em;text-align:center;color:#F3F7FD;opacity:0;visibility:hidden}
+.cap em{font-style:normal;color:var(--sky)}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="stage">
+    <div class="bg"><div class="blob" id="blobA"></div><div class="blob" id="blobB"></div><div id="grid"></div></div>
+    <div id="scenes"></div>
+    <div id="win">
+      <div id="view"><div id="cam">
+        <img class="shot" id="shAll" src="shots/all.jpg" alt="">
+        <img class="shot" id="shWA" src="shots/190_wa.jpg" alt="">
+        <img class="shot" id="shNSW" src="shots/189_nsw.jpg" alt="">
+        <img class="shot" id="shHeat" src="shots/heatmap.jpg" alt="">
+        <img class="shot" id="shMat" src="shots/matrix.jpg" alt="">
+        <img class="shot" id="shVicS" src="shots/heat_vic_sub.jpg" alt="">
+        <img class="shot" id="shVicI" src="shots/heat_vic_inv.jpg" alt="">
+        <div class="spot" id="spot"></div>
+      </div></div>
+    </div>
+    <div id="cos"></div>
+    <div id="ripple"></div>
+    <div id="cursor"><svg viewBox="0 0 24 24"><path d="M4 2.5v17.2l4.7-4.4 3 6.6 3-1.4-3-6.4 6.4-.3z" fill="#fff" stroke="#0A0F1C" stroke-width="1.4" stroke-linejoin="round"/></svg></div>
+    <div id="caps"></div>
+  </div>
+</div>
+
+<div id="controls">
+  <button id="play" aria-label="Play">Play</button>
+  <span id="time">0:00 / 1:44</span>
+  <div id="track"><div id="marks"></div><input id="scrub" type="range" min="0" max="104" step="0.01" value="0" aria-label="Seek"></div>
+  <span id="sceneName">1. Intro</span>
+</div>
+
+<script>
+const LOGO='../../assets/interlace/logo-white.png';
+const warnIco='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 21h20L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>';
+
+document.getElementById('scenes').innerHTML=`
+<section class="scene" id="s1">
+  <img id="logo1" src="${LOGO}" alt="Interlace">
+  <div class="c">
+    <div class="eyebrow" id="e1">Migration Intelligence Platform</div>
+    <h1 class="h" id="h1">How to read the <em>EOI&nbsp;Analysis</em> dashboard</h1>
+    <div class="sub" id="sub1">SkillSelect Expression of Interest data · <b>04/2024 to 08/2026</b></div>
+  </div>
+</section>
+
+<section class="scene" id="s2">
+  <div id="eoiCard">
+    <div class="ttl"><b>Expression of Interest</b><span>SkillSelect</span></div>
+    <div class="fld"><span class="k">Occupation</span><span class="v"><small>261313</small>Software Engineer</span></div>
+    <div class="fld"><span class="k">Points score</span><span class="v">85 pts</span></div>
+    <div class="fld"><span class="k">Visa subclasses</span><span class="chips"><span class="c189">189</span><span class="c190">190</span><span class="c491">491</span></span></div>
+    <div class="fld"><span class="k">States</span><span class="v">NSW · VIC</span></div>
+    <div id="eoiFoot">Home Affairs and the states invite people from this pool.</div>
+  </div>
+  <div id="flowT"><div class="eyebrow" id="e2">EOI status</div><h2 class="h" id="h2">How an EOI moves</h2></div>
+  <div id="flow">
+    <div class="node"><div class="dot">1</div><b>Submitted</b><span>In the pool, eligible for invitation rounds</span></div>
+    <div class="node"><div class="dot">2</div><b>Invited</b><span>Invitation to apply, valid 60 days</span></div>
+    <div class="node"><div class="dot">3</div><b>Lodged</b><span>Visa application lodged and in processing</span></div>
+    <div class="node"><div class="dot">4</div><b>Closed</b><span>No longer active</span></div>
+  </div>
+  <div id="hold"><b>Hold</b> on hold, can't be selected (reason not recorded)</div>
+  <div id="notVisa">${warnIco}An EOI is not a visa application</div>
+</section>
+
+<section class="scene" id="s12">
+  <div class="c">
+    <div class="eyebrow" id="e12">Three things to remember</div>
+    <h2 class="h" id="h12">Read the numbers the <em>right way</em></h2>
+    <div id="rules">
+      <div class="rule"><div class="n">1</div><b>Counts are snapshots</b><p>Each month shows the pool on that date. Never add months together.</p></div>
+      <div class="rule"><div class="n">2</div><b>Invited does not last</b><p>Outstanding invitations from the last 60 days, not invitations issued per month.</p></div>
+      <div class="rule"><div class="n">3</div><b>EOIs are not people</b><p>One person can hold EOIs for several states and visas.</p></div>
+    </div>
+    <img id="logo12" src="${LOGO}" alt="Interlace">
+  </div>
+</section>`;
+
+function split(el){
+  const walk=n=>{[...n.childNodes].forEach(c=>{
+    if(c.nodeType===3){const f=document.createDocumentFragment();c.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(t))}else{const s=document.createElement('span');s.className='w';s.textContent=t;f.appendChild(s)}});c.replaceWith(f)}
+    else if(c.nodeType===1&&!c.classList.contains('w'))walk(c)})};
+  walk(el);return el.querySelectorAll('.w');
+}
+
+const stage=document.getElementById('stage'),vp=document.getElementById('viewport');
+let SCALE=1;
+function fit(){SCALE=vp.clientWidth/1920;stage.style.transform=`scale(${SCALE})`}
+window.addEventListener('resize',fit);fit();
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+const DUR=104;
+// on-screen captions [start, end, text]
+const CAP=[
+  [0.6,5.4,"A quick guide to the <em>EOI Analysis</em> dashboard."],
+  [5.8,10.2,"An EOI is a skilled migrant's profile in SkillSelect: occupation, points, visas and states."],
+  [10.4,15,"EOIs move from Submitted to Invited to Lodged. An EOI is not a visa application."],
+  [15.3,20,"The dashboard uses the monthly SkillSelect files from Home Affairs."],
+  [20.3,24.6,"Three filters drive the whole page: <em>month</em>, <em>state</em> and <em>visa subclass</em>."],
+  [24.8,29,"“All” adds up 189, 190, 491 State/Territory and 491 Family."],
+  [29.3,33.2,"Total Active EOIs counts Submitted EOIs: the pool that can be invited."],
+  [33.4,37.2,"Total Estimated Invited shows invitations still open from the last 60 days."],
+  [37.4,41,"The occupation cards count occupations with at least one active EOI."],
+  [41.3,46.4,"Total Count tracks Submitted, Invited and Lodged over the last 25 months."],
+  [46.6,52,"Each point is a snapshot of the pool, so <em>never add months together</em>."],
+  [52.3,59,"Points Distribution compares Submitted and Invited EOIs per points score, from 65."],
+  [59.3,63,"Change a filter and every section updates. Here: subclass 190 in WA."],
+  [63.2,67,"87,301 active EOIs, 43 invited, and most invitations held at 80 points."],
+  [67.3,71,"Occupations are ranked by active EOIs, with the change from last month."],
+  [71.2,75,"Each row also shows estimated invitations, invitation rate and the points range."],
+  [75.3,78.6,"Point Heatmap shows which occupations sit at which points score."],
+  [78.8,82.2,"It has its own filters: the state and the EOI status, Submitted or Invited."],
+  [82.4,86.2,"Submitted shows the pool. Software Engineer in VIC: 766 EOIs at 80 points."],
+  [86.4,90.4,"Switch to Invited to see which occupations got invitations, and at which points."],
+  [90.6,94,"State Matrix splits 190 and 491 EOIs across the eight states and territories."],
+  [94.3,99,"189 and 491 Family have no state breakdown: use <em>All States</em> for them."],
+  [99.3,103.8,"Snapshots, not totals. EOIs, not people."]];
+const SCN=[[0,'1. Intro'],[5.5,'2. What is an EOI'],[15,'3. The dashboard'],[20,'4. Filters'],[29,'5. KPI cards'],[41,'6. Total Count'],[52,'7. Points'],[59,'8. Filter example'],[67,'9. Occupations'],[75,'10. Point Heatmap'],[90.5,'11. State Matrix'],[94,'12. Watch out'],[99,'13. Summary']];
+
+// page boxes in dashboard CSS px (from shots/boxes.json and the captures)
+const B={
+  top:{x:0,y:0,w:1920,h:1080},
+  filters:{x:1060,y:18,w:700,h:62}, month:{x:1067,y:24,w:167,h:50}, state:{x:1246,y:24,w:120,h:50}, visa:{x:1378,y:25,w:374,h:49},
+  kpis:{x:408,y:99,w:1344,h:119},
+  k1:{x:408,y:99,w:327,h:119}, k2:{x:747,y:99,w:327,h:119}, k34:{x:1086,y:99,w:666,h:119},
+  chart:{x:408,y:297,w:1344,h:540}, line:{x:440,y:380,w:1300,h:220}, band:{x:440,y:614,w:1300,h:62},
+  pts:{x:408,y:854,w:1344,h:326}, axL:{x:428,y:912,w:56,h:216}, axR:{x:1668,y:912,w:46,h:216}, axX:{x:470,y:1112,w:1200,h:28},
+  hdr:{x:408,y:0,w:1344,h:230}, waKpi:{x:408,y:99,w:892,h:119}, badge:{x:1524,y:873,w:212,h:28}, waAll:{x:408,y:20,w:1344,h:900},
+  table:{x:408,y:1196,w:1344,h:640}, colPool:{x:836,y:1448,w:160,h:262}, colInv:{x:1340,y:1448,w:400,h:262},
+  tabsView:{x:408,y:295,w:1344,h:640}, heatCols:{x:1034,y:405,w:718,h:422}, matCols:{x:1078,y:405,w:674,h:422},
+  heatFilt:{x:1520,y:296,w:236,h:54}, heatStatus:{x:1640,y:318,w:112,h:32}, swRow:{x:408,y:479,w:1344,h:38}, sw80:{x:1230,y:479,w:65,h:38}, invRows:{x:408,y:441,w:1344,h:152},
+  nswTop:{x:408,y:20,w:1344,h:560}, nswFilt:{x:1240,y:20,w:236,h:58}};
+
+const R0={x:60,y:50,w:1800,h:860};
+function camFor(b,R=R0,max=2.4){const s=Math.min(R.w/b.w,R.h/b.h,max);return{x:R.x+(R.w-b.w*s)/2-b.x*s,y:R.y+(R.h-b.h*s)/2-b.y*s,scale:s}}
+const scr=(b,c)=>({x:b.x*c.scale+c.x,y:b.y*c.scale+c.y,w:b.w*c.scale,h:b.h*c.scale});
+const pad=(b,p=8)=>({x:b.x-p,y:b.y-p,w:b.w+2*p,h:b.h+2*p});
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+// callout factory, positioned in screen px
+function co(html,{x,y,w,cls=''}){const d=document.createElement('div');d.className='co '+cls;d.innerHTML=html;
+  Object.assign(d.style,{left:x+'px',top:y+'px',width:w+'px'});$('#cos').appendChild(d);return d}
+function under(b,c,w,gap=24){const s=scr(b,c);return{x:clamp(s.x+s.w/2-w/2,60,1860-w),y:s.y+s.h+gap,w}}
+
+CAP.forEach(([a,b,t])=>{const d=document.createElement('div');d.className='cap';d.innerHTML=t;$('#caps').appendChild(d)});
+
+function build(){
+  const tl=gsap.timeline({paused:true,defaults:{ease:'power3.out'}});
+  const show=(el,t,d=.5,v={})=>tl.to(el,{autoAlpha:1,duration:d,...v},t);
+  const hide=(el,t,d=.4,v={})=>tl.to(el,{autoAlpha:0,duration:d,...v},t);
+  const words=(el,t,stag=.07)=>{const w=split(el);tl.fromTo(w,{autoAlpha:0,y:28,filter:'blur(10px)'},{autoAlpha:1,y:0,filter:'blur(0px)',duration:.7,stagger:stag},t);return w};
+  const pop=(el,t,from={y:24})=>tl.fromTo(el,{autoAlpha:0,...from},{autoAlpha:1,y:0,x:0,scale:1,duration:.55},t);
+  const cam=(c,t,d=1.2)=>tl.to('#cam',{x:c.x,y:c.y,scale:c.scale,duration:d,ease:'power2.inOut'},t);
+  const spot=(b,t,d=.6)=>{const p=pad(b);tl.to('#spot',{left:p.x,top:p.y,width:p.w,height:p.h,autoAlpha:1,duration:d,ease:'power2.inOut'},t)};
+  const swap=(from,to,t,d=.5)=>{tl.to(to,{autoAlpha:1,duration:d},t);tl.to(from,{autoAlpha:0,duration:d},t+d*.6)};
+  const click=(sx,sy,t)=>{tl.to('#cursor',{x:sx-6,y:sy-4,duration:.7,ease:'power2.inOut'},t);
+    tl.fromTo('#ripple',{x:sx,y:sy,scale:.3,autoAlpha:1},{scale:1.4,autoAlpha:0,duration:.5,ease:'power1.out',immediateRender:false},t+.72);
+    tl.to('#cursor',{scale:.85,duration:.1,yoyo:true,repeat:1},t+.7)};
+
+  gsap.set('#cam',{transformOrigin:'0 0',x:0,y:0,scale:1});
+  gsap.set(['#cursor','#ripple'],{transformOrigin:'50% 50%'});
+
+  // captions
+  $$('.cap').forEach((el,i)=>{const[a,b]=CAP[i];
+    tl.fromTo(el,{autoAlpha:0,y:14},{autoAlpha:1,y:0,duration:.35},a);tl.to(el,{autoAlpha:0,duration:.25},b-.25)});
+
+  /* 1 Intro 0–5.5 */
+  show('#s1',0,.01);
+  tl.fromTo('#logo1',{autoAlpha:0,y:-16},{autoAlpha:1,y:0,duration:.7},.2);
+  show('#e1',.4,.5);
+  words($('#h1'),.6,.08);
+  pop('#sub1',1.7);
+  hide('#s1',5,.5);
+
+  /* 2 What is an EOI 5.5–15 */
+  show('#s2',5.4,.01);
+  tl.fromTo('#eoiCard',{autoAlpha:0,x:-60,rotateY:12,transformPerspective:1400},{autoAlpha:1,x:0,rotateY:0,duration:.8},5.5);
+  tl.fromTo('#eoiCard .fld',{autoAlpha:0,x:-20},{autoAlpha:1,x:0,duration:.45,stagger:.35},6.1);
+  pop('#eoiFoot',8.0);
+  show('#e2',9.6,.4); tl.fromTo('#h2',{autoAlpha:0,y:20},{autoAlpha:1,y:0,duration:.6},9.7);
+  tl.set('#flowT',{autoAlpha:1},9.6);
+  tl.fromTo('#flow .node',{autoAlpha:0,y:30},{autoAlpha:1,y:0,duration:.55,stagger:.55},10.4);
+  pop('#hold',12.6,{y:14});
+  tl.fromTo('#notVisa',{autoAlpha:0,scale:.9},{autoAlpha:1,scale:1,duration:.6,ease:'back.out(1.7)'},13.1);
+  hide('#s2',14.6,.5);
+
+  /* 3 Dashboard overview 15–20 */
+  gsap.set('#win',{scale:.78,y:-20});
+  gsap.set('#shAll',{autoAlpha:1});
+  tl.fromTo('#win',{autoAlpha:0,scale:.7,rotateX:14,y:60,transformPerspective:1600},{autoAlpha:1,scale:.78,rotateX:0,y:-20,duration:1.2,ease:'power3.out'},15);
+  tl.to('#cam',{y:-1020,duration:2.4,ease:'power1.inOut'},16.6);
+  // dive in: window fills the frame, camera lands on the filters
+  const c4=camFor(B.filters,{x:110,y:110,w:1700,h:260});
+  tl.to('#win',{scale:1,y:0,borderRadius:0,duration:1.3,ease:'power3.inOut'},19.1);
+  cam(c4,19.1,1.4);
+
+  /* 4 Filters 20–29 */
+  const fw=470;
+  const coMonth=co(`<div class="k"><i></i>EOI Month</div><b>Snapshot month</b><p>Used by every section. Defaults to the latest, <em>08/2026</em>.</p>`,under(B.month,c4,fw,40));
+  const coState=co(`<div class="k"><i></i>State / Territory</div><b>All States or one of 8</b><p>NSW, VIC, QLD, WA, SA, TAS, ACT, NT.</p>`,under(B.state,c4,fw,40));
+  const coVisa=co(`<div class="k"><i></i>Visa Subclass</div><b>Five options</b><p>All, 189, 190, 491 State/Territory, 491 Family.</p>`,under(B.visa,c4,fw,40));
+  // keep the three cards side by side
+  [coMonth,coState,coVisa].forEach((el,i)=>{el.style.left=(150+i*(fw+90))+'px';el.style.top='470px'});
+  spot(B.month,20.4); pop(coMonth,20.6);
+  spot(B.state,21.9); pop(coState,22.1);
+  spot(B.visa,23.4); pop(coVisa,23.6);
+  hide([coMonth,coState,coVisa],24.6,.35);
+  const coSum=co(`<div class="k"><i></i>08/2026 · Submitted EOIs</div><b>“All” is the sum of the four streams</b>
+    <div class="sum"><span><small>189</small>180,666</span>+<span><small>190</small>461,281</span>+<span><small>491 S/T</small>500,354</span>+<span><small>491 FAMILY</small>8,966</span>=<span class="tot"><small>ALL</small>1,151,267</span></div>`,{x:360,y:470,w:1200});
+  pop(coSum,25);
+  hide(coSum,28.6,.35);
+
+  /* 5 KPI cards 29–41 */
+  const c5=camFor(B.kpis,{x:110,y:80,w:1700,h:300});
+  cam(c5,28.8,1.1);
+  spot(B.k1,29.3);
+  const kw=560;
+  const coK1=co(`<div class="k"><i></i>Total Active EOIs</div><b>1,151,267 Submitted EOIs</b><p>The pool eligible for invitation. Down <em>31,274</em> from the previous snapshot.</p>`,under(B.k1,c5,kw,36));
+  const coK2=co(`<div class="k"><i></i>Total Estimated Invited</div><b>436 open invitations</b><p>Invitations not yet used, from the last <em>60 days</em>. Not invitations issued per month.</p>`,under(B.k2,c5,kw,36));
+  const coK3=co(`<div class="k"><i></i>SC 190 · SC 491 Occupations</div><b>406 and 471 occupations</b><p>Occupations with at least one <em>active (Submitted)</em> EOI. Pick one visa and only its card shows.</p>`,under(B.k34,c5,kw+60,36));
+  pop(coK1,29.6);
+  hide(coK1,33.1,.3); spot(B.k2,33.3); pop(coK2,33.6);
+  hide(coK2,37.1,.3); spot(B.k34,37.3); pop(coK3,37.6);
+  hide(coK3,40.7,.3); hide('#spot',40.7,.3);
+
+  /* 6 Total Count chart 41–52 */
+  const c6=camFor(B.chart,{x:40,y:30,w:1840,h:890});
+  cam(c6,40.8,1.2);
+  spot(B.line,41.6);
+  const coLine=co(`<div class="k"><i></i>Submitted · blue line</div><b>399,709 → 1,151,267</b><p>The active pool from 08/2024 to 08/2026. Window: the selected month and the 24 months before it.</p>`,{x:1000,y:372,w:780});
+  pop(coLine,42);
+  hide(coLine,46.3,.3);
+  spot(B.band,46.5);
+  const coSnap=co(`<div class="k"><i></i>Snapshot, not flow</div><b>Never add months together</b><p>Each point counts EOIs in that status <em>on that date</em>. Summing 12 months counts the same EOIs up to 12 times.</p>`,{x:130,y:250,w:760});
+  const coLodged=co(`<div class="k"><i></i>Invited · Lodged</div><b>Why Lodged is higher</b><p>Invited empties within 60 days. Lodged builds up over several rounds while visas are processed.</p>`,{x:950,y:250,w:820});
+  pop(coSnap,46.9); pop(coLodged,47.5);
+  hide([coSnap,coLodged],51.6,.3); hide('#spot',51.6,.3);
+
+  /* 7 Points Distribution 52–59 */
+  const c7=camFor(B.pts,{x:60,y:50,w:1800,h:560});
+  cam(c7,51.8,1.2);
+  const pw=540;
+  const coL=co(`<div class="k"><i></i>Left axis</div><b>Submitted</b><p>EOIs in the pool at each points score.</p>`,{x:150,y:640,w:pw});
+  const coR=co(`<div class="k"><i></i>Right axis</div><b>Invited</b><p>Hundreds of times smaller, so it gets its own scale.</p>`,{x:150+pw+40,y:640,w:pw});
+  const coX=co(`<div class="k"><i></i>Points axis</div><b>Starts at 65</b><p>65 is the minimum points score to lodge an EOI.</p>`,{x:150+2*(pw+40),y:640,w:pw});
+  spot(B.axL,52.8); pop(coL,53);
+  spot(B.axR,54.8); pop(coR,55);
+  spot(B.axX,56.7); pop(coX,56.9);
+  hide([coL,coR,coX],58.7,.3); hide('#spot',58.7,.3);
+
+  /* 8 Filter example: 190 + WA 59–67 */
+  const c8=camFor(B.hdr,{x:60,y:60,w:1800,h:440});
+  cam(c8,58.9,1.1);
+  const sState=scr(B.state,c8), s190=scr({x:1471,y:47,w:47,h:24},c8);
+  tl.fromTo('#cursor',{x:1300,y:900,autoAlpha:0},{autoAlpha:1,duration:.3},59.6);
+  click(sState.x+sState.w*.5,sState.y+sState.h*.55,59.7);
+  click(s190.x+s190.w*.5,s190.y+s190.h*.6,60.8);
+  swap('#shAll','#shWA',61.6,.45);
+  hide('#cursor',62.4,.3);
+  const c8b=camFor(B.kpis,{x:110,y:80,w:1700,h:300});
+  cam(c8b,62.5,1.1);
+  spot(B.waKpi,63);
+  const coWAk=co(`<div class="k"><i></i>08/2026 · 190 · WA</div><b>87,301 active · 43 invited</b><p>The same filters feed the KPI cards and the charts, so they always agree.</p>`,under(B.waKpi,c8b,640,36));
+  pop(coWAk,63.3);
+  hide(coWAk,64.6,.3);
+  const c8c=camFor(B.pts,{x:60,y:250,w:1800,h:600});
+  cam(c8c,64.6,1.1);
+  spot(B.badge,65.2,.5);
+  const sb=scr(B.badge,c8c);
+  const coWA=co(`<div class="k"><i></i>Most invited badge</div><b>80 points · 14 invites</b><p>The points score holding the most invitations in the selected month.</p>`,{x:clamp(sb.x+sb.w-660,60,1200),y:sb.y-210,w:660});
+  pop(coWA,65.4);
+  hide([coWA,'#spot'],66.7,.3);
+
+  /* 9 Occupations table 67–75 */
+  swap('#shWA','#shAll',66.9,.4);
+  const c9=camFor(B.table);
+  cam(c9,66.9,1.3);
+  spot(B.colPool,68);
+  const coPool=co(`<div class="k"><i></i>Active EOIs (Δ MoM)</div><b>Pool size per occupation</b><p>Software Engineer: <em>57,483</em>, down 2,358 from last month.</p>`,under(B.colPool,c9,620,22));
+  pop(coPool,68.3);
+  hide(coPool,70.9,.3);
+  spot(B.colInv,71.1);
+  const coInv=co(`<div class="k"><i></i>Est. Invited · Inv. Rate · Points Range</div><b>Invitations held right now</b><p>Rates sit near 0% in a month without a recent invitation round.</p>`,under(B.colInv,c9,700,22));
+  pop(coInv,71.4);
+  hide(coInv,74.7,.3); hide('#spot',74.7,.3);
+
+  /* 10 Point Heatmap 75–90.5 */
+  const c10=camFor(B.tabsView);
+  cam(c10,74.9,1.2);
+  swap('#shAll','#shHeat',75.2,.45);
+  spot(B.heatCols,75.8);
+  const coHeat=co(`<div class="k"><i></i>Point Heatmap</div><b>Occupation × points score</b><p>Each cell is the number of EOIs for that occupation at that points band. Darker means more.</p>`,{...under(B.heatCols,c10,660,22),x:150});
+  pop(coHeat,76);
+  hide(coHeat,78.4,.3);
+  // filters: 190 + VIC, status Submitted
+  swap('#shHeat','#shVicS',78.6,.45);
+  spot(B.heatFilt,78.9);
+  const sf=scr(B.heatFilt,c10);
+  const coFilt=co(`<div class="k"><i></i>Heatmap filters</div><b>State and EOI status</b><p>Here: subclass <em>190</em>, <em>VIC</em>, status <em>Submitted</em>. Switch the status to <em>Invited</em> to see invitations.</p>`,{x:sf.x+sf.w-700,y:sf.y+sf.h+30,w:700});
+  pop(coFilt,79.2);
+  hide(coFilt,82.1,.3);
+  spot(B.swRow,82.4);
+  spot(B.sw80,84.2,.5);
+  const s80=scr(B.sw80,c10);
+  const coSW=co(`<div class="k"><i></i>Submitted · 190 · VIC</div><b>Software Engineer at 80 points</b><p><em>766</em> EOIs at 80 points, <em>590</em> at 85 and <em>520</em> at 90.</p>`,{x:clamp(s80.x-360,60,1860-720),y:s80.y+s80.h+40,w:720});
+  pop(coSW,82.7);
+  hide(coSW,86.1,.3);
+  // status Invited
+  const sst=scr(B.heatStatus,c10);
+  tl.fromTo('#cursor',{x:sst.x-200,y:sst.y+260,autoAlpha:0},{autoAlpha:1,duration:.3},86.2);
+  hide('#spot',86.2,.3);
+  click(sst.x+sst.w*.5,sst.y+sst.h*.5,86.3);
+  swap('#shVicS','#shVicI',87.2,.45);
+  hide('#cursor',87.6,.3);
+  spot(B.invRows,87.8);
+  const sir=scr(B.invRows,c10);
+  const coInvH=co(`<div class="k"><i></i>Invited · 190 · VIC · 08/2026</div><b>4 invitations, 4 occupations</b><p>Civil Engineer at <em>85</em>, Registered Nurse (Aged Care) at <em>75</em>, Social Worker and Carpenter at <em>70</em> points.</p>`,{x:150,y:sir.y+sir.h+40,w:900});
+  pop(coInvH,88.1);
+  hide(coInvH,90.3,.3); hide('#spot',90.3,.3);
+
+  /* 11 State Matrix 90.5–94 */
+  swap('#shVicI','#shMat',90.5,.45);
+  spot(B.matCols,90.8);
+  const coMat=co(`<div class="k"><i></i>State Matrix</div><b>Occupation × state</b><p>For 190 and 491 State/Territory, the streams with state nomination.</p>`,{...under(B.matCols,c10,640,22),x:150});
+  pop(coMat,91.1);
+  hide(coMat,93.7,.3); hide('#spot',93.7,.3);
+
+  /* 12 Watch out: 189 + NSW 94–99 */
+  swap('#shMat','#shNSW',93.9,.45);
+  const c11=camFor(B.nswTop);
+  cam(c11,93.9,1.1);
+  spot(B.nswFilt,94.6);
+  spot(B.kpis,96.2);
+  const coWarn=co(`<div class="k"><i></i>189 + NSW = 0 everywhere</div><b>No state breakdown</b><p>189 and 491 Family are stored as <em>ALL STATES</em>. Select them with State = All States.</p>`,{x:560,y:600,w:800});
+  pop(coWarn,95);
+  hide(coWarn,98.7,.3);
+
+  /* 13 Summary 99–104 */
+  tl.to('#win',{autoAlpha:0,scale:.92,duration:.6,ease:'power2.in'},98.8);
+  show('#s12',99.2,.01);
+  show('#e12',99.3,.4);
+  words($('#h12'),99.4,.07);
+  tl.fromTo('.rule',{autoAlpha:0,y:40},{autoAlpha:1,y:0,duration:.6,stagger:.25},100.2);
+  pop('#logo12',101.6,{y:12});
+  tl.to({},{duration:.01},DUR-.01);
+  return tl;
+}
+
+// Voiceover retiming, written by vo.py: [[original time, new time], ...]. Empty = original timing.
+// Each stretch between two anchors plays the original animation slower, so the scene waits for the voice.
+const WARP=[];
+const OUT=WARP.length?WARP[WARP.length-1][1]:DUR;
+function unwarp(t){if(!WARP.length)return t;
+  for(let i=0;i<WARP.length-1;i++){const[a,na]=WARP[i],[b,nb]=WARP[i+1];if(t<=nb)return a+(b-a)*Math.max(0,t-na)/(nb-na)}
+  return DUR}
+function rewarp(t){if(!WARP.length)return t;
+  for(let i=0;i<WARP.length-1;i++){const[a,na]=WARP[i],[b,nb]=WARP[i+1];if(t<=b)return na+(nb-na)*Math.max(0,t-a)/(b-a)}
+  return OUT}
+function retime(inner){if(!WARP.length)return inner;
+  // a setter, not an onUpdate callback: seek() suppresses callbacks, and render.py drives the page with seek()
+  let now=0;const clock={get t(){return now},set t(v){now=v;inner.seek(unwarp(v))}};
+  const m=gsap.timeline({paused:true});
+  m.fromTo(clock,{t:0},{t:OUT,duration:OUT,ease:'none',immediateRender:false},0);
+  return m}
+
+let TL;
+const playBtn=$('#play'),scrub=$('#scrub'),timeEl=$('#time'),sn=$('#sceneName');
+const fmt=t=>`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`;
+const setPlayLabel=l=>{playBtn.textContent=l;playBtn.setAttribute('aria-label',l)};
+function ui(){const t=TL.time();scrub.value=t;timeEl.textContent=`${fmt(t)} / ${fmt(OUT)}`;
+  let n=SCN[0][1];SCN.forEach(s=>{if(t>=rewarp(s[0]))n=s[1]});sn.textContent=n;}
+document.getElementById('marks').innerHTML=SCN.slice(1).map(s=>`<i style="left:${rewarp(s[0])/OUT*100}%"></i>`).join('');
+const imgs=$$('img').map(i=>i.complete?Promise.resolve():new Promise(r=>{i.onload=i.onerror=r}));
+Promise.all([document.fonts.ready,...imgs]).then(()=>{
+  fit();TL=retime(build());scrub.max=OUT;TL.eventCallback('onUpdate',ui);
+  TL.eventCallback('onComplete',()=>setPlayLabel('Replay'));
+  TL.seek(0);ui();
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){TL.play();setPlayLabel('Pause')}
+});
+playBtn.onclick=()=>{if(!TL)return;
+  if(TL.progress()>=1){TL.restart();}
+  else if(TL.paused()){TL.play();}
+  else{TL.pause();}
+  setPlayLabel(!TL.paused()&&TL.progress()<1?'Pause':'Play')};
+scrub.oninput=()=>{if(!TL)return;TL.pause();TL.seek(+scrub.value);setPlayLabel('Play');ui()};
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();playBtn.click()}});
+</script>
+</body>
+</html>

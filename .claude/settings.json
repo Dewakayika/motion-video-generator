@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python tools/frames.py:*)",
+      "Bash(python tools/render.py:*)",
+      "Bash(python tools/vo.py mux:*)",
+      "Bash(ffprobe:*)",
+      "Bash(ffmpeg:*)"
+    ],
+    "ask": [
+      "Bash(python tools/vo.py gen:*)"
+    ]
+  }
+}

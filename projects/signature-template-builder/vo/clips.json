@@ -1,0 +1,176 @@
+{
+ "00": {
+  "text": "A quick guide to the Template Builder.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 2.322
+ },
+ "01": {
+  "text": "Build a Service Agreement template on one screen.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 3.065
+ },
+ "03": {
+  "text": "Content can hold three kinds of variables.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 2.972
+ },
+ "05": {
+  "text": "Sections on the left, the editor in the middle, the preview on the right.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.458
+ },
+ "06": {
+  "text": "Pick a template here, or start a new one.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 2.601
+ },
+ "10": {
+  "text": "Add a new section, or reuse one from the library.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 3.39
+ },
+ "13": {
+  "text": "Custom fields hold data that changes per agreement.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 3.437
+ },
+ "16": {
+  "text": "The fee schedule lists the default fees of the template.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 3.901
+ },
+ "18": {
+  "text": "It replaces the built-in fees of every service that uses the template.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.458
+ },
+ "25": {
+  "text": "Save stores everything in one go. Cancel goes back to the saved version.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.737
+ },
+ "02": {
+  "text": "Sections, custom fields, a fee schedule and a live A4 preview.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.341
+ },
+ "04": {
+  "text": "Fees are data, never typed text. The engine calculates the tables.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.294
+ },
+ "07": {
+  "text": "A new template starts empty, or as a copy of the sections of another.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.551
+ },
+ "08": {
+  "text": "Drag to reorder sections. Untick one to hide it from the agreement.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.876
+ },
+ "09": {
+  "text": "Any change shows Unsaved changes, with Cancel and Save.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.783
+ },
+ "11": {
+  "text": "Edit the section in the Visual editor, or switch to HTML.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.272
+ },
+ "12": {
+  "text": "Page options: start on a new page, or keep the section on one page.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.294
+ },
+ "14": {
+  "text": "Save stays disabled until every field has a valid name and key.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.272
+ },
+ "15": {
+  "text": "The key is made from the label. Choose a type, a default, and whether it is required.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 6.13
+ },
+ "17": {
+  "text": "Set the amount, how it is charged, GST, and whether staff can change it.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.341
+ },
+ "19": {
+  "text": "Use the Insert bar to place a field in the text, at the cursor.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.087
+ },
+ "20": {
+  "text": "Without a default, the preview shows the field label in brackets.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.365
+ },
+ "21": {
+  "text": "For fees, add a section and insert the Full fee schedule and Totals.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.83
+ },
+ "22": {
+  "text": "The preview uses sample data: Jane Sample, one partner and one child.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.759
+ },
+ "23": {
+  "text": "Each fee is the amount times the number of people, plus GST if ticked.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.83
+ },
+ "24": {
+  "text": "$2,200 plus $1,000 plus $100: a grand total of $3,300.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 7.245
+ },
+ "26": {
+  "text": "Staff then see the template's fields and fees when they create an agreement.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.458
+ },
+ "27": {
+  "text": "Each agreement keeps a snapshot, so later template edits do not change it.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.108
+ },
+ "28": {
+  "text": "Fees are data. Shared sections change everywhere. Nothing is live until Save.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.573
+ }
+}

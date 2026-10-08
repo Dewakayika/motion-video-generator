@@ -1,0 +1,3992 @@
+{
+ "overview": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Client(s)": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 655,
+   "y": 412,
+   "w": 574,
+   "h": 28
+  },
+  "button:Custom fields (0)": {
+   "x": 679,
+   "y": 814,
+   "w": 113,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 796,
+   "y": 814,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 926,
+   "y": 814,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 814,
+   "w": 125,
+   "h": 23
+  },
+  "button:Client name": {
+   "x": 630,
+   "y": 852,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent name": {
+   "x": 734,
+   "y": 852,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent MARN": {
+   "x": 838,
+   "y": 852,
+   "w": 103,
+   "h": 25
+  },
+  "button:Agreement date": {
+   "x": 946,
+   "y": 852,
+   "w": 121,
+   "h": 25
+  },
+  "button:Reference": {
+   "x": 1072,
+   "y": 852,
+   "w": 88,
+   "h": 25
+  },
+  "button:Service name": {
+   "x": 630,
+   "y": 882,
+   "w": 106,
+   "h": 25
+  },
+  "button:Service code": {
+   "x": 741,
+   "y": 882,
+   "w": 103,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 811,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 908,
+   "h": 34
+  },
+  "input22:Client Details": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input23:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input24:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": null,
+  "text:Up to date": {
+   "x": 1688,
+   "y": 56,
+   "w": 79,
+   "h": 19
+  },
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 89,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 89,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "new_template": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "label:New template name": {
+   "x": 335,
+   "y": 141,
+   "w": 893,
+   "h": 56
+  },
+  "label:Start from": {
+   "x": 1238,
+   "y": 143,
+   "w": 513,
+   "h": 54
+  },
+  "select:Empty template": {
+   "x": 1238,
+   "y": 165,
+   "w": 513,
+   "h": 32
+  },
+  "button:Create": {
+   "x": 1761,
+   "y": 161,
+   "w": 71,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 918,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 918,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 971,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 1017,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 268,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 268,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 346,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 346,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 416,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Client(s)": {
+   "x": 655,
+   "y": 482,
+   "w": 574,
+   "h": 31
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 655,
+   "y": 526,
+   "w": 574,
+   "h": 28
+  },
+  "button:Custom fields (0)": {
+   "x": 679,
+   "y": 928,
+   "w": 113,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 796,
+   "y": 928,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 926,
+   "y": 928,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 928,
+   "w": 125,
+   "h": 23
+  },
+  "button:Client name": {
+   "x": 630,
+   "y": 966,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent name": {
+   "x": 734,
+   "y": 966,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent MARN": {
+   "x": 838,
+   "y": 966,
+   "w": 103,
+   "h": 25
+  },
+  "button:Agreement date": {
+   "x": 946,
+   "y": 966,
+   "w": 121,
+   "h": 25
+  },
+  "button:Reference": {
+   "x": 1072,
+   "y": 966,
+   "w": 88,
+   "h": 25
+  },
+  "button:Service name": {
+   "x": 630,
+   "y": 996,
+   "w": 106,
+   "h": 25
+  },
+  "button:Service code": {
+   "x": 741,
+   "y": 996,
+   "w": 103,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 1039,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 1039,
+   "w": 123,
+   "h": 19
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 484,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 925,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 908,
+   "h": 34
+  },
+  "input2:e.g. Employer Sponsored Visa": {
+   "x": 335,
+   "y": 163,
+   "w": 893,
+   "h": 34
+  },
+  "input23:Client Details": {
+   "x": 621,
+   "y": 266,
+   "w": 479,
+   "h": 32
+  },
+  "input24:#000000": {
+   "x": 888,
+   "y": 380,
+   "w": 32,
+   "h": 32
+  },
+  "input25:#ffff00": {
+   "x": 944,
+   "y": 380,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 255,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": null,
+  "text:Up to date": {
+   "x": 1688,
+   "y": 56,
+   "w": 79,
+   "h": 19
+  },
+  "text:Custom fields": {
+   "x": 376,
+   "y": 983,
+   "w": 89,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 1029,
+   "w": 89,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 1039,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "library": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:189": {
+   "x": 343,
+   "y": 636,
+   "w": 202,
+   "h": 47
+  },
+  "button:2. Other Costs (Skills Assessment)": {
+   "x": 343,
+   "y": 683,
+   "w": 202,
+   "h": 65
+  },
+  "button:A. Service / Scope (186 Employer Sponsor": {
+   "x": 343,
+   "y": 748,
+   "w": 202,
+   "h": 65
+  },
+  "button:A. Service / Scope (AAT / ART Tribunal R": {
+   "x": 343,
+   "y": 813,
+   "w": 202,
+   "h": 65
+  },
+  "button:A. Service / Scope (GSM 189, 190, 491)": {
+   "x": 343,
+   "y": 878,
+   "w": 202,
+   "h": 65
+  },
+  "button:A. Service / Scope (Partner Visa 820/801": {
+   "x": 343,
+   "y": 944,
+   "w": 202,
+   "h": 65
+  },
+  "button:B. Fees / Professional Fees (Skills Asse": {
+   "x": 343,
+   "y": 1009,
+   "w": 202,
+   "h": 65
+  },
+  "button:Definitions (Skills Assessment)": {
+   "x": 343,
+   "y": 1074,
+   "w": 202,
+   "h": 47
+  },
+  "button:Cancel": {
+   "x": 343,
+   "y": 821,
+   "w": 39,
+   "h": 18
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Client(s)": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 655,
+   "y": 412,
+   "w": 574,
+   "h": 28
+  },
+  "button:Custom fields (0)": {
+   "x": 679,
+   "y": 814,
+   "w": 113,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 796,
+   "y": 814,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 926,
+   "y": 814,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 814,
+   "w": 125,
+   "h": 23
+  },
+  "button:Client name": {
+   "x": 630,
+   "y": 852,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent name": {
+   "x": 734,
+   "y": 852,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent MARN": {
+   "x": 838,
+   "y": 852,
+   "w": 103,
+   "h": 25
+  },
+  "button:Agreement date": {
+   "x": 946,
+   "y": 852,
+   "w": 121,
+   "h": 25
+  },
+  "button:Reference": {
+   "x": 1072,
+   "y": 852,
+   "w": 88,
+   "h": 25
+  },
+  "button:Service name": {
+   "x": 630,
+   "y": 882,
+   "w": 106,
+   "h": 25
+  },
+  "button:Service code": {
+   "x": 741,
+   "y": 882,
+   "w": 103,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 811,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 908,
+   "h": 34
+  },
+  "input22:Search existing sections": {
+   "x": 343,
+   "y": 596,
+   "w": 202,
+   "h": 34
+  },
+  "input23:Client Details": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input24:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input25:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": null,
+  "text:Up to date": {
+   "x": 1688,
+   "y": 56,
+   "w": 79,
+   "h": 19
+  },
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 89,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 89,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "unsaved": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Client(s)": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 655,
+   "y": 412,
+   "w": 574,
+   "h": 28
+  },
+  "button:Custom fields (0)": {
+   "x": 679,
+   "y": 814,
+   "w": 113,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 796,
+   "y": 814,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 926,
+   "y": 814,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 814,
+   "w": 125,
+   "h": 23
+  },
+  "button:Client name": {
+   "x": 630,
+   "y": 852,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent name": {
+   "x": 734,
+   "y": 852,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent MARN": {
+   "x": 838,
+   "y": 852,
+   "w": 103,
+   "h": 25
+  },
+  "button:Agreement date": {
+   "x": 946,
+   "y": 852,
+   "w": 121,
+   "h": 25
+  },
+  "button:Reference": {
+   "x": 1072,
+   "y": 852,
+   "w": 88,
+   "h": 25
+  },
+  "button:Service name": {
+   "x": 630,
+   "y": 882,
+   "w": 106,
+   "h": 25
+  },
+  "button:Service code": {
+   "x": 741,
+   "y": 882,
+   "w": 103,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 811,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input22:Client Details": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input23:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input24:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 89,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 89,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "html": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:Custom fields (0)": {
+   "x": 679,
+   "y": 814,
+   "w": 113,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 796,
+   "y": 814,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 926,
+   "y": 814,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 814,
+   "w": 125,
+   "h": 23
+  },
+  "button:Client name": {
+   "x": 630,
+   "y": 852,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent name": {
+   "x": 734,
+   "y": 852,
+   "w": 99,
+   "h": 25
+  },
+  "button:Agent MARN": {
+   "x": 838,
+   "y": 852,
+   "w": 103,
+   "h": 25
+  },
+  "button:Agreement date": {
+   "x": 946,
+   "y": 852,
+   "w": 121,
+   "h": 25
+  },
+  "button:Reference": {
+   "x": 1072,
+   "y": 852,
+   "w": 88,
+   "h": 25
+  },
+  "button:Service name": {
+   "x": 630,
+   "y": 882,
+   "w": 106,
+   "h": 25
+  },
+  "button:Service code": {
+   "x": 741,
+   "y": 882,
+   "w": 103,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Client(s)": {
+   "x": 1414,
+   "y": 522,
+   "w": 360,
+   "h": 33
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 1414,
+   "y": 568,
+   "w": 360,
+   "h": 26
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 811,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input22:Client Details": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 89,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 89,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "fields_empty": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Add field": {
+   "x": 621,
+   "y": 335,
+   "w": 105,
+   "h": 36
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Client(s)": {
+   "x": 1414,
+   "y": 522,
+   "w": 360,
+   "h": 33
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 1414,
+   "y": 568,
+   "w": 360,
+   "h": 26
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 811,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 89,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 89,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": null
+ },
+ "save_blocked": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "th:LABEL SHOWN ON THE FORM": {
+   "x": 621,
+   "y": 244,
+   "w": 149,
+   "h": 46
+  },
+  "th:KEY": {
+   "x": 770,
+   "y": 244,
+   "w": 141,
+   "h": 46
+  },
+  "th:TYPE": {
+   "x": 911,
+   "y": 244,
+   "w": 97,
+   "h": 46
+  },
+  "th:DEFAULT": {
+   "x": 1008,
+   "y": 244,
+   "w": 151,
+   "h": 46
+  },
+  "th:REQUIRED": {
+   "x": 1158,
+   "y": 244,
+   "w": 70,
+   "h": 46
+  },
+  "select:Text": {
+   "x": 917,
+   "y": 297,
+   "w": 85,
+   "h": 32
+  },
+  "button:Add field": {
+   "x": 621,
+   "y": 349,
+   "w": 105,
+   "h": 36
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Client(s)": {
+   "x": 1414,
+   "y": 522,
+   "w": 360,
+   "h": 33
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 1414,
+   "y": 568,
+   "w": 360,
+   "h": 26
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 811,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 381,
+   "h": 34
+  },
+  "input22:e.g. Employer ABN": {
+   "x": 627,
+   "y": 296,
+   "w": 137,
+   "h": 34
+  },
+  "input23:employer_abn": {
+   "x": 776,
+   "y": 296,
+   "w": 129,
+   "h": 34
+  },
+  "input24:": {
+   "x": 1014,
+   "y": 296,
+   "w": 139,
+   "h": 34
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1160,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 92,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 89,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": null
+ },
+ "fields": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "th:LABEL SHOWN ON THE FORM": {
+   "x": 621,
+   "y": 244,
+   "w": 149,
+   "h": 46
+  },
+  "th:KEY": {
+   "x": 770,
+   "y": 244,
+   "w": 141,
+   "h": 46
+  },
+  "th:TYPE": {
+   "x": 911,
+   "y": 244,
+   "w": 97,
+   "h": 46
+  },
+  "th:DEFAULT": {
+   "x": 1008,
+   "y": 244,
+   "w": 151,
+   "h": 46
+  },
+  "th:REQUIRED": {
+   "x": 1158,
+   "y": 244,
+   "w": 70,
+   "h": 46
+  },
+  "select:Text": {
+   "x": 917,
+   "y": 297,
+   "w": 85,
+   "h": 32
+  },
+  "button:Add field": {
+   "x": 621,
+   "y": 485,
+   "w": 105,
+   "h": 36
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Client(s)": {
+   "x": 1414,
+   "y": 522,
+   "w": 360,
+   "h": 33
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 1414,
+   "y": 568,
+   "w": 360,
+   "h": 26
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 811,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input22:Employer ABN": {
+   "x": 627,
+   "y": 296,
+   "w": 137,
+   "h": 34
+  },
+  "input23:employer_abn": {
+   "x": 776,
+   "y": 296,
+   "w": 129,
+   "h": 34
+  },
+  "input24:": {
+   "x": 1014,
+   "y": 296,
+   "w": 139,
+   "h": 34
+  },
+  "input26:Nominated Occupation": {
+   "x": 627,
+   "y": 343,
+   "w": 137,
+   "h": 34
+  },
+  "input27:nominated_occupation": {
+   "x": 776,
+   "y": 343,
+   "w": 129,
+   "h": 34
+  },
+  "input28:Software Engineer": {
+   "x": 1014,
+   "y": 343,
+   "w": 139,
+   "h": 34
+  },
+  "input30:Visa Stream": {
+   "x": 627,
+   "y": 390,
+   "w": 137,
+   "h": 34
+  },
+  "input31:visa_stream": {
+   "x": 776,
+   "y": 390,
+   "w": 129,
+   "h": 34
+  },
+  "input32:": {
+   "x": 1014,
+   "y": 390,
+   "w": 139,
+   "h": 34
+  },
+  "input34:Temporary Skill Shortage, Empl": {
+   "x": 627,
+   "y": 431,
+   "w": 630,
+   "h": 34
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 89,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": null
+ },
+ "fees_empty": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Professional fee": {
+   "x": 621,
+   "y": 316,
+   "w": 148,
+   "h": 36
+  },
+  "button:Government charge": {
+   "x": 775,
+   "y": 316,
+   "w": 173,
+   "h": 36
+  },
+  "button:Other cost": {
+   "x": 953,
+   "y": 316,
+   "w": 115,
+   "h": 36
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Client(s)": {
+   "x": 1414,
+   "y": 522,
+   "w": 360,
+   "h": 33
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 1414,
+   "y": 568,
+   "w": 360,
+   "h": 26
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 811,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 89,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": null
+ },
+ "fees": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "th:FEE": {
+   "x": 621,
+   "y": 288,
+   "w": 146,
+   "h": 29
+  },
+  "th:TYPE": {
+   "x": 767,
+   "y": 288,
+   "w": 132,
+   "h": 29
+  },
+  "th:AMOUNT ($)": {
+   "x": 899,
+   "y": 288,
+   "w": 110,
+   "h": 29
+  },
+  "th:CHARGED": {
+   "x": 1009,
+   "y": 288,
+   "w": 111,
+   "h": 29
+  },
+  "th:+GST": {
+   "x": 1120,
+   "y": 288,
+   "w": 41,
+   "h": 29
+  },
+  "th:EDITABLE": {
+   "x": 1162,
+   "y": 288,
+   "w": 67,
+   "h": 29
+  },
+  "select:Professional fee": {
+   "x": 773,
+   "y": 324,
+   "w": 120,
+   "h": 32
+  },
+  "select:Fixed (once)": {
+   "x": 1015,
+   "y": 324,
+   "w": 99,
+   "h": 32
+  },
+  "button:Professional fee": {
+   "x": 621,
+   "y": 468,
+   "w": 148,
+   "h": 36
+  },
+  "button:Government charge": {
+   "x": 775,
+   "y": 468,
+   "w": 173,
+   "h": 36
+  },
+  "button:Other cost": {
+   "x": 953,
+   "y": 468,
+   "w": 115,
+   "h": 36
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Client(s)": {
+   "x": 1414,
+   "y": 522,
+   "w": 360,
+   "h": 33
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 1414,
+   "y": 568,
+   "w": 360,
+   "h": 26
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 811,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input22:Service Fee": {
+   "x": 627,
+   "y": 323,
+   "w": 134,
+   "h": 34
+  },
+  "input23:2000": {
+   "x": 905,
+   "y": 323,
+   "w": 98,
+   "h": 34
+  },
+  "input26:Visa Application Charge": {
+   "x": 627,
+   "y": 369,
+   "w": 134,
+   "h": 34
+  },
+  "input27:500": {
+   "x": 905,
+   "y": 369,
+   "w": 98,
+   "h": 34
+  },
+  "input30:Child Charge": {
+   "x": 627,
+   "y": 416,
+   "w": 134,
+   "h": 34
+  },
+  "input31:100": {
+   "x": 905,
+   "y": 416,
+   "w": 98,
+   "h": 34
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 90,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": null
+ },
+ "insert_fields": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Client(s)": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 655,
+   "y": 412,
+   "w": 574,
+   "h": 28
+  },
+  "button:Custom fields (3)": {
+   "x": 679,
+   "y": 844,
+   "w": 112,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 795,
+   "y": 844,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 925,
+   "y": 844,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 844,
+   "w": 125,
+   "h": 23
+  },
+  "button:Employer ABN": {
+   "x": 630,
+   "y": 882,
+   "w": 111,
+   "h": 25
+  },
+  "button:Nominated Occupation": {
+   "x": 746,
+   "y": 882,
+   "w": 159,
+   "h": 25
+  },
+  "button:Visa Stream": {
+   "x": 910,
+   "y": 882,
+   "w": 99,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "h1:Agreement to Provide Migration Services1": {
+   "x": 1414,
+   "y": 369,
+   "w": 131,
+   "h": 99
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 831,
+   "w": 360,
+   "h": 52
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input22:Client Details": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input23:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input24:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 90,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "field_inserted": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Client(s)": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 655,
+   "y": 412,
+   "w": 574,
+   "h": 28
+  },
+  "button:Custom fields (3)": {
+   "x": 679,
+   "y": 844,
+   "w": 112,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 795,
+   "y": 844,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 925,
+   "y": 844,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 844,
+   "w": 125,
+   "h": 23
+  },
+  "button:Employer ABN": {
+   "x": 630,
+   "y": 882,
+   "w": 111,
+   "h": 25
+  },
+  "button:Nominated Occupation": {
+   "x": 746,
+   "y": 882,
+   "w": 159,
+   "h": 25
+  },
+  "button:Visa Stream": {
+   "x": 910,
+   "y": 882,
+   "w": 99,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 257,
+   "w": 360,
+   "h": 52
+  },
+  "h2:DEFINITIONS": {
+   "x": 1414,
+   "y": 1077,
+   "w": 360,
+   "h": 33
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input22:Client Details": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input23:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input24:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 90,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "new_section": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:Add": {
+   "x": 490,
+   "y": 804,
+   "w": 55,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Client(s)": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 655,
+   "y": 412,
+   "w": 574,
+   "h": 28
+  },
+  "button:Custom fields (3)": {
+   "x": 679,
+   "y": 844,
+   "w": 112,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 795,
+   "y": 844,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 925,
+   "y": 844,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 844,
+   "w": 125,
+   "h": 23
+  },
+  "button:Employer ABN": {
+   "x": 630,
+   "y": 882,
+   "w": 111,
+   "h": 25
+  },
+  "button:Nominated Occupation": {
+   "x": 746,
+   "y": 882,
+   "w": 159,
+   "h": 25
+  },
+  "button:Visa Stream": {
+   "x": 910,
+   "y": 882,
+   "w": 99,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 257,
+   "w": 360,
+   "h": 52
+  },
+  "h2:DEFINITIONS": {
+   "x": 1414,
+   "y": 1077,
+   "w": 360,
+   "h": 33
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input22:Fee Summary": {
+   "x": 343,
+   "y": 804,
+   "w": 141,
+   "h": 36
+  },
+  "input23:Client Details": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input24:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input25:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 90,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "insert_fees": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Fee Summary": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "button:Custom fields (3)": {
+   "x": 679,
+   "y": 814,
+   "w": 112,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 795,
+   "y": 814,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 925,
+   "y": 814,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 814,
+   "w": 125,
+   "h": 23
+  },
+  "button:Full fee schedule": {
+   "x": 630,
+   "y": 852,
+   "w": 123,
+   "h": 25
+  },
+  "button:Professional fees": {
+   "x": 758,
+   "y": 852,
+   "w": 125,
+   "h": 25
+  },
+  "button:Government charges": {
+   "x": 889,
+   "y": 852,
+   "w": 147,
+   "h": 25
+  },
+  "button:Other costs": {
+   "x": 1041,
+   "y": 852,
+   "w": 96,
+   "h": 25
+  },
+  "button:Totals": {
+   "x": 1142,
+   "y": 852,
+   "w": 66,
+   "h": 25
+  },
+  "button:Payment structure": {
+   "x": 630,
+   "y": 882,
+   "w": 134,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "h3:PRIMARY CLIENT DETAILS": {
+   "x": 1414,
+   "y": -6,
+   "w": 360,
+   "h": 26
+  },
+  "h2:Registered Migration Agent(s) and/or Leg": {
+   "x": 1414,
+   "y": 257,
+   "w": 360,
+   "h": 52
+  },
+  "h2:DEFINITIONS": {
+   "x": 1414,
+   "y": 1077,
+   "w": 360,
+   "h": 33
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input23:Fee Summary": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input24:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input25:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 90,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": null,
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "fee_preview": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Fee Summary": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "button:Custom fields (3)": {
+   "x": 679,
+   "y": 814,
+   "w": 112,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 795,
+   "y": 814,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 925,
+   "y": 814,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 814,
+   "w": 125,
+   "h": 23
+  },
+  "button:Full fee schedule": {
+   "x": 630,
+   "y": 852,
+   "w": 123,
+   "h": 25
+  },
+  "button:Professional fees": {
+   "x": 758,
+   "y": 852,
+   "w": 125,
+   "h": 25
+  },
+  "button:Government charges": {
+   "x": 889,
+   "y": 852,
+   "w": 147,
+   "h": 25
+  },
+  "button:Other costs": {
+   "x": 1041,
+   "y": 852,
+   "w": 96,
+   "h": 25
+  },
+  "button:Totals": {
+   "x": 1142,
+   "y": 852,
+   "w": 66,
+   "h": 25
+  },
+  "button:Payment structure": {
+   "x": 630,
+   "y": 882,
+   "w": 134,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "th:Professional Fees": {
+   "x": 1415,
+   "y": 438,
+   "w": 92,
+   "h": 48
+  },
+  "th:Amount": {
+   "x": 1507,
+   "y": 438,
+   "w": 72,
+   "h": 48
+  },
+  "th:Number": {
+   "x": 1579,
+   "y": 438,
+   "w": 60,
+   "h": 48
+  },
+  "th:GST": {
+   "x": 1639,
+   "y": 438,
+   "w": 62,
+   "h": 48
+  },
+  "th:Total": {
+   "x": 1701,
+   "y": 438,
+   "w": 73,
+   "h": 48
+  },
+  "th:Government / Official Charges": {
+   "x": 1415,
+   "y": 560,
+   "w": 167,
+   "h": 48
+  },
+  "th:Description": {
+   "x": 1415,
+   "y": 712,
+   "w": 267,
+   "h": 30
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input23:Fee Summary": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input24:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input25:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 90,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": {
+   "x": 1415,
+   "y": 804,
+   "w": 267,
+   "h": 31
+  },
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "fee_total": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Fee Summary": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "button:Custom fields (3)": {
+   "x": 679,
+   "y": 814,
+   "w": 112,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 795,
+   "y": 814,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 925,
+   "y": 814,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 814,
+   "w": 125,
+   "h": 23
+  },
+  "button:Full fee schedule": {
+   "x": 630,
+   "y": 852,
+   "w": 123,
+   "h": 25
+  },
+  "button:Professional fees": {
+   "x": 758,
+   "y": 852,
+   "w": 125,
+   "h": 25
+  },
+  "button:Government charges": {
+   "x": 889,
+   "y": 852,
+   "w": 147,
+   "h": 25
+  },
+  "button:Other costs": {
+   "x": 1041,
+   "y": 852,
+   "w": 96,
+   "h": 25
+  },
+  "button:Totals": {
+   "x": 1142,
+   "y": 852,
+   "w": 66,
+   "h": 25
+  },
+  "button:Payment structure": {
+   "x": 630,
+   "y": 882,
+   "w": 134,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "th:Professional Fees": {
+   "x": 1415,
+   "y": 438,
+   "w": 92,
+   "h": 48
+  },
+  "th:Amount": {
+   "x": 1507,
+   "y": 438,
+   "w": 72,
+   "h": 48
+  },
+  "th:Number": {
+   "x": 1579,
+   "y": 438,
+   "w": 60,
+   "h": 48
+  },
+  "th:GST": {
+   "x": 1639,
+   "y": 438,
+   "w": 62,
+   "h": 48
+  },
+  "th:Total": {
+   "x": 1701,
+   "y": 438,
+   "w": 73,
+   "h": 48
+  },
+  "th:Government / Official Charges": {
+   "x": 1415,
+   "y": 560,
+   "w": 167,
+   "h": 48
+  },
+  "th:Description": {
+   "x": 1415,
+   "y": 712,
+   "w": 267,
+   "h": 30
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input23:Fee Summary": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input24:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input25:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 90,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": {
+   "x": 1415,
+   "y": 804,
+   "w": 267,
+   "h": 31
+  },
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ },
+ "insert_tables": {
+  "button:System Setup": {
+   "x": 23,
+   "y": 374,
+   "w": 242,
+   "h": 36
+  },
+  "select:Standard Visa Application": {
+   "x": 335,
+   "y": 49,
+   "w": 260,
+   "h": 32
+  },
+  "button:New template": {
+   "x": 607,
+   "y": 47,
+   "w": 135,
+   "h": 36
+  },
+  "button:Cancel": {
+   "x": 1674,
+   "y": 47,
+   "w": 93,
+   "h": 36
+  },
+  "button:Save": {
+   "x": 1779,
+   "y": 47,
+   "w": 79,
+   "h": 36
+  },
+  "button:New section": {
+   "x": 343,
+   "y": 804,
+   "w": 124,
+   "h": 36
+  },
+  "button:From library": {
+   "x": 473,
+   "y": 804,
+   "w": 123,
+   "h": 36
+  },
+  "button:Custom fields": {
+   "x": 343,
+   "y": 857,
+   "w": 202,
+   "h": 42
+  },
+  "button:Fee schedule": {
+   "x": 343,
+   "y": 903,
+   "w": 202,
+   "h": 42
+  },
+  "button:Visual": {
+   "x": 1113,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "button:HTML": {
+   "x": 1187,
+   "y": 154,
+   "w": 73,
+   "h": 28
+  },
+  "select:Paragraph": {
+   "x": 736,
+   "y": 232,
+   "w": 122,
+   "h": 30
+  },
+  "select:Arial": {
+   "x": 862,
+   "y": 232,
+   "w": 154,
+   "h": 30
+  },
+  "select:Insert": {
+   "x": 825,
+   "y": 302,
+   "w": 132,
+   "h": 28
+  },
+  "h2:Fee Summary": {
+   "x": 655,
+   "y": 368,
+   "w": 574,
+   "h": 31
+  },
+  "button:Custom fields (3)": {
+   "x": 679,
+   "y": 814,
+   "w": 112,
+   "h": 23
+  },
+  "button:Client & agreement": {
+   "x": 795,
+   "y": 814,
+   "w": 126,
+   "h": 23
+  },
+  "button:Fees": {
+   "x": 925,
+   "y": 814,
+   "w": 46,
+   "h": 23
+  },
+  "button:Tables & signatures": {
+   "x": 975,
+   "y": 814,
+   "w": 125,
+   "h": 23
+  },
+  "button:Client details": {
+   "x": 630,
+   "y": 852,
+   "w": 104,
+   "h": 25
+  },
+  "button:Business & agent": {
+   "x": 739,
+   "y": 852,
+   "w": 126,
+   "h": 25
+  },
+  "button:Service details": {
+   "x": 870,
+   "y": 852,
+   "w": 112,
+   "h": 25
+  },
+  "button:Scope clauses": {
+   "x": 987,
+   "y": 852,
+   "w": 110,
+   "h": 25
+  },
+  "button:Exclusions": {
+   "x": 1102,
+   "y": 852,
+   "w": 91,
+   "h": 25
+  },
+  "button:Schedule A": {
+   "x": 630,
+   "y": 882,
+   "w": 95,
+   "h": 25
+  },
+  "button:Schedule B": {
+   "x": 730,
+   "y": 882,
+   "w": 94,
+   "h": 25
+  },
+  "button:Client signature": {
+   "x": 828,
+   "y": 882,
+   "w": 119,
+   "h": 25
+  },
+  "button:Agent signature": {
+   "x": 952,
+   "y": 882,
+   "w": 120,
+   "h": 25
+  },
+  "label:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  },
+  "label:Keep on one page": {
+   "x": 772,
+   "y": 924,
+   "w": 123,
+   "h": 19
+  },
+  "th:Professional Fees": {
+   "x": 1415,
+   "y": 438,
+   "w": 92,
+   "h": 48
+  },
+  "th:Amount": {
+   "x": 1507,
+   "y": 438,
+   "w": 72,
+   "h": 48
+  },
+  "th:Number": {
+   "x": 1579,
+   "y": 438,
+   "w": 60,
+   "h": 48
+  },
+  "th:GST": {
+   "x": 1639,
+   "y": 438,
+   "w": 62,
+   "h": 48
+  },
+  "th:Total": {
+   "x": 1701,
+   "y": 438,
+   "w": 73,
+   "h": 48
+  },
+  "th:Government / Official Charges": {
+   "x": 1415,
+   "y": 560,
+   "w": 167,
+   "h": 48
+  },
+  "th:Description": {
+   "x": 1415,
+   "y": 712,
+   "w": 267,
+   "h": 30
+  },
+  "input0:Search menu": {
+   "x": 23,
+   "y": 98,
+   "w": 242,
+   "h": 38
+  },
+  "input1:Standard Visa Application": {
+   "x": 767,
+   "y": 48,
+   "w": 760,
+   "h": 34
+  },
+  "input23:Fee Summary": {
+   "x": 621,
+   "y": 152,
+   "w": 479,
+   "h": 32
+  },
+  "input24:#000000": {
+   "x": 888,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "input25:#ffff00": {
+   "x": 944,
+   "y": 266,
+   "w": 32,
+   "h": 32
+  },
+  "text:SECTIONS": null,
+  "text:Preview": {
+   "x": 1331,
+   "y": 141,
+   "w": 527,
+   "h": 40
+  },
+  "text:INSERT": null,
+  "text:Unsaved changes": {
+   "x": 1540,
+   "y": 56,
+   "w": 122,
+   "h": 19
+  },
+  "text:Up to date": null,
+  "text:Custom fields": {
+   "x": 376,
+   "y": 868,
+   "w": 90,
+   "h": 20
+  },
+  "text:Fee schedule": {
+   "x": 376,
+   "y": 914,
+   "w": 90,
+   "h": 20
+  },
+  "text:This section is also used": null,
+  "text:Grand Total": {
+   "x": 1415,
+   "y": 804,
+   "w": 267,
+   "h": 31
+  },
+  "text:[Employer ABN]": null,
+  "text:Start on a new page": {
+   "x": 621,
+   "y": 924,
+   "w": 133,
+   "h": 19
+  }
+ }
+}

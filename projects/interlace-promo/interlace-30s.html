@@ -1,0 +1,453 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Interlace · 30s promo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+:root{
+  --chrome-bg:#E9EEF5; --chrome-fg:#0B2A4A; --chrome-muted:#5B6B80; --chrome-panel:#FFFFFF; --chrome-line:#D5DDE8;
+  --blue:#2472B0; --sky:#4FA3E0; --navy:#0B2A4A; --deep:#061B33; --ink:#0E1B2C; --mut:#5B6B80;
+  --orange:#F7941D; --teal:#18B6B0; --line:#E3ECF6; --paper:#F5F8FC;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --chrome-bg:#06111F; --chrome-fg:#E6F0FA; --chrome-muted:#8EA0BD; --chrome-panel:#0C1A2E; --chrome-line:#1B2C4A; }
+}
+:root[data-theme="dark"]{ --chrome-bg:#06111F; --chrome-fg:#E6F0FA; --chrome-muted:#8EA0BD; --chrome-panel:#0C1A2E; --chrome-line:#1B2C4A; }
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--chrome-bg);color:var(--chrome-fg);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px}
+#viewport{position:relative;width:min(calc(100vw - 32px),calc((100vh - 130px) * 16 / 9));aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:var(--paper);box-shadow:0 20px 60px rgba(4,12,28,.25)}
+#stage{position:absolute;left:0;top:0;width:1920px;height:1080px;transform-origin:0 0;overflow:hidden;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink)}
+
+/* controls */
+#controls{width:min(calc(100vw - 32px),calc((100vh - 130px) * 16 / 9));display:flex;align-items:center;gap:14px;background:var(--chrome-panel);border:1px solid var(--chrome-line);border-radius:12px;padding:10px 14px}
+#controls button{font:inherit;font-size:14px;font-weight:600;color:var(--chrome-fg);background:transparent;border:1px solid var(--chrome-line);border-radius:999px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+#controls button:focus-visible,#scrub:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+#controls button[aria-pressed="true"]{background:var(--blue);color:#fff;border-color:var(--blue)}
+#time{font-variant-numeric:tabular-nums;font-size:14px;color:var(--chrome-muted);min-width:92px}
+#track{position:relative;flex:1;display:flex;align-items:center}
+#scrub{width:100%;accent-color:var(--blue);margin:0}
+#marks{position:absolute;left:0;right:0;top:-9px;height:6px;pointer-events:none}
+#marks i{position:absolute;top:0;width:2px;height:6px;background:var(--chrome-muted);opacity:.6;border-radius:1px}
+#sceneName{font-size:13px;color:var(--chrome-muted);min-width:150px;text-align:right}
+@media (max-width:700px){#sceneName{display:none}}
+
+/* backgrounds: light paper for scenes 1–4, deep blue for the CTA */
+.bg{position:absolute;inset:0}
+#bgL{background:radial-gradient(80% 70% at 50% 40%,#FFFFFF 0%,#EEF4FB 70%,#E4EDF8 100%)}
+.blob{position:absolute;border-radius:50%;filter:blur(90px)}
+#blobA{left:-260px;top:-300px;width:900px;height:900px;background:rgba(79,163,224,.28)}
+#blobB{right:-300px;bottom:-360px;width:1000px;height:1000px;background:rgba(24,182,176,.18)}
+#grid{position:absolute;inset:0;background-image:radial-gradient(rgba(36,114,176,.16) 1.5px,transparent 1.5px);background-size:44px 44px;-webkit-mask-image:radial-gradient(70% 60% at 50% 50%,#000 20%,transparent 75%);mask-image:radial-gradient(70% 60% at 50% 50%,#000 20%,transparent 75%)}
+#bgD{background:radial-gradient(90% 80% at 50% 35%,#1C5E96 0%,#0B2A4A 55%,#061B33 100%);opacity:0;visibility:hidden}
+#ring{position:absolute;left:50%;top:50%;width:1500px;height:1500px;margin:-750px 0 0 -750px;border-radius:50%;border:2px solid rgba(255,255,255,.08);box-shadow:inset 0 0 200px rgba(79,163,224,.18);opacity:0;visibility:hidden}
+
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden}
+.c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.t{margin:0;text-align:center;font-size:84px;font-weight:700;letter-spacing:-.035em;line-height:1.1;color:var(--ink)}
+.t em,.h em{font-style:normal;color:var(--blue)}
+.w{display:inline-block;opacity:0;will-change:transform}
+.ico{display:block;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.eyebrow{display:inline-flex;align-items:center;gap:12px;font-size:22px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--blue);opacity:0}
+.eyebrow::before{content:"";width:36px;height:3px;border-radius:2px;background:var(--orange)}
+.h{margin:0;font-size:64px;font-weight:700;letter-spacing:-.03em;line-height:1.12;color:var(--ink)}
+.card{background:#fff;border:1px solid var(--line);border-radius:28px;box-shadow:0 30px 70px rgba(14,42,74,.10),0 2px 6px rgba(14,42,74,.04)}
+
+/* 1 Hook */
+#fly{position:absolute;inset:0;width:1920px;height:1080px;overflow:visible}
+#flyPath{fill:none;stroke:var(--blue);stroke-width:4;stroke-linecap:round;stroke-dasharray:2 18;opacity:.55}
+#plane{position:absolute;left:0;top:0;width:64px;height:64px;margin:-32px 0 0 -32px;color:var(--blue);opacity:0;visibility:hidden;filter:drop-shadow(0 8px 14px rgba(36,114,176,.35))}
+#plane svg{width:100%;height:100%;display:block;fill:currentColor}
+.pin{position:absolute;display:flex;flex-direction:column;align-items:center;gap:10px;opacity:0}
+.pin i{width:22px;height:22px;border-radius:50%;background:var(--blue);box-shadow:0 0 0 8px rgba(36,114,176,.15)}
+.pin b{font-size:22px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+#pinB i{background:var(--orange);box-shadow:0 0 0 8px rgba(247,148,29,.18)}
+#pinB b{color:var(--orange)}
+.vchip{position:absolute;padding:14px 26px;border-radius:999px;background:#fff;border:1px solid var(--line);box-shadow:0 16px 40px rgba(14,42,74,.10);font-size:26px;font-weight:700;color:var(--navy);opacity:0;visibility:hidden;white-space:nowrap}
+.vchip span{color:var(--mut);font-weight:500}
+#logo1{width:720px;opacity:0}
+#logo1 img{width:100%;display:block}
+#tag1{margin-top:36px;font-size:40px;font-weight:600;letter-spacing:-.01em;color:var(--mut);opacity:0}
+#tag1 em{font-style:normal;color:var(--orange)}
+
+/* 2 Services: card wheel (Pinterest-style arc carousel) */
+#wheel{position:absolute;left:960px;top:1420px;width:0;height:0}
+.wc{position:absolute;left:-130px;top:-145px;width:260px;height:290px}
+.wci{width:100%;height:100%;border-radius:40px;overflow:hidden;background:#dfe9f4;box-shadow:0 26px 60px rgba(14,42,74,.18),0 2px 6px rgba(14,42,74,.06);opacity:0;visibility:hidden}
+.wci img{width:100%;height:100%;object-fit:cover;display:block}
+.wci.tile{display:flex;flex-direction:column;justify-content:space-between;padding:30px 28px;color:#fff;background:var(--tbg)}
+.wci.tile svg{width:54px;height:54px;stroke-width:1.7}
+.wci.tile b{font-size:30px;font-weight:700;line-height:1.1;letter-spacing:-.02em}
+.mid{position:absolute;left:0;right:0;top:600px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.mid .h{font-size:64px;margin-top:18px}
+.mid p{margin:22px 0 0;font-size:26px;color:var(--mut);opacity:0}
+.feats{display:grid;grid-template-columns:repeat(4,285px);margin-top:46px}
+.ft{padding:6px 20px;border-left:1px solid #D5E1EE;opacity:0;visibility:hidden}
+.ft:first-child{border-left:0}
+.ft b{display:block;white-space:nowrap;font-size:26px;font-weight:700;letter-spacing:-.015em;color:var(--ink);transition:none}
+.ft span{display:block;margin-top:8px;font-size:20px;color:var(--mut)}
+.ft i{display:block;width:0;height:4px;margin:12px auto 0;border-radius:2px;background:var(--acc)}
+/* 3 Migration agents */
+.l3{position:absolute;left:150px;top:180px;width:860px;display:flex;flex-direction:column;gap:28px}
+.l3 .h{font-size:76px}
+.l3 p{margin:0;font-size:30px;line-height:1.45;color:var(--mut);opacity:0}
+.idc{position:absolute;left:1120px;top:170px;width:650px;padding:46px 50px;opacity:0;visibility:hidden}
+.idc .row{display:flex;align-items:center;gap:22px}
+.idc .sh{width:96px;height:96px;border-radius:26px;background:linear-gradient(135deg,var(--sky),var(--blue));color:#fff;display:flex;align-items:center;justify-content:center;flex:none;box-shadow:0 16px 30px rgba(36,114,176,.35)}
+.idc .sh svg{width:52px;height:52px;stroke-width:2}
+.idc .k{font-size:20px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--mut)}
+.idc .v{font-size:34px;font-weight:700;letter-spacing:-.02em;color:var(--ink);margin-top:4px}
+.marn{margin-top:36px;padding:26px 30px;border-radius:20px;background:var(--paper);border:1px dashed #C7D7EA;display:flex;align-items:center;justify-content:space-between}
+.marn .k{font-size:20px}
+.mslot{display:grid;overflow:hidden;height:56px}
+.mslot span{grid-area:1/1;font-size:44px;font-weight:800;letter-spacing:.02em;color:var(--blue);font-variant-numeric:tabular-nums;opacity:0}
+.ok{display:flex;gap:14px;margin-top:28px;flex-wrap:wrap}
+.ok span{display:inline-flex;align-items:center;gap:10px;padding:10px 18px;border-radius:999px;background:#E7F7F6;color:#0E7C78;font-size:21px;font-weight:700;opacity:0}
+.ok svg{width:22px;height:22px;stroke-width:2.6}
+.stats{position:absolute;left:150px;right:150px;top:720px;display:grid;grid-template-columns:repeat(4,1fr);gap:32px}
+.st{padding:34px 36px;opacity:0;visibility:hidden}
+.st b{display:block;font-size:72px;font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--navy);font-variant-numeric:tabular-nums}
+.st b i{font-style:normal;color:var(--orange)}
+.st>span{display:block;margin-top:12px;font-size:23px;font-weight:600;color:var(--mut)}
+
+/* 4 Success story */
+.l4{position:absolute;left:150px;top:150px;width:900px}
+.l4 .eyebrow{margin-bottom:34px}
+.qc{padding:52px 56px;opacity:0;visibility:hidden;position:relative}
+.qc .qm{position:absolute;right:46px;top:20px;font-size:200px;line-height:1;font-weight:800;color:#E8F2FB}
+.who{display:flex;align-items:center;gap:26px;position:relative}
+.av{width:118px;height:118px;border-radius:50%;background:linear-gradient(135deg,var(--orange),#F26B3A);color:#fff;display:flex;align-items:center;justify-content:center;font-size:44px;font-weight:800;box-shadow:0 0 0 8px #FFF1E0}
+.who b{display:block;font-size:40px;font-weight:700;letter-spacing:-.02em}
+.who span{display:block;margin-top:6px;font-size:24px;color:var(--mut)}
+.qt{margin:42px 0 0;font-size:46px;font-weight:600;line-height:1.3;letter-spacing:-.02em;color:var(--ink);position:relative}
+.qt em{font-style:normal;color:var(--blue)}
+.foot4{position:absolute;left:150px;top:690px;display:flex;align-items:center;gap:18px;font-size:30px;font-weight:600;color:var(--mut);opacity:0}
+.foot4 b{font-size:44px;font-weight:800;color:var(--orange)}
+.tline{position:absolute;left:1190px;top:190px;width:580px}
+.tl-rail{position:absolute;left:39px;top:40px;width:4px;height:560px;border-radius:2px;background:var(--line)}
+.tl-fill{position:absolute;left:39px;top:40px;width:4px;height:560px;border-radius:2px;background:linear-gradient(var(--blue),var(--teal));transform:scaleY(0);transform-origin:50% 0}
+.step{position:relative;display:flex;gap:30px;align-items:flex-start;height:280px;opacity:0}
+.step:last-child{height:auto}
+.dot{width:82px;height:82px;border-radius:50%;background:#fff;border:4px solid var(--line);display:flex;align-items:center;justify-content:center;color:#fff;flex:none;position:relative;z-index:1}
+.dot svg{width:38px;height:38px;stroke-width:3;opacity:0}
+.step.done .dot{background:var(--blue);border-color:var(--blue)}
+.step.done .dot svg{opacity:1}
+.step .yr{font-size:22px;font-weight:700;letter-spacing:.12em;color:var(--mut)}
+.step .nm{margin-top:6px;font-size:38px;font-weight:700;letter-spacing:-.02em;color:var(--ink)}
+.step .ds{margin-top:6px;font-size:24px;color:var(--mut)}
+#stp3 .dot{border-color:var(--line)}
+#stp3.done .dot{background:var(--teal);border-color:var(--teal)}
+#stamp{position:absolute;left:1480px;top:900px;padding:12px 26px;border:5px solid var(--teal);border-radius:14px;color:var(--teal);font-size:40px;font-weight:800;letter-spacing:.14em;transform:rotate(-8deg);opacity:0;visibility:hidden;background:rgba(255,255,255,.85)}
+
+/* 5 CTA */
+#s5{color:#fff}
+#logo5{width:560px;opacity:0}
+#logo5 img{width:100%;display:block}
+.cta{gap:0}
+.cta .t{color:#fff;font-size:96px;margin-top:64px}
+.cta .t em{color:var(--orange)}
+.btn{display:inline-flex;align-items:center;gap:16px;margin-top:56px;height:92px;padding:0 50px;border-radius:999px;background:var(--orange);color:#fff;font-size:34px;font-weight:700;box-shadow:0 20px 60px rgba(247,148,29,.45);opacity:0;visibility:hidden}
+.btn svg{width:34px;height:34px;stroke-width:2.4}
+.contact{display:flex;gap:44px;margin-top:46px;font-size:30px;font-weight:600;opacity:0}
+.contact span{display:inline-flex;align-items:center;gap:12px}
+.contact svg{width:30px;height:30px;color:var(--orange)}
+.cities{margin-top:30px;font-size:22px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(255,255,255,.6);opacity:0}
+
+#vo{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);max-width:1400px;text-align:center;background:rgba(6,27,51,.78);color:#fff;font-size:28px;line-height:1.35;padding:12px 24px;border-radius:12px;z-index:50;display:none}
+#vo.on{display:block}
+#vo:empty{display:none}
+</style>
+</head>
+<body>
+<div id="viewport" role="img" aria-label="Animatic of the 30-second Interlace Studies promo">
+  <div id="stage">
+    <div class="bg" id="bgL"><div class="blob" id="blobA"></div><div class="blob" id="blobB"></div><div id="grid"></div></div>
+    <div class="bg" id="bgD"></div>
+    <div id="ring"></div>
+    <div id="scenes"></div>
+    <div id="vo"></div>
+  </div>
+</div>
+
+<div id="controls">
+  <button id="play" aria-label="Play">Play</button>
+  <span id="time">0:00 / 0:30</span>
+  <div id="track"><div id="marks"></div><input id="scrub" type="range" min="0" max="30" step="0.01" value="0" aria-label="Seek"></div>
+  <span id="sceneName">1. Hook</span>
+  <button id="cc" aria-pressed="false">VO captions</button>
+</div>
+
+<script>
+// line icons (24px grid)
+const I={
+  cap:'<path d="M22 10 12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1.5 3 3 6 3s6-1.5 6-3v-5"/><path d="M22 10v6"/>',
+  brief:'<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="M3 13h18"/>',
+  bldg:'<rect x="4" y="3" width="16" height="18" rx="1.5"/><path d="M9 7h1M14 7h1M9 11h1M14 11h1M9 15h1M14 15h1M10 21v-3h4v3"/>',
+  fam:'<circle cx="9" cy="7" r="3"/><path d="M3 20v-1a6 6 0 0 1 12 0v1"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2A4.5 4.5 0 0 1 21 18.5V20"/>',
+  shield:'<path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3z"/><path d="m8.5 12 2.5 2.5 4.5-5"/>',
+  check:'<path d="m5 12 5 5 9-10"/>',
+  star:'<path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
+  book:'<path d="M4 4h6a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H4z"/><path d="M20 4h-6a3 3 0 0 0-3 3"/><path d="M20 4v14h-7"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M8 3v4M16 3v4M3 10h18"/><path d="m9 15 2 2 4-4"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/>',
+  phone:'<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
+  arrow:'<path d="M5 12h14M13 6l6 6-6 6"/>'
+};
+const ic=(n,cls='')=>`<svg class="ico ${cls}" viewBox="0 0 24 24" aria-hidden="true">${I[n]}</svg>`;
+// Material "flight" glyph, nose pointing up; rotated in JS to follow the path
+const PLANE='<svg viewBox="0 0 24 24"><path d="M21 16v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>';
+
+// service wheel (Pinterest-style arc): photos from interlace.com.au plus service tiles
+const WHEEL=[['img','student'],['tile','book','PTE / IELTS Prep','#F7941D'],['img','skilled'],['img','office'],['tile','brief','Job Ready Program','#18B6B0'],
+  ['img','employer'],['img','consult1'],['img','family'],['tile','check','Skills Assessment','#2472B0'],['img','trade'],
+  ['img','team'],['img','consult2'],['tile','shield','Visa Appeals','#0B2A4A'],['img','event'],['img','brochure'],
+  ['tile','fam','Family Visas','#7A5AF8'],['img','student'],['img','office'],['tile','cap','Study Visa','#2472B0'],['img','employer']];
+
+// visa subclasses scattered around the hook question (fixed positions so every render is identical)
+const VCH=[[230,250,'Subclass','500'],[1450,210,'Subclass','190'],[300,720,'Subclass','482'],[1420,760,'Subclass','485'],[820,140,'Subclass','189'],[900,880,'Subclass','820']];
+
+// Placeholder success story: replace with a real client (name, photo, quote, dates) and their written consent before publishing.
+const STORY={initials:'AR',name:'Anisa R.',from:'Jakarta → Adelaide',steps:[
+  ['2021','Student Visa','Subclass 500 · Bachelor of Nursing'],
+  ['2024','Graduate Visa','Subclass 485 · Working as an RN'],
+  ['2025','Permanent Residency','Subclass 190 · Adelaide, SA']]};
+
+document.getElementById('scenes').innerHTML=`
+<section class="scene" id="s1">
+  <svg id="fly" viewBox="0 0 1920 1080"><defs><mask id="flyMask" maskUnits="userSpaceOnUse" x="0" y="0" width="1920" height="1080"><path id="flyReveal" d="M210 830 C 360 160, 1300 60, 1690 600" fill="none" stroke="#fff" stroke-width="16"/></mask></defs><path id="flyPath" mask="url(#flyMask)" d="M210 830 C 360 160, 1300 60, 1690 600"/></svg>
+  <div class="pin" id="pinA" style="left:174px;top:850px"><i></i><b>Home</b></div>
+  <div class="pin" id="pinB" style="left:1640px;top:620px"><i></i><b>Australia</b></div>
+  <div id="plane">${PLANE}</div>
+  ${VCH.map((v,i)=>`<div class="vchip" id="vc${i}" style="left:${v[0]}px;top:${v[1]}px"><span>${v[2]}</span> ${v[3]}</div>`).join('')}
+  <div class="c"><h1 class="t" id="h1a">Dreaming of studying<br><em>in Australia?</em></h1></div>
+  <div class="c"><h1 class="t" id="h1b">Not sure which <em>visa</em><br>is right for you?</h1></div>
+  <div class="c" id="c1">
+    <div id="logo1"><img src="../../assets/interlace/logo-crop.png" alt="Interlace Studies"></div>
+    <div id="tag1">We'll guide you <em>there.</em></div>
+  </div>
+</section>
+
+<section class="scene" id="s2">
+  <div id="wheel">${WHEEL.map((c,i)=>`<div class="wc" style="transform:rotate(${i*360/WHEEL.length}deg) translateY(-1100px)">${c[0]==='img'
+    ?`<div class="wci"><img src="../../assets/interlace/photos/${c[1]}.jpg" alt=""></div>`
+    :`<div class="wci tile" style="--tbg:${c[3]}">${ic(c[1])}<b>${c[2]}</b></div>`}</div>`).join('')}</div>
+  <div class="mid">
+    <span class="eyebrow" id="e2">Our services</span>
+    <h2 class="h" id="h2">Every step of your journey,<br><em>covered.</em></h2>
+    <p id="p2">Study, work, migrate and bring your family, all with one team.</p>
+  </div>  
+</section>
+<section class="scene" id="s3">
+  <div class="l3">
+    <span class="eyebrow" id="e3">Registered migration agents</span>
+    <h2 class="h" id="h3">Visa advice you can <em>trust.</em></h2>
+    <p id="p3">Every case is handled by MARA-registered migration agents, from your first course to permanent residency.</p>
+  </div>
+  <div class="card idc" id="idc">
+    <div class="row"><div class="sh">${ic('shield')}</div><div><div class="k">Interlace Studies</div><div class="v">Registered Migration Agents</div></div></div>
+    <div class="marn"><span class="k">MARN</span><div class="mslot"><span>2117623</span><span>2418363</span><span>2519108</span><span>1802688</span></div></div>
+    <div class="ok"><span>${ic('check')}MARA registered</span><span>${ic('check')}ICEF certified</span><span>${ic('check')}7+ years</span></div>
+  </div>
+  <div class="stats">
+    <div class="card st"><b><span data-n="1200">0</span><i>+</i></b><span>PR grants</span></div>
+    <div class="card st"><b><span data-n="300">0</span><i>+</i></b><span>Education partners</span></div>
+    <div class="card st"><b><span data-n="2500">0</span><i>+</i></b><span>Students placed</span></div>
+    <div class="card st"><b><span data-n="250">0</span><i>+</i></b><span>Family visas processed</span></div>
+  </div>
+</section>
+
+<section class="scene" id="s4">
+  <div class="l4">
+    <span class="eyebrow" id="e4">Success story</span>
+    <div class="card qc" id="qc">
+      <div class="qm">&rdquo;</div>
+      <div class="who"><div class="av">${STORY.initials}</div><div><b>${STORY.name}</b><span>${STORY.from}</span></div></div>
+      <p class="qt" id="qt">“Interlace guided me from my first course <em>all the way to PR.</em>”</p>
+    </div>
+  </div>
+  <div class="tline">
+    <div class="tl-rail"></div><div class="tl-fill" id="tlFill"></div>
+    ${STORY.steps.map((s,i)=>`<div class="step" id="stp${i+1}"><div class="dot">${ic('check')}</div><div><div class="yr">${s[0]}</div><div class="nm">${s[1]}</div><div class="ds">${s[2]}</div></div></div>`).join('')}
+  </div>
+  <div id="stamp">GRANTED</div>
+  <div class="foot4" id="foot4"><b><span data-n="85">0</span>%</b> of our graduates secure a job within 6 months</div>
+</section>
+
+<section class="scene" id="s5">
+  <div class="c cta">
+    <div id="logo5"><img src="../../assets/interlace/logo-white.png" alt="Interlace Studies"></div>
+    <h1 class="t" id="h5">Your journey starts <em>here.</em></h1>
+    <div class="btn" id="btn5">${ic('cal')}Book an appointment ${ic('arrow')}</div>
+    <div class="contact" id="ct5"><span>${ic('globe')}interlace.com.au</span><span>${ic('phone')}1300 365 423</span></div>
+    <div class="cities" id="cy5">Adelaide · Brisbane · Perth · Sydney · Kathmandu · Indonesia</div>
+  </div>
+</section>`;
+
+// split words
+function split(el){
+  const walk=n=>{[...n.childNodes].forEach(c=>{
+    if(c.nodeType===3){const f=document.createDocumentFragment();c.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(t))}else{const s=document.createElement('span');s.className='w';s.textContent=t;f.appendChild(s)}});c.replaceWith(f)}
+    else if(c.nodeType===1&&!c.classList.contains('w'))walk(c)})};
+  walk(el);return el.querySelectorAll('.w');
+}
+
+const stage=document.getElementById('stage'),vp=document.getElementById('viewport');
+let SCALE=1;
+function fit(){SCALE=vp.clientWidth/1920;stage.style.transform=`scale(${SCALE})`}
+window.addEventListener('resize',fit);fit();
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+const DUR=30;
+const VO=[[0,2.4,"Dreaming of studying in Australia?"],[2.4,4.6,"Not sure which visa is right for you?"],[4.6,6.2,"Interlace will guide you there."],
+  [6.2,12.6,"Study, skilled, employer-sponsored and family visas: we cover every step of your journey."],
+  [12.6,18.6,"Your case is handled by registered migration agents, with over twelve hundred PR grants and counting."],
+  [18.6,25,"Like Anisa: student visa, graduate visa, then permanent residency, with Interlace at every step."],
+  [25,30,"Your journey starts here. Book an appointment at interlace dot com dot au."]];
+const SCN=[[0,'1. Hook'],[6.2,'2. Services'],[12.6,'3. Migration agents'],[18.6,'4. Success story'],[25,'5. Call to action']];
+
+function build(){
+  const tl=gsap.timeline({paused:true,defaults:{ease:'power3.out'}});
+  const show=(el,t,d=.5,v={})=>tl.to(el,{autoAlpha:1,duration:d,...v},t);
+  const hide=(el,t,d=.4,v={})=>tl.to(el,{autoAlpha:0,duration:d,...v},t);
+  const words=(el,t,stag=.08)=>{const w=split(el);tl.fromTo(w,{autoAlpha:0,y:28,filter:'blur(10px)'},{autoAlpha:1,y:0,filter:'blur(0px)',duration:.7,stagger:stag},t);return w};
+  const out=(el,t,d=.45)=>tl.to(el,{autoAlpha:0,y:-16,filter:'blur(8px)',duration:d,ease:'power2.in'},t);
+  const rise=(el,t,v={})=>tl.fromTo(el,{autoAlpha:0,y:40},{autoAlpha:1,y:0,duration:.7,...v},t);
+  // setter proxy: GSAP assigns v on every render, including TL.seek() (which suppresses onUpdate)
+  const count=(el,t,d=1.4)=>{const n=+el.dataset.n,o={set v(x){el.textContent=Math.round(x).toLocaleString('en-AU')},get v(){return 0}};tl.fromTo(o,{v:0},{v:n,duration:d,ease:'power2.out'},t)};
+  const setCls=(el,c,t)=>tl.set(el,{className:c},t);
+
+  // ambient drift across the whole piece
+  tl.fromTo('#blobA',{x:0,y:0},{x:260,y:140,duration:DUR,ease:'sine.inOut'},0);
+  tl.fromTo('#blobB',{x:0,y:0},{x:-220,y:-120,duration:DUR,ease:'sine.inOut'},0);
+
+  /* 1 Hook 0–6.2 */
+  tl.set('#s1',{autoAlpha:1},0);
+  const fp=$('#flyPath'),L=fp.getTotalLength();
+  tl.fromTo('#pinA',{autoAlpha:0,scale:.4},{autoAlpha:1,scale:1,duration:.5,ease:'back.out(2)'},.1);
+  // plane flies along the path; position is derived from progress so seeking is exact
+  const pl=$('#plane'),pp={_p:0,set p(x){this._p=x;placePlane()},get p(){return this._p}};
+  const rv=$('#flyReveal');rv.style.strokeDasharray=`${L} ${L}`;
+  const placePlane=()=>{const q=pp._p;rv.style.strokeDashoffset=L*(1-q);const a=fp.getPointAtLength(q*L),b=fp.getPointAtLength(Math.min(L,q*L+2));
+    const ang=Math.atan2(b.y-a.y,b.x-a.x)*180/Math.PI+90;pl.style.transform=`translate(${a.x}px,${a.y}px) rotate(${ang}deg)`};
+  placePlane();
+  show(pl,.2,.3);
+  tl.fromTo(pp,{p:0},{p:1,duration:4,ease:'power1.inOut'},.2);
+  tl.fromTo('#pinB',{autoAlpha:0,scale:.4},{autoAlpha:1,scale:1,duration:.5,ease:'back.out(2)'},3.9);
+  words($('#h1a'),.35,.09);out('#h1a',2.1);
+  words($('#h1b'),2.45,.07);
+  VCH.forEach((v,i)=>{tl.fromTo(`#vc${i}`,{autoAlpha:0,scale:.7,y:20},{autoAlpha:1,scale:1,y:0,duration:.45,ease:'back.out(2)'},2.7+i*.12)});
+  tl.to(VCH.map((v,i)=>`#vc${i}`),{y:'-=14',duration:1.2,ease:'sine.inOut',stagger:.1},3.2);
+  out('#h1b',4.3);
+  tl.to(VCH.map((v,i)=>`#vc${i}`),{autoAlpha:0,scale:.6,x:(i)=>960-VCH[i][0]-100,y:(i)=>520-VCH[i][1],duration:.5,ease:'power2.in',stagger:.03},4.25);
+  tl.to(['#flyPath','#pinA','#pinB',pl],{autoAlpha:0,duration:.4},4.4);
+  tl.fromTo('#logo1',{autoAlpha:0,scale:.9,filter:'blur(12px)'},{autoAlpha:1,scale:1,filter:'blur(0px)',duration:.8},4.65);
+  tl.fromTo('#tag1',{autoAlpha:0,y:16},{autoAlpha:1,y:0,duration:.6},5.1);
+  out('#c1',5.85,.35);
+  hide('#s1',6.2,.05);
+
+  /* 2 Services 6.2–12.6: card wheel */
+  show('#s2',6.2,.05);
+  const wcs=$$('#wheel .wci');
+  // wheel spins in fast and keeps drifting; one tween so the speed never jumps
+  tl.fromTo('#wheel',{rotation:-110},{rotation:28,duration:6.4,ease:'power3.out'},6.2);
+  tl.fromTo(wcs,{autoAlpha:0,scale:.6},{autoAlpha:1,scale:1,duration:.7,ease:'back.out(1.6)',stagger:{each:.035,from:'end'}},6.2);
+  rise('#e2',6.7,{y:16,duration:.5});
+  words($('#h2'),6.85,.07);
+  rise('#p2',7.6,{y:20});
+  const fts=$$('#s2 .ft');
+  tl.fromTo(fts,{autoAlpha:0,y:24},{autoAlpha:1,y:0,duration:.55,stagger:.12},8.0);
+  // spotlight each service in turn
+  fts.forEach((f,i)=>{const t=9.0+i*.65;
+    tl.fromTo($('i',f),{width:0},{width:64,duration:.35,ease:'power2.out'},t);
+    tl.fromTo($('b',f),{color:'#0E1B2C'},{color:getComputedStyle(f).getPropertyValue('--acc').trim(),duration:.25},t)});
+  tl.to(['#e2','#h2','#p2',...fts],{autoAlpha:0,y:-20,duration:.4,ease:'power2.in',stagger:.03},12.0);
+  tl.to('#wheel',{scale:1.25,duration:.6,ease:'power2.in'},12.0);
+  tl.to(wcs,{autoAlpha:0,duration:.45,ease:'power2.in'},12.1);
+  hide('#s2',12.6,.05);
+  /* 3 Migration agents 12.6–18.6 */
+  show('#s3',12.6,.05);
+  rise('#e3',12.65,{y:16,duration:.5});
+  words($('#h3'),12.8,.08);
+  rise('#p3',13.5,{y:20});
+  tl.fromTo('#idc',{autoAlpha:0,x:80,rotationY:-14,transformPerspective:2000},{autoAlpha:1,x:0,rotationY:0,duration:.9},13.1);
+  tl.fromTo('#idc .sh',{scale:.4,rotation:-20},{scale:1,rotation:0,duration:.6,ease:'back.out(2.2)'},13.4);
+  const ms=$$('#idc .mslot span');
+  ms.forEach((s,i)=>{const t=13.8+i*.85;
+    tl.fromTo(s,{autoAlpha:0,yPercent:100},{autoAlpha:1,yPercent:0,duration:.4},t);
+    if(i<ms.length-1)tl.to(s,{autoAlpha:0,yPercent:-100,duration:.35,ease:'power2.in'},t+.6)});
+  tl.fromTo($$('#idc .ok span'),{autoAlpha:0,scale:.8},{autoAlpha:1,scale:1,duration:.4,ease:'back.out(2)',stagger:.15},14.4);
+  const sts=$$('#s3 .st');
+  tl.fromTo(sts,{autoAlpha:0,y:60},{autoAlpha:1,y:0,duration:.7,stagger:.12},14.9);
+  $$('#s3 [data-n]').forEach((el,i)=>count(el,15.1+i*.12,1.6));
+  tl.to(['#e3','#h3','#p3'],{autoAlpha:0,x:-40,duration:.4,ease:'power2.in'},18.0);
+  tl.to('#idc',{autoAlpha:0,x:60,duration:.4,ease:'power2.in'},18.0);
+  tl.to(sts,{autoAlpha:0,y:40,duration:.4,ease:'power2.in',stagger:.04},18.0);
+  hide('#s3',18.6,.05);
+
+  /* 4 Success story 18.6–25 */
+  show('#s4',18.6,.05);
+  rise('#e4',18.65,{y:16,duration:.5});
+  tl.fromTo('#qc',{autoAlpha:0,y:60,scale:.97},{autoAlpha:1,y:0,scale:1,duration:.8},18.8);
+  tl.fromTo('#qc .av',{scale:.3},{scale:1,duration:.6,ease:'back.out(2.2)'},19.0);
+  words($('#qt'),19.5,.06);
+  const steps=$$('.step');
+  steps.forEach((s,i)=>{const t=19.4+i*1.25;
+    tl.fromTo(s,{autoAlpha:0,x:50},{autoAlpha:1,x:0,duration:.55},t);
+    setCls(s,'step done',t+.45);
+    tl.fromTo($('.dot',s),{scale:1},{scale:1.18,duration:.18,yoyo:true,repeat:1,ease:'power2.out'},t+.45)});
+  tl.fromTo('#tlFill',{scaleY:0},{scaleY:1,duration:2.5,ease:'power1.inOut'},19.85);
+  tl.fromTo('#stamp',{autoAlpha:0,scale:2.2,rotation:-20},{autoAlpha:1,scale:1,rotation:-8,duration:.4,ease:'back.out(1.6)'},22.4);
+  tl.fromTo('#foot4',{autoAlpha:0,y:24},{autoAlpha:1,y:0,duration:.6},22.9);
+  count($('#foot4 [data-n]'),22.95,1.2);
+  tl.to(['#e4','#qc','#foot4'],{autoAlpha:0,y:-30,duration:.45,ease:'power2.in',stagger:.04},24.4);
+  tl.to(['.tline','#stamp'],{autoAlpha:0,y:-30,duration:.45,ease:'power2.in'},24.45);
+  hide('#s4',25.0,.05);
+
+  /* 5 CTA 25–30 */
+  tl.fromTo('#bgD',{autoAlpha:0,clipPath:'circle(0% at 50% 50%)'},{autoAlpha:1,clipPath:'circle(75% at 50% 50%)',duration:.9,ease:'power3.inOut'},24.7);
+  tl.fromTo('#ring',{autoAlpha:0,scale:.6},{autoAlpha:1,scale:1,duration:2.5,ease:'power2.out'},25.0);
+  tl.to('#ring',{rotation:30,duration:5,ease:'none'},25.0);
+  show('#s5',25.0,.05);
+  tl.fromTo('#logo5',{autoAlpha:0,y:20,filter:'blur(10px)'},{autoAlpha:1,y:0,filter:'blur(0px)',duration:.8},25.35);
+  words($('#h5'),25.8,.08);
+  tl.fromTo('#btn5',{autoAlpha:0,y:30,scale:.9},{autoAlpha:1,y:0,scale:1,duration:.6,ease:'back.out(1.8)'},26.6);
+  tl.to('#btn5',{scale:1.05,boxShadow:'0 24px 80px rgba(247,148,29,.65)',duration:.5,yoyo:true,repeat:3,ease:'sine.inOut'},27.4);
+  tl.fromTo('#ct5',{autoAlpha:0,y:20},{autoAlpha:1,y:0,duration:.6},27.1);
+  tl.fromTo('#cy5',{autoAlpha:0,y:16},{autoAlpha:1,y:0,duration:.6},27.5);
+  tl.to({},{duration:.01},DUR-.01);
+  return tl;
+}
+
+let TL;
+const playBtn=$('#play'),scrub=$('#scrub'),timeEl=$('#time'),vo=$('#vo'),sn=$('#sceneName');
+const fmt=t=>`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`;
+const setPlayLabel=l=>{playBtn.textContent=l;playBtn.setAttribute('aria-label',l)};
+function ui(){const t=TL.time();scrub.value=t;timeEl.textContent=`${fmt(t)} / ${fmt(DUR)}`;
+  const v=VO.find(x=>t>=x[0]&&t<x[1]);vo.textContent=v?v[2]:'';
+  let n=SCN[0][1];SCN.forEach(s=>{if(t>=s[0])n=s[1]});sn.textContent=n;}
+document.getElementById('marks').innerHTML=SCN.slice(1).map(s=>`<i style="left:${s[0]/DUR*100}%"></i>`).join('');
+document.fonts.ready.then(()=>{
+  fit();TL=build();TL.eventCallback('onUpdate',ui);
+  TL.eventCallback('onComplete',()=>setPlayLabel('Replay'));
+  TL.seek(0);ui();
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){TL.play();setPlayLabel('Pause')}
+});
+playBtn.onclick=()=>{if(!TL)return;
+  if(TL.progress()>=1){TL.restart();}
+  else if(TL.paused()){TL.play();}
+  else{TL.pause();}
+  setPlayLabel(!TL.paused()&&TL.progress()<1?'Pause':'Play')};
+scrub.oninput=()=>{if(!TL)return;TL.pause();TL.seek(+scrub.value);setPlayLabel('Play');ui()};
+$('#cc').onclick=e=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',on);vo.classList.toggle('on',on)};
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();playBtn.click()}});
+</script>
+</body>
+</html>

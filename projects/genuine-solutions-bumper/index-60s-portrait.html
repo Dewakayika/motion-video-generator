@@ -1,0 +1,890 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Genuine Solutions · 60s portrait</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+:root{
+  --chrome-bg:#E9EEF5; --chrome-fg:#09295C; --chrome-muted:#5B6B86; --chrome-panel:#FFFFFF; --chrome-line:#D5DDE8;
+  --bg:#040A16; --green:#41FF95; --navy:#09295C; --txt:#F2F6FB; --mut:#8EA0BD;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --chrome-bg:#040C1C; --chrome-fg:#E6FFF1; --chrome-muted:#8EA0BD; --chrome-panel:#0A1730; --chrome-line:#1B2C4A; }
+}
+:root[data-theme="dark"]{ --chrome-bg:#040C1C; --chrome-fg:#E6FFF1; --chrome-muted:#8EA0BD; --chrome-panel:#0A1730; --chrome-line:#1B2C4A; }
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--chrome-bg);color:var(--chrome-fg);font-family:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:16px}
+#viewport{position:relative;width:min(calc(100vw - 32px),calc((100vh - 130px) * 9 / 16));aspect-ratio:9/16;border-radius:14px;overflow:hidden;background:var(--bg);box-shadow:0 20px 60px rgba(4,12,28,.35)}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0;overflow:hidden;font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--txt)}
+
+/* controls */
+#controls{width:min(calc(100vw - 32px),max(420px,calc((100vh - 130px) * 9 / 16)));display:flex;align-items:center;gap:14px;background:var(--chrome-panel);border:1px solid var(--chrome-line);border-radius:12px;padding:10px 14px}
+#controls button{font:inherit;font-size:14px;font-weight:600;color:var(--chrome-fg);background:transparent;border:1px solid var(--chrome-line);border-radius:999px;padding:7px 14px;cursor:pointer;white-space:nowrap}
+#controls button:focus-visible,#scrub:focus-visible{outline:2px solid #41FF95;outline-offset:2px}
+#controls button[aria-pressed="true"]{background:#41FF95;color:#061A3A;border-color:#41FF95}
+#time{font-variant-numeric:tabular-nums;font-size:14px;color:var(--chrome-muted);min-width:92px}
+#track{position:relative;flex:1;display:flex;align-items:center}
+#scrub{width:100%;accent-color:#41FF95;margin:0}
+#marks{position:absolute;left:0;right:0;top:-9px;height:6px;pointer-events:none}
+#marks i{position:absolute;top:0;width:2px;height:6px;background:var(--chrome-muted);opacity:.6;border-radius:1px}
+#sceneName{font-size:13px;color:var(--chrome-muted);min-width:150px;text-align:right}
+@media (max-width:700px){#sceneName{display:none}}
+
+/* background: one dark field, one glow at a time */
+.bg{position:absolute;inset:0}
+#bgBase{background:radial-gradient(70% 60% at 50% 42%,#0A1A33 0%,#040A16 72%)}
+#halo{position:absolute;left:-420px;top:-560px;width:1500px;height:1200px;border-radius:50%;background:radial-gradient(closest-side,rgba(65,255,149,.20),rgba(65,255,149,0));opacity:0;visibility:hidden}
+#arc{position:absolute;left:50%;top:2020px;width:2600px;height:1500px;margin-left:-1300px;border-radius:50%;border-top:3px solid rgba(65,255,149,.85);box-shadow:0 -40px 160px rgba(65,255,149,.32),inset 0 60px 170px rgba(65,255,149,.16);opacity:0;visibility:hidden}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(120% 100% at 50% 50%,transparent 58%,rgba(0,0,0,.55))}
+
+.scene{position:absolute;inset:0;opacity:0;visibility:hidden}
+.c{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.t{margin:0;padding:0 80px;text-align:center;font-size:64px;font-weight:500;letter-spacing:-.025em;line-height:1.18;color:var(--txt)}
+.t em,.lt em{font-style:normal;color:var(--green)}
+.w{display:inline-block;opacity:0;will-change:transform}
+.star svg{display:block;width:100%;height:100%}
+.spk{position:absolute;width:22px;height:22px;color:#fff;opacity:0;visibility:hidden}
+.spk svg{display:block;width:100%;height:100%}
+
+/* glass surface */
+.glass{background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.025));border:1px solid rgba(255,255,255,.09);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 40px 100px rgba(0,0,0,.45);backdrop-filter:blur(20px)}
+
+/* logo (recreated; swap with official SVG in production) */
+.logo{display:inline-flex;flex-direction:column;align-items:flex-end;color:#fff;line-height:1}
+.logo .lw{font-size:128px;font-weight:600;letter-spacing:-.03em;position:relative}
+.logo .lg{color:#41FF95;position:relative}
+.logo .li{position:relative}
+.logo .li .star{position:absolute;width:.2em;height:.2em;left:-.01em;top:-.12em;color:#41FF95}
+.logo .ls{font-size:42px;font-weight:500;letter-spacing:.04em;margin-top:6px}
+.tag{margin-top:44px;font-size:24px;font-weight:500;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);opacity:0}
+
+/* scene 3: rotating service */
+.slot{display:grid;margin-top:44px;padding:30px 64px;border-radius:999px;border-color:rgba(65,255,149,.4);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 0 70px rgba(65,255,149,.16);opacity:0}
+.slot span{grid-area:1/1;text-align:center;font-size:46px;font-weight:600;letter-spacing:-.02em;color:var(--green);white-space:nowrap;opacity:0}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:22px 40px;max-width:900px;margin-top:64px}
+.badge{display:inline-flex;align-items:center;gap:12px;font-size:24px;font-weight:500;color:var(--mut);opacity:0}
+.badge .star{width:18px;height:18px;color:#41FF95}
+
+/* scene 4: product walkthrough (Figma: Genuine Solution app, 1440×1024 frames) */
+.hlw{position:absolute;left:0;right:0;top:250px;display:grid;justify-items:center;z-index:6;pointer-events:none}
+.pill{grid-area:1/1;margin:0;padding:14px 32px;border-radius:999px;font-size:38px;font-weight:500;letter-spacing:-.02em;line-height:1.2;white-space:nowrap;color:var(--txt);background:rgba(4,10,22,.72);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(16px);box-shadow:0 20px 50px rgba(0,0,0,.35);opacity:0;visibility:hidden}
+.pill em{font-style:normal;color:var(--green)}
+#cam{position:absolute;left:0;top:0;width:1440px;height:1024px;transform-origin:0 0;opacity:0;visibility:hidden}
+#app{position:absolute;inset:0;border-radius:18px;overflow:hidden;background:#fff;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:20px;color:#0a0a0a;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 60px 140px rgba(0,0,0,.6),0 0 120px rgba(65,255,149,.08)}
+#app img{display:block;flex:none}
+#acur{position:absolute;left:0;top:0;width:36px;height:36px;z-index:21;opacity:0;visibility:hidden;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+#aring{position:absolute;left:0;top:0;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;border:3px solid #6363ae;z-index:20;opacity:0;visibility:hidden}
+.ga-side{position:absolute;left:0;top:0;bottom:0;width:240px;padding:16px;border-right:1px solid #e5e5e5;background:#fff}
+.ga-logo{padding:0 12px 24px;font-size:16px;line-height:24px;font-weight:500;color:#171717}
+.ga-logo b{font-weight:500;color:#6363ae}
+.ga-menu{display:flex;flex-direction:column;gap:8px}
+.ga-mi{display:flex;align-items:center;gap:8px;height:32px;padding:0 12px;border:1px solid transparent;border-radius:8px;color:#525252}
+.ga-mi .ga-chev{margin-left:auto}
+.ga-mi.act{border-color:#cccce9;color:#6363ae}
+.ga-sub{padding-left:20px}
+.ga-sub div{height:32px;display:flex;align-items:center;padding-left:16px;border-left:1px solid #e5e5e5;color:#525252}
+.ga-sub .act{color:#6363ae}
+.ga-top{position:absolute;left:240px;right:0;top:0;height:64px;display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:0 24px;border-bottom:1px solid #e5e5e5;background:#fff}
+.ga-bell{position:relative;padding:8px;border:1px solid #e5e5e5;border-radius:8px}
+.ga-bell i{position:absolute;right:9px;top:7px;width:6px;height:6px;border-radius:50%;background:#ef4444}
+.ga-user{display:flex;align-items:center;gap:4px}
+.ga-av{border-radius:50%;overflow:hidden;flex:none}
+.ga-av img{width:100%;height:100%;object-fit:cover}
+.ga-main{position:absolute;left:240px;right:0;top:64px;bottom:0;background:#fafafa;overflow:hidden}
+.ga-view{position:absolute;inset:0;padding:24px}
+#vKan{opacity:0;visibility:hidden}
+.ga-crumb{display:flex;align-items:center;gap:4px;color:#737373}
+.ga-crumb b{font-weight:400;color:#0a0a0a}
+.ga-head{display:flex;align-items:center;justify-content:space-between;height:80px;margin-top:24px}
+.ga-job{display:flex;align-items:center;gap:12px}
+.ga-gs{width:80px;height:80px;border-radius:50%;background:#f5f5f5;border:2px solid #e5e5e5;display:flex;align-items:center;justify-content:center;font-size:28px;line-height:40px;font-weight:600}
+.ga-jt{display:flex;align-items:center;gap:8px}
+.ga-jt h3{margin:0;font-size:30px;line-height:30px;font-weight:600;letter-spacing:-1px}
+.ga-active{display:inline-block;padding:2px 8px;border-radius:999px;background:#15803d;color:#fafafa;font-size:12px;line-height:16px;font-weight:500}
+.ga-jsub{margin-top:8px;color:#737373}
+.ga-acts{display:flex;gap:10px}
+.ga-btnp{display:flex;align-items:center;gap:8px;padding:8px 16px;border-radius:8px;background:#6363ae;color:#fafafa;font-weight:500}
+.ga-ib{padding:9px;border:1px solid #e5e5e5;border-radius:8px;background:#fff}
+.ga-tabs{display:flex;gap:24px;height:48px;margin-top:24px;border-bottom:1px solid #e5e5e5}
+.ga-tab{position:relative;display:flex;align-items:center;padding:0 16px;font-size:16px;line-height:24px;font-weight:500;color:#404040}
+.ga-tab.act{color:#6363ae}
+.ga-tab.act::after,.ga-stab.act::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;border-radius:2px 2px 0 0;background:#6363ae}
+.ga-fc{display:grid;grid-template-columns:415px 720px;gap:24px;margin-top:24px;align-items:start}
+.ga-box{background:#fff;border:1px solid #e5e5e5;border-radius:16px}
+.ga-crit{padding:20px}
+.ga-crit h4{margin:0;font-size:14px;font-weight:500}
+.ga-cl{display:flex;flex-direction:column;gap:24px;margin-top:24px}
+.ga-cl b{display:block;font-weight:500}
+.ga-cl p{margin:12px 0 0;color:#737373}
+.ga-cl .ga-active,.ga-cl .ga-tags{margin-top:12px}
+.ga-tags{display:flex;gap:8px}
+.ga-tag{min-width:48px;padding:3px 8px;border-radius:999px;border:1px solid #cccce9;background:#eeeef8;color:#6363ae;font-size:12px;line-height:16px;font-weight:500;text-align:center}
+.ga-tag.g{border-color:rgba(21,128,61,.15);background:rgba(21,128,61,.05);color:#15803d}
+.ga-fil{display:flex;gap:16px}
+.ga-in{display:flex;align-items:center;gap:8px;height:36px;white-space:nowrap;padding:0 12px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;color:#737373}
+.ga-in .ic{width:20px;display:flex;justify-content:center}
+.ga-in.sel{width:197px;justify-content:space-between;color:#0a0a0a}
+.ga-showing{margin:24px 0 16px;color:#737373}
+.ga-list{display:flex;flex-direction:column;gap:24px}
+.ga-fcard{height:160px;display:flex;justify-content:space-between;padding:16px;background:#fff;border:1px solid #e5e5e5;border-radius:16px}
+.ga-fcard.dim{opacity:.75}
+.ga-fcard.sel{background:#f8f8fc;border-color:#cccce9}
+.ga-fl{display:flex;gap:16px}
+.ga-chk{position:relative;width:20px;height:20px;flex:none}
+.ga-chk i{position:absolute;left:2px;top:2px;width:16px;height:16px;border-radius:4px;border:1px solid #d4d4d4;background:#fff;display:flex;align-items:center;justify-content:center}
+.ga-chk img{opacity:0}
+.sel .ga-chk i{background:#6363ae;border-color:#6363ae}
+.sel .ga-chk img{opacity:1}
+.ga-fcol{display:flex;flex-direction:column;gap:20px}
+.ga-who{display:flex;align-items:center;gap:16px}
+.ga-who b{display:block;font-size:16px;line-height:24px;font-weight:500}
+.ga-who span{display:block;margin-top:2px;color:#737373}
+.ga-mc{display:flex;flex-direction:column;gap:16px}
+.ga-mt{display:flex;gap:16px;color:#737373}
+.ga-mt span:first-child{color:#404040}
+.ga-fr{display:flex;flex-direction:column;align-items:flex-end;justify-content:space-between}
+.ga-upd{color:#737373}
+.ga-addw{display:grid;justify-items:end}
+.ga-addw>span{grid-area:1/1}
+.ga-btno,.ga-btnadd{display:flex;align-items:center;gap:8px;min-height:36px;padding:7px 15px;border-radius:8px;background:#fff}
+.ga-btno{border:1px solid #6363ae;color:#6363ae;font-weight:500}
+.ga-btnadd{border:1px solid #d4d4d4;opacity:0}
+.sel .ga-btno{opacity:.75}
+.added .ga-btno{opacity:0}
+.added .ga-btnadd{opacity:1}
+.ga-fab{position:absolute;left:400px;bottom:24px;display:flex;align-items:center;gap:24px;padding:16px 24px;background:#fff;border:1px solid #e5e5e5;border-radius:12px;box-shadow:0 10px 7.5px rgba(0,0,0,.1),0 4px 3px rgba(0,0,0,.1);color:#404040;opacity:0;visibility:hidden}
+.ga-fab .itm{display:flex;align-items:center;gap:8px}
+.ga-fab .sep{width:1px;height:24px;border-radius:100px;background:#e5e5e5}
+.ga-btnps{display:flex;align-items:center;gap:6px;min-height:32px;padding:6px 12px;border-radius:8px;background:#6363ae;color:#fafafa;font-weight:500}
+.ga-bar{display:flex;align-items:center;justify-content:space-between;height:36px;margin-top:24px}
+.ga-tot{display:flex;align-items:center;gap:10px;color:#737373}
+.ga-tot b{padding:2px 12px;border-radius:6px;background:#6363ae;color:#fafafa;font-size:12px;line-height:16px;font-weight:500}
+.ga-bar .r{display:flex;gap:16px}
+.ga-bar .ga-in{width:320px}
+.ga-filter{display:flex;align-items:center;gap:8px;min-height:36px;padding:7px 15px;border:1px solid #6363ae;border-radius:8px;background:#fff;color:#6363ae;font-weight:500}
+.ga-clear{display:flex;align-items:center;padding:8px 16px;color:#404040;font-weight:500}
+.ga-board{position:absolute;left:24px;top:296px;width:1400px;height:640px}
+.ga-col{position:absolute;top:0;width:312px;height:640px;background:#f5f5f5;border:1px solid #e5e5e5;border-radius:16px;box-shadow:24px 24px 80px rgba(0,0,0,.01)}
+.ga-ch{display:flex;align-items:center;justify-content:space-between;padding:15px}
+.ga-ch .l{display:flex;align-items:center;gap:4px}
+.ga-ct{padding:4px 12px;border-radius:6px;color:#fff;font-weight:500}
+.ga-cnt{display:grid;min-width:32px;padding:3px 8px;border:1px solid #e5e5e5;border-radius:6px;background:#fff;text-align:center}
+.ga-cnt b{grid-area:1/1;font-weight:500}
+.ga-cnt b+b{opacity:0}
+.ga-kc{position:absolute;width:280px;padding:15px;display:flex;flex-direction:column;gap:16px;background:#fff;border:1px solid #e5e5e5;border-radius:16px}
+.ga-kci{display:flex;align-items:center;gap:10px}
+.ga-kci .h{flex:1;min-width:0;display:flex;align-items:center;gap:8px}
+.ga-kci .h>div{min-width:0}
+.ga-kci b{display:block;font-size:12px;line-height:16px;font-weight:500}
+.ga-kci span{display:block;font-size:10px;line-height:16px;color:#737373;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ga-ktags{display:flex;gap:8px}
+.ga-ktags span{min-width:40px;padding:1px 8px;border-radius:999px;border:1px solid #cccce9;background:#eeeef8;color:#6363ae;font-size:11px;line-height:16px;font-weight:500;text-align:center}
+.ga-kft{display:flex;align-items:center;justify-content:space-between}
+.ga-idle{display:flex;align-items:center;gap:4px;font-size:12px;line-height:16px;color:#737373}
+.ga-idle.warn{color:#ca8a04}
+.ga-kic{display:flex;gap:8px}
+.ga-acc{position:absolute;left:-2px;top:50%;width:3px;height:50px;margin-top:-25px;border-radius:9999px;background:#6363ae}
+.ga-empty{position:absolute;width:280px;height:48px;display:flex;align-items:center;justify-content:center;gap:4px;border:1px dashed #e5e5e5;border-radius:8px;color:#6363ae;font-size:12px;line-height:16px;font-weight:500}
+.ga-dd{position:absolute;width:200px;padding:2px;background:#fff;border:1px solid #e5e5e5;border-radius:12px;box-shadow:0 4px 3px rgba(0,0,0,.1),0 2px 2px rgba(0,0,0,.1);z-index:5;opacity:0;visibility:hidden}
+.ga-mlbl{min-height:32px;display:flex;align-items:center;padding:0 8px;font-size:12px;line-height:16px;font-weight:500;color:#737373}
+.ga-mit{display:flex;align-items:center;gap:8px;min-height:32px;padding:0 8px;border-radius:6px}
+.ga-mit .ic{width:20px;display:flex;justify-content:center}
+.ga-mit .end{margin-left:auto;width:20px;display:flex;justify-content:center}
+.ga-mit.hov{background:#f5f5f5}
+.ga-mit.red{color:#dc2626}
+.ga-msep{height:9px;display:flex;align-items:center}
+.ga-msep i{flex:1;height:1px;background:#e5e5e5}
+.ga-bd{position:absolute;inset:0;background:rgba(0,0,0,.6);z-index:8;opacity:0;visibility:hidden}
+.ga-sheet{position:absolute;right:0;top:0;bottom:0;width:640px;display:flex;flex-direction:column;background:#fff;z-index:9}
+.ga-sh{display:flex;flex-direction:column;gap:24px;padding:16px 24px 0}
+.ga-sh .row{display:flex;align-items:center;justify-content:space-between}
+.ga-scrumb{display:flex;align-items:center;gap:4px;font-size:12px;line-height:16px;color:#737373}
+.ga-scrumb b{font-size:14px;line-height:20px;font-weight:400;color:#0a0a0a}
+.ga-sib{padding:7px;border:1px solid #e5e5e5;border-radius:4px;background:#f5f5f5}
+.ga-sp{display:flex;align-items:center;gap:8px}
+.ga-sp b{display:block;font-size:20px;line-height:27px;font-weight:600;letter-spacing:-.5px}
+.ga-sp span{display:block;color:#737373}
+.ga-rec{display:flex;align-items:center;gap:4px;min-height:24px;padding:3px 8px;border:1px solid #0d9488;border-radius:999px;background:#0d9488;color:#fff;font-size:12px;line-height:16px;font-weight:500}
+.ga-rec .al{display:flex;align-items:center}
+.ga-sc{flex:1;min-height:0;display:flex;flex-direction:column;gap:24px;padding:24px}
+.ga-stabs{display:flex;gap:24px;height:32px;border-bottom:1px solid #e5e5e5}
+.ga-stab{position:relative;padding:0 16px;line-height:30px;font-weight:500;color:#404040}
+.ga-stab.act{color:#6363ae}
+.ga-file{display:flex;align-items:center;justify-content:space-between}
+.ga-file .l{display:flex;align-items:center;gap:8px}
+.ga-pdf{display:flex;justify-content:center;width:40px;padding:10px 0;border-radius:5px;background:#fef2f2}
+.ga-file b{display:block;font-weight:500}
+.ga-file small{display:block;margin-top:2px;font-size:12px;line-height:16px;color:#737373}
+.ga-file .r{display:flex;gap:10px}
+.ga-res{position:relative;flex:1;min-height:0;padding:24px;border-radius:12px;background:#eeeef8;overflow:hidden}
+.ga-res .pg{width:544px;height:100%;overflow:hidden}
+.ga-res .pg img{width:544px;height:682.85px;object-fit:cover}
+.ga-res .sb{position:absolute;left:568px;top:24px;width:6px;height:459px;border-radius:4px;background:#e5e5e5}
+.ga-next{position:absolute;left:-22px;top:490px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;background:#fff}
+.ga-next img{width:16px;height:24px}
+
+/* scene 9: job-seeker app (Figma: onboarding 3089:13736/13620/13658/13697, dashboard 3130:20887, application 6164:60029) */
+#cam2{position:absolute;left:0;top:0;width:1440px;height:1024px;transform-origin:0 0;opacity:0;visibility:hidden}
+#app2{position:absolute;inset:0;border-radius:18px;overflow:hidden;background:#fff;font-family:'Inter',system-ui,sans-serif;font-size:14px;line-height:20px;color:#0a0a0a;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 60px 140px rgba(0,0,0,.6),0 0 120px rgba(65,255,149,.08)}
+#app2 img{display:block;flex:none}
+#app2 p,#app2 h1,#app2 h3,#app2 h4{margin:0}
+#bcur{position:absolute;left:0;top:0;width:36px;height:36px;z-index:21;opacity:0;visibility:hidden;filter:drop-shadow(0 4px 8px rgba(0,0,0,.3))}
+#bring{position:absolute;left:0;top:0;width:64px;height:64px;margin:-32px 0 0 -32px;border-radius:50%;border:3px solid #6363ae;z-index:20;opacity:0;visibility:hidden}
+.js-view{position:absolute;inset:0;overflow:hidden;background:#fff}
+#jDash,#jApp{opacity:0;visibility:hidden}
+/* onboarding */
+.jo-left{position:absolute;left:0;top:0;bottom:0;width:480px;display:flex;flex-direction:column;justify-content:space-between;padding:40px 64px 40px 40px;background:#f8f8fc}
+.jo-logo,.jd-logo{font-size:16px;line-height:24px;font-weight:500;color:#171717}
+.jo-logo b,.jd-logo b{font-weight:500;color:#6363ae}
+.jo-title{margin-top:64px}
+.jo-title h4{font-size:18px;line-height:27px;font-weight:500}
+.jo-title p{margin-top:8px;color:#737373}
+.jo-steps{display:flex;flex-direction:column;height:360px;margin-top:32px}
+.jo-st{flex:1;display:flex;gap:12px}
+.jo-trk{display:flex;flex-direction:column;align-items:center}
+.jo-dot{position:relative;width:40px;height:40px;flex:none;display:flex;align-items:center;justify-content:center;border:2px solid #cccce9;border-radius:50%;background:#fff;color:#aaaadb;font-size:20px;line-height:24px;font-weight:500}
+.jo-dot img{position:absolute;left:6px;top:6px;opacity:0}
+.jo-con{flex:1;width:2px;background:#cccce9}
+.jo-st:last-child .jo-con{display:none}
+.jo-txt b{display:block;font-weight:500;color:#737373}
+.jo-txt span{display:block;margin-top:2px;color:#a3a3a3}
+.jo-st.act .jo-dot,.jo-st.done .jo-dot{background:#6363ae;border-color:#6363ae;color:#fff}
+.jo-st.done .jo-dot{color:transparent}
+.jo-st.done .jo-dot img{opacity:1}
+.jo-st.act .jo-con,.jo-st.done .jo-con{background:#6363ae}
+.jo-st.act b,.jo-st.done b{color:#171717}
+.jo-st.act span,.jo-st.done span{color:#737373}
+.jo-foot{display:flex;flex-direction:column;gap:24px}
+.jo-alert{display:flex;gap:8px;padding:12px;border:1px solid #e5e5e5;border-radius:12px;background:#fafafa;color:#737373}
+.jo-alert span:first-child{padding-top:2px}
+.jo-logout{display:inline-flex;align-self:flex-start;align-items:center;gap:8px;min-height:36px;padding:8px 16px;color:#dc2626;font-weight:500;opacity:0;visibility:hidden}
+.jo-right{position:absolute;left:480px;right:0;top:0;bottom:0}
+.jo-pane{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:32px;opacity:0;visibility:hidden}
+.jo-pane:first-child{opacity:1;visibility:visible}
+.jo-c{width:640px;display:flex;flex-direction:column;gap:24px}
+.jo-h{text-align:center}
+.jo-h h3{font-size:24px;line-height:28.8px;font-weight:600;letter-spacing:-1px}
+.jo-h p{margin-top:8px;color:#737373}
+.jo-drop{display:flex;flex-direction:column;align-items:center;padding:32px 24px;border:1px dashed #cbd5e1;border-radius:12px;background:rgba(248,250,252,.5)}
+.jo-badge{display:flex;align-items:center;justify-content:center;width:56px;height:56px;margin-bottom:16px;border:1px solid #e5e5e5;border-radius:10px;background:#eeeef8}
+.jo-drop b{font-weight:500}
+.jo-drop i{margin-top:4px;font-size:12px;line-height:16px;color:#737373}
+.jo-btn-o,.jo-btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:9px 23px;border-radius:8px;font-weight:500}
+.jo-btn-o{border:1px solid #d4d4d4;background:#fff}
+.jo-btn-p{border:1px solid #6363ae;background:#6363ae;color:#fafafa}
+.jo-drop .jo-btn-o{margin-top:20px}
+.jo-item{display:flex;align-items:center;gap:8px;padding:7px 11px;border:1px solid #e5e5e5;border-radius:8px;font-size:12px;line-height:16px}
+.jo-ib{display:flex;align-items:center;justify-content:center;width:32px;height:32px;border:1px solid #e5e5e5;border-radius:4px;background:#eeeef8}
+.jo-item div{flex:1}
+.jo-item b{display:block;font-weight:500}
+.jo-item span{display:block;margin-top:2px;color:#737373}
+.jo-item .jo-tr{padding:8px}
+.jo-acts{display:flex;justify-content:flex-end;gap:16px}
+.jo-photo{display:flex;flex-direction:column;align-items:center}
+.jo-ph{position:relative;display:flex;align-items:center;justify-content:center;width:128px;height:128px;border:4px solid #e9e9f6;border-radius:50%;background:#f8f8fc}
+.jo-pen{position:absolute;right:4px;bottom:4px;display:flex;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:#6363ae}
+.jo-photo span{margin-top:16px;font-weight:500;color:#737373}
+.jo-form{display:flex;flex-direction:column;gap:24px}
+.jo-row{display:flex;gap:16px}
+.jo-row>.jo-f{flex:1}
+.jo-f{display:flex;flex-direction:column;gap:4px}
+.jo-f>label{font-size:12px;line-height:16px}
+.jo-f>label em{font-style:normal;color:#dc2626}
+.jo-in{display:flex;align-items:center;gap:12px;min-height:40px;padding:9px 15px;border:1px solid #e5e5e5;border-radius:8px;background:#fff;color:#737373;white-space:nowrap}
+.jo-in .ic{display:flex;justify-content:center;width:20px}
+.jo-sel{display:flex;align-items:center;justify-content:space-between;width:100px;min-height:40px;padding:9px 7px 9px 11px;border:1px solid #d4d4d4;border-radius:8px}
+.jo-ta{position:relative;height:100px;border:1px solid #e5e5e5;border-radius:8px;color:#737373}
+.jo-ta p{position:absolute;inset:8px}
+.jo-ta img{position:absolute;right:5px;bottom:5px}
+.jo-sec{display:flex;flex-direction:column;gap:24px}
+.jo-sh{display:flex;align-items:center;gap:8px;font-size:16px;line-height:24px;font-weight:500}
+.jo-list{display:flex;flex-direction:column;gap:12px}
+.jo-acc{display:flex;align-items:center;gap:12px;padding:11px 15px;border:1px solid #e5e5e5;border-radius:8px;background:#fff}
+.jo-acc b{flex:1;font-weight:500}
+.jo-add{display:flex;align-items:center;gap:8px;min-height:36px;padding:7px 15px;border:1px dashed #6363ae;border-radius:8px;background:#fff;color:#6363ae;font-size:12px;line-height:16px;font-weight:500}
+.jo-div{height:1px;background:#f5f5f5}
+.jo-help{margin-top:4px;font-size:12px;line-height:16px;color:#737373}
+.jo-chips{display:flex;gap:8px}
+.jo-chip{display:flex;align-items:center;gap:4px;padding:3px 7px;border:1px solid #cccce9;border-radius:999px;background:#eeeef8;color:#6363ae;font-size:12px;line-height:16px;font-weight:500}
+/* dashboard + application shared */
+.jd-top{display:flex;align-items:center;justify-content:space-between;height:64px;padding:0 64px;border-bottom:1px solid #e5e5e5;background:#fff}
+.jd-l{display:flex;align-items:center;gap:48px;height:100%}
+.jd-nav{display:flex;height:100%}
+.jd-tab{position:relative;display:flex;align-items:center;padding:0 16px;font-weight:500;color:#404040}
+.jd-tab.act{color:#6363ae}
+.jd-tab.act::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;border-radius:2px 2px 0 0;background:#6363ae}
+.jd-r{display:flex;align-items:center;gap:12px}
+.jd-body{position:absolute;left:0;right:0;top:64px;bottom:0;overflow:hidden;background:#fafafa}
+.jd-c{display:flex;flex-direction:column;gap:24px;padding:48px 128px}
+.jd-c h1{font-size:36px;line-height:48px;font-weight:600;letter-spacing:-1px}
+.jd-sub{margin-top:8px;color:#737373}
+.jd-main{display:flex;align-items:flex-start;gap:24px}
+.jd-col{flex:1;display:flex;flex-direction:column;gap:24px;min-width:0}
+.jd-side{display:flex;flex-direction:column;gap:24px;flex:none}
+.jd-card{border:1px solid #e5e5e5;background:#fff}
+.jd-stats{display:flex;gap:24px}
+.jd-stat{flex:1;display:flex;flex-direction:column;gap:16px;padding:15px;border-radius:20px}
+.jd-st{display:flex;align-items:center;gap:12px;font-size:16px;line-height:24px;font-weight:500;color:#404040}
+.jd-si{display:flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%}
+.jd-sv{display:flex;align-items:center;justify-content:space-between}
+.jd-sv b{font-size:30px;line-height:30px;font-weight:500;letter-spacing:-1px}
+.jd-sv span{font-size:12px;line-height:16px;color:#737373;opacity:.8}
+.jd-lh{display:flex;align-items:flex-end;justify-content:space-between;font-size:18px;line-height:27px;font-weight:500}
+.jd-lh span{font-size:14px;line-height:20px;color:#6363ae}
+.jd-apps{display:flex;flex-direction:column;gap:20px;margin-top:16px}
+.jd-app{display:flex;flex-direction:column;gap:32px;padding:23px;border-radius:20px}
+.jd-at{display:flex;align-items:flex-start;justify-content:space-between}
+.jd-who{display:flex;align-items:center;gap:16px}
+.jd-gs{display:flex;align-items:center;justify-content:center;flex:none;background:#f5f5f5;font-weight:600}
+.jd-who b{display:block;font-size:16px;line-height:24px;font-weight:500}
+.jd-who div span{display:block;margin-top:2px;color:#737373}
+.jd-pill{padding:4px 16px;border-radius:999px;color:#fafafa;font-size:12px;line-height:16px;font-weight:500}
+.jp{display:flex;align-items:flex-start;width:100%}
+.jp-n{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.jp-row{display:flex;align-items:center;width:100%}
+.jp-row i{flex:1;height:2px;background:#e5e5e5}
+.jp-ic{position:relative;width:32px;height:32px;flex:none}
+.jp-ic img{position:absolute;left:0;top:0;opacity:0}
+.jp-n.pd .i-d,.jp-n.pc .i-c,.jp-n.pt .i-t{opacity:1}
+.jp-n.pd i,.jp-n.pc i:first-child{background:#6363ae}
+.jp-n span{white-space:nowrap;color:#737373}
+.jp-n.pd span{color:#0a0a0a}
+.jp-n.pc span{color:#6363ae}
+.jd-empty{display:flex;flex-direction:column;align-items:center;gap:16px;padding:23px;border-radius:20px;text-align:center}
+.jd-eb{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:8px;background:#eeeef8}
+.jd-empty b{display:block;font-size:16px;line-height:24px;font-weight:500;color:#6363ae}
+.jd-empty p{width:474px;margin-top:4px;color:#737373}
+.jd-prof{display:flex;flex-direction:column;align-items:center;gap:24px;padding:16px;border-radius:16px;text-align:center}
+.jd-prof b{display:block;font-size:16px;line-height:24px;font-weight:500}
+.jd-prof p{margin-top:4px;color:#737373}
+.jd-ring{position:relative;width:120px;height:120px}
+.jd-ring img{position:absolute;top:0}
+#jRingArc{left:7.5px;-webkit-mask:conic-gradient(from 0deg at 52.5px 60px,#000 calc(var(--p,70) * 3.6deg),transparent 0);mask:conic-gradient(from 0deg at 52.5px 60px,#000 calc(var(--p,70) * 3.6deg),transparent 0)}
+.jd-ring span{position:absolute;left:0;right:0;top:47px;font-size:18px;line-height:27px;font-weight:500}
+.jd-ring b{display:inline;font-size:18px;line-height:27px}
+.jd-plus{display:flex;align-items:center;gap:8px;font-size:12px;line-height:16px;color:#737373}
+.jd-btnp{display:flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:10px 24px;border-radius:8px;background:#6363ae;color:#fafafa;font-weight:500}
+.jd-prof .jd-btnp{align-self:stretch}
+.jd-sch{font-size:18px;line-height:27px;font-weight:500}
+.jd-nos{display:flex;flex-direction:column;align-items:center;gap:12px;padding:24px;border-radius:16px;color:#737373;text-align:center}
+.jd-int{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:16px}
+.jd-ih{display:flex;align-items:center;gap:12px}
+.jd-meet{position:relative;width:32px;height:32px;flex:none}
+.jd-meet img{position:absolute;left:4px;top:5.33px}
+.jd-vr{align-self:stretch;width:1px;margin:4px 0;background:#f5f5f5}
+.jd-ih b{display:block;font-weight:500}
+.jd-ih div span{display:block;margin-top:4px;font-size:12px;line-height:16px;color:#737373}
+.jd-hr{height:1px;background:#f5f5f5}
+.jd-ib{display:flex;flex-direction:column;gap:16px}
+.jd-ib h4{font-size:16px;line-height:24px;font-weight:500}
+.jd-meta{display:flex;gap:12px;margin-top:10px;font-size:12px;line-height:16px;color:#737373}
+.jd-meta span{display:flex;align-items:center;gap:6px}
+.jd-note{padding:10px;border:1px solid #e5e5e5;border-radius:12px;background:#fafafa}
+.jd-note p{display:-webkit-box;overflow:hidden;-webkit-line-clamp:2;-webkit-box-orient:vertical;color:#737373}
+.jd-note b{display:block;margin-top:2px;font-weight:500;color:#6363ae}
+.jd-int .jd-btnp{align-self:flex-start}
+.jd-btno{align-self:flex-start;display:flex;align-items:center;justify-content:center;min-height:40px;padding:9px 23px;border:1px solid #d4d4d4;border-radius:8px;background:#fff;font-weight:500}
+/* application detail */
+.ja-back{display:flex;align-items:center;gap:8px;font-weight:500;color:#404040}
+.ja-head{display:flex;align-items:center;gap:16px;padding:23px;border-radius:20px}
+.ja-head small{display:block;font-size:14px;line-height:20px;font-weight:500;color:#404040}
+.ja-head h3{margin-top:4px;font-size:30px;line-height:30px;font-weight:600;letter-spacing:-1px}
+.ja-meta{display:flex;gap:16px;margin-top:12px;font-size:12px;line-height:16px;color:#737373}
+.ja-meta span{display:flex;align-items:center;gap:6px}
+.ja-stage{display:flex;flex-direction:column;gap:16px;padding:23px;border-radius:20px}
+.ja-t{font-weight:500}
+.ja-desc{display:flex;flex-direction:column;gap:24px;padding:20px;border-radius:16px}
+.ja-desc .ja-t{margin-bottom:12px}
+.ja-desc ul{margin:14px 0 0;padding-left:21px;color:#737373}
+.ja-desc p{color:#737373}
+.ja-two{display:flex;gap:24px;align-items:flex-start}
+.ja-ov{flex:1;display:flex;flex-direction:column;gap:24px;padding:20px;border-radius:16px}
+.ja-kv{display:flex;flex-direction:column;gap:20px}
+.ja-kv div{display:flex;gap:16px}
+.ja-kv span:first-child{width:160px;color:#404040}
+.ja-kv span:last-child{color:#737373}
+.ja-money{color:#737373}
+.ja-money b{font-size:18px;line-height:27px;font-weight:500;color:#404040}
+.ja-closed{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:16px}
+.ja-act{display:flex;flex-direction:column;gap:24px;padding:16px;border-radius:16px}
+.ja-tl{display:flex;flex-direction:column;gap:8px}
+.ja-ti{display:flex;gap:12px}
+.ja-rail{display:flex;flex-direction:column;align-items:center;gap:8px;align-self:stretch}
+.ja-rail i{width:12px;height:12px;border-radius:50%;background:#f5f5f5;flex:none}
+.ja-rail u{flex:1;width:2px;border-radius:999px;background:#f5f5f5}
+.ja-ti.now .ja-rail i{background:#6363ae}
+.ja-tb{flex:1;display:flex;flex-direction:column;gap:12px;padding-bottom:32px}
+.ja-ti:last-child .ja-tb{padding-bottom:0}
+.ja-tb small{display:block;font-size:12px;line-height:16px;color:#737373}
+.ja-ti.now .ja-tb small{color:#6363ae}
+.ja-tb b{display:block;margin-top:4px;font-weight:500;color:#404040}
+.ja-tb p{margin-top:4px;color:#404040}
+.ja-chg{display:flex;align-items:center;gap:12px;color:#525252}
+.ja-bdg{padding:2px 8px;border-radius:999px;color:#fafafa;font-size:12px;line-height:16px;font-weight:500}
+
+#m4{font-size:150px;font-weight:600;letter-spacing:-.04em;opacity:0;visibility:hidden}
+#op{font-size:76px}
+
+/* scene 7: end card */
+#b7{font-size:64px}
+.endstack{gap:44px}
+.btns{display:flex;gap:18px;opacity:0}
+.gbtn{display:inline-flex;align-items:center;gap:12px;height:72px;padding:0 38px;border-radius:999px;font-size:26px;font-weight:700}
+.gbtn.f{background:#41FF95;color:#061A3A;box-shadow:0 0 50px rgba(65,255,149,.4)}
+.gbtn.o{color:var(--txt)}
+.gbtn .star{width:20px;height:20px}
+.url{font-size:24px;color:var(--mut);opacity:0}
+
+#bigstar{position:absolute;left:450px;top:870px;width:180px;height:180px;opacity:0;visibility:hidden;filter:drop-shadow(0 0 40px rgba(65,255,149,.6));z-index:20}
+#vo{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);max-width:960px;width:max-content;text-align:center;background:rgba(3,12,31,.72);color:#fff;font-size:28px;line-height:1.35;padding:12px 24px;border-radius:12px;z-index:50;display:none}
+#vo.on{display:block}
+#vo:empty{display:none}
+</style>
+</head>
+<body>
+<div id="viewport" role="img" aria-label="Portrait (9:16) animatic of the 60-second Genuine Solutions bumper">
+  <div id="stage">
+    <div class="bg" id="bgBase"></div>
+    <div id="halo"></div>
+    <div id="arc"></div>
+    <div id="scenes"></div>
+    <div id="vig"></div>
+    <div class="star" id="bigstar"><svg viewBox="0 0 100 100"><defs><linearGradient id="gl" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#C9FFE1"/><stop offset=".45" stop-color="#41FF95"/><stop offset="1" stop-color="#11B864"/></linearGradient></defs><path d="M50 0C53 35 65 47 100 50C65 53 53 65 50 100C47 65 35 53 0 50C35 47 47 35 50 0Z" fill="url(#gl)"/></svg></div>
+    <div id="vo"></div>
+  </div>
+</div>
+<div id="controls">
+  <button id="play" aria-label="Play">Play</button>
+  <span id="time">0:00 / 1:00</span>
+  <div id="track"><div id="marks"></div><input id="scrub" type="range" min="0" max="60" step="0.01" value="0" aria-label="Seek"></div>
+  <span id="sceneName">1. Hook</span>
+  <button id="cc" aria-pressed="false">VO captions</button>
+</div>
+
+<script>
+const STAR='<svg viewBox="0 0 100 100"><path d="M50 0C53 35 65 47 100 50C65 53 53 65 50 100C47 65 35 53 0 50C35 47 47 35 50 0Z" fill="currentColor"/></svg>';
+const st=(cls='')=>`<span class="star ${cls}">${STAR}</span>`;
+const LOGO=`<div class="logo"><div class="lw"><span class="lg">G</span>enu<span class="li">ı${st()}</span>ne</div><div class="ls">SOLUTIONS</div></div>`;
+// fixed sparkle positions so every render is identical
+const spk=list=>list.map(([x,y,z])=>`<span class="spk" style="left:${x}px;top:${y}px;width:${z}px;height:${z}px">${STAR}</span>`).join('');
+const SPK1=[[290,600,22],[790,540,16],[250,1300,14],[820,1240,24],[540,380,12],[670,1480,14]];
+const SPK7=[[300,440,18],[780,410,14],[240,1100,12],[840,1020,20]];
+
+// ---- Genuine Solution app, built from Figma frames 5081:28029 (Find Candidates), 4310:12355 (Kanban), 4331:41290 (Resume sheet)
+const FA='../../assets/figma/';
+const ic=(f,w,h=w)=>`<img src="${FA}${f}" width="${w}" height="${h}" alt="">`;
+const av=z=>`<span class="ga-av" style="width:${z}px;height:${z}px">${ic('avatar.png',z)}</span>`;
+const NAV=[['Dashboard','nav-dashboard.svg'],['Call Center','nav-headset.svg','nav-chevron-right.svg',['Master Leads','Lead Pipeline']],['Recruitment','nav-briefcase.svg','nav-chevron-up.svg',['Jobs','Candidates','Clients'],1],['Operations','nav-calendar.svg','nav-chevron-up.svg',['Interviews','Reports']],['User Management','nav-users.svg','nav-chevron-up.svg',['Members','Roles & Permissions']],['Settings','nav-settings.svg','nav-chevron-up.svg',['Profile','System Preferences','Integration']]];
+const gaSide=`<aside class="ga-side"><div class="ga-logo"><b>Genuine</b> Solution</div><nav class="ga-menu">${NAV.map(([l,i,ch,kids,act])=>`<div class="ga-mi${act?' act':''}">${ic(i,16)}<span>${l}</span>${ch?`<span class="ga-chev">${ic(ch,12)}</span>`:''}</div>${kids?`<div class="ga-sub">${kids.map(k=>`<div${k==='Jobs'?' class="act"':''}>${k}</div>`).join('')}</div>`:''}`).join('')}</nav></aside>`;
+const gaTop=`<header class="ga-top"><div class="ga-bell">${ic('bell.svg',16)}<i></i></div><div class="ga-user">${av(32)}${ic('chevron-down.svg',16)}</div></header>`;
+const gaCrumb=`<div class="ga-crumb">Jobs${ic('crumb-chevron.svg',14)}PT Genuine Solution${ic('crumb-chevron.svg',14)}Batch-2${ic('crumb-chevron.svg',14)}<b>Frontend Developer</b></div>`;
+const gaHead=addCand=>`<div class="ga-head"><div class="ga-job"><div class="ga-gs">GS</div><div><div class="ga-jt"><h3>Frontend Developer</h3><span class="ga-active">Active</span>${ic('flag.svg',20)}</div><div class="ga-jsub">Sydney, NSW • Full-time • Remote</div></div></div><div class="ga-acts">${addCand?`<span class="ga-btnp">${ic('plus-white.svg',16)}Add Candidate</span>`:''}<span class="ga-ib">${ic('ellipsis.svg',16)}</span></div></div>`;
+const gaTabs=a=>`<div class="ga-tabs">${['Candidates','Job Details','Timeline & Notes','Find Candidates'].map(t=>`<span class="ga-tab${t===a?' act':''}">${t.replace('&','&amp;')}</span>`).join('')}</div>`;
+const tag=([l,g])=>`<span class="ga-tag${g?' g':''}">${l}</span>`;
+// [name, role, skills match, skills [label, matched], updated, initial state]
+const FIND=[['Budi Santoso','Senior Frontend Engineer at TechCorp','3/3',[['React JS',1],['Tailwind CSS',1],['Next.js',1],['TypeScript']],'2w',''],
+  ['Sarah Connor','Frontend Developer at WebSys','2/3',[['React JS',1],['Tailwind CSS',1],['Angular']],'2d','added dim'],
+  ['John Wick','Lead UI Engineer','2/3',[['Next.js',1],['Tailwind CSS',1],['Angular'],['GraphQL']],'1d',''],
+  ['Ali Khan','Principal Engineer','2/3',[['React JS',1],['Tailwind CSS',1],['Vue.js'],['Jest']],'3h','']];
+const fcard=([n,r,m,sk,u,s],i)=>`<div class="ga-fcard ${s}" data-fc="${i}"><div class="ga-fl"><span class="ga-chk"><i>${ic('checkbox-check.svg',14)}</i></span><div class="ga-fcol"><div class="ga-who">${av(46)}<div><b>${n}</b><span>${r}</span></div></div><div class="ga-mc"><div class="ga-mt"><span>Skills Match:</span><span>${m} Skills</span></div><div class="ga-tags">${sk.map(tag).join('')}</div></div></div></div><div class="ga-fr"><span class="ga-upd">Updated ${u} ago</span><div class="ga-addw"><span class="ga-btno">${ic('plus-primary.svg',16)}Add to Job</span><span class="ga-btnadd">${ic('check-added.svg',16)}Added</span></div></div></div>`;
+const vFind=`<div class="ga-view" id="vFind"><div id="fScroll">${gaCrumb}${gaHead(false)}${gaTabs('Find Candidates')}
+  <div class="ga-fc"><div class="ga-box ga-crit" id="fCrit"><h4>Matching Criteria</h4><div class="ga-cl">
+    <div><b>Salary Range</b><p>A$5,000.00 - A$7,000.00 / Monthly</p></div>
+    <div><b>Visa / Sponsorship</b><span class="ga-active">Available</span></div>
+    <div><b>Must-have Skills</b><div class="ga-tags">${[['React JS'],['Tailwind CSS'],['Next.js']].map(tag).join('')}</div></div></div></div>
+  <div><div class="ga-fil"><div class="ga-in" style="width:507px"><span class="ic">${ic('search-fc.svg',16)}</span>Search company name, states or batch...</div><div class="ga-in sel">Sort by: Highest Match${ic('chevron-down.svg',16)}</div></div>
+    <p class="ga-showing">Showing 45 recommended candidates</p><div class="ga-list">${FIND.map(fcard).join('')}</div></div></div></div>
+  <div class="ga-fab" id="fab"><span class="itm">2 candidates selected${ic('x.svg',16)}</span><span class="sep"></span><span class="ga-btnps">${ic('plus-white.svg',16)}Add 2 to Job</span></div></div>`;
+const COLS=[['Matched','#2563EB',3],['Screening','#CA8A04',2],['Interview','#6363AE',2],['Recommended','#0D9488',2]];
+const COL_X=336,CARD_Y=140;
+// [id, name, role, column, slot, footer, warn]
+const KC=[['sarah','Sarah Connor','Frontend Developer at WebSys',0,0,'Idle: 1 days'],['john','John Wick','Lead UI Engineer',0,1,'Idle: 1 days'],['ali','Ali Khan','Principal Engineer',0,2,'Idle: 4 days',1],
+  ['maya','Maya Chen','Senior Frontend Engineer at Brightlane',1,0,'Idle: 1 days'],['arjun','Arjun Patel','Frontend Developer at Northwind Labs',1,1,'Idle: 1 days'],
+  ['lena','Lena Hoffmann','UI Engineer at Atlas Group',2,0,'Idle: 1 days'],['tom','Tom Riley','React Developer at Koala Code',2,1,'Idle: 1 days'],
+  ['udin','Udin Surudin','Frontend Developer & UI Designer',3,0,'Waiting: 1 days'],['budi','Budi Santoso','Senior Frontend Engineer at TechCorp',3,1,'Waiting: 1 days']];
+const kcard=([id,n,r,c,s,f,w])=>`<div class="ga-kc" data-k="${id}" style="left:${c*COL_X+16}px;top:${60+s*CARD_Y}px"><div class="ga-kci"><div class="h">${av(32)}<div><b>${n}</b><span>${r.replace('&','&amp;')}</span></div></div><span class="ga-kell">${ic('ellipsis-vertical.svg',20)}</span></div><div class="ga-ktags"><span>React</span><span>Typescript</span><span>Tailwind CSS</span></div><div class="ga-kft"><span class="ga-idle${w?' warn':''}">${ic(w?'clock-warn.svg':'clock.svg',16)}${f}</span><span class="ga-kic">${ic('linkedin.svg',16)}${ic('globe.svg',16)}${ic('paperclip.svg',16)}</span></div><i class="ga-acc"></i></div>`;
+const STAGES=[['Matched','dot-matched.svg'],['Screening','dot-screening.svg'],['Interview','dot-interview.svg'],['Recommended','dot-recommended.svg'],['Offering','dot-offering.svg'],['Hired','dot-hired.svg'],['Rejected','dot-rejected.svg']];
+const vKan=`<div class="ga-view" id="vKan">${gaCrumb}${gaHead(true)}${gaTabs('Candidates')}
+  <div class="ga-bar"><div class="ga-tot">Total Candidates:<b>22</b></div><div class="r"><div class="ga-in"><span class="ic">${ic('search.svg',16)}</span>Search by name...</div><span class="ga-filter">${ic('filter.svg',16)}Filter${ic('filter-count.svg',16)}</span><span class="ga-clear">Clear Filters</span></div></div>
+  <div class="ga-board">${COLS.map(([t,c,n],k)=>`<div class="ga-col" style="left:${k*COL_X}px"><div class="ga-ch"><div class="l"><span class="ga-ct" style="background:${c}">${t}</span><span class="ga-cnt" data-cnt="${k}"><b>${n}</b><b>${k===0?n-1:n+1}</b></span></div>${ic('lock.svg',16)}</div></div>`).join('')}
+    <div class="ga-empty" style="left:${2*COL_X+16}px;top:364px">${ic('inbox.svg',16)}Drag candidate here</div>
+    ${KC.map(kcard).join('')}
+    <div class="ga-dd" id="m1" style="left:80px;top:249px"><div class="ga-mlbl">Actions</div><div class="ga-mit"><span class="ic">${ic('menu-eye.svg',16)}</span>View Full Profile</div><div class="ga-mit mv"><span class="ic">${ic('menu-move.svg',16)}</span>Move to Stage...<span class="end">${ic('menu-chevron.svg',16)}</span></div><div class="ga-msep"><i></i></div><div class="ga-mit red"><span class="ic">${ic('menu-reject.svg',16)}</span>Reject Candidate</div></div>
+    <div class="ga-dd" id="m2" style="left:270px;top:313px">${STAGES.map(([s,d])=>`<div class="ga-mit${s==='Matched'?' hov':''}" data-st="${s}">${ic(d,20)}${s}</div>`).join('')}</div>
+  </div></div>`;
+const gaSheet=`<div class="ga-bd" id="gaBd"></div><div class="ga-sheet" id="gaSheet">
+  <div class="ga-sh"><div class="row"><div class="ga-scrumb">PT Genuine Solution${ic('crumb-chevron.svg',14)}Frontend Developer${ic('crumb-chevron.svg',14)}<b>Udin Surudin</b></div><span class="ga-sib">${ic('sheet-ellipsis.svg',16)}</span></div>
+    <div class="row"><div class="ga-sp">${av(48)}<div><b>Udin Surudin</b><span>Frontend Developer &amp; UI Designer</span></div></div><span class="ga-rec" id="gaRec"><span class="al">${ic('rec-dot.svg',16)}Recommended</span>${ic('rec-chevron.svg',16)}</span></div></div>
+  <div class="ga-sc"><div class="ga-stabs">${['Details','Resume','Activity','Interviews'].map(t=>`<span class="ga-stab${t==='Resume'?' act':''}">${t}</span>`).join('')}</div>
+    <div class="ga-file"><div class="l"><span class="ga-pdf">${ic('pdf.svg',17.5,20)}</span><div><b>Udin_Surudin_Resume_2026.pdf</b><small>Uploaded February 2, 2026</small></div></div><div class="r"><span class="ga-sib">${ic('download.svg',16)}</span><span class="ga-sib">${ic('external.svg',16)}</span></div></div>
+    <div class="ga-res"><div class="pg"><img src="${FA}resume.png" alt=""></div><i class="sb"></i></div></div>
+  <span class="ga-next"><img src="${FA}sheet-next.svg" alt=""></span></div>`;
+const GA_APP=`<div id="app">${gaSide}${gaTop}<main class="ga-main">${vFind}${vKan}</main>${gaSheet}
+  <div id="aring"></div><svg id="acur" viewBox="0 0 40 40"><path d="M6 3 L6 33 L14 25 L19 37 L25 34.5 L20 23 L31 23 Z" fill="#0A0A0A" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/></svg></div>`;
+// ---- Job-seeker app, built from Figma frames 3089:13736/13620/13658/13697 (onboarding), 3130:20887 (dashboard), 6164:60029 (application)
+const JO_STEPS=[['Resume Upload','Upload your latest resume in PDF format.'],['Personal Information','Share your education and experience.'],['Skills & Portfolio','Showcase your core skills and portfolio link.'],['Education & Experience','Share your education and experience.']];
+const joField=(label,req,inner)=>`<div class="jo-f"><label>${label}${req?' <em>*</em>':''}</label>${inner}</div>`;
+const joIn=(icon,text)=>`<div class="jo-in"><span class="ic">${ic(icon,16)}</span>${text}</div>`;
+const joActs=(primary,back=true,id='')=>`<div class="jo-acts">${back?'<span class="jo-btn-o">Back</span>':''}<span class="jo-btn-p"${id?` id="${id}"`:''}>${primary}</span></div>`;
+const joPanes=[
+  `<div class="jo-h"><h3>Resume Upload</h3><p>You're almost there! Upload your latest CV to finalize your profile. Our system will securely store it for our matching team.</p></div>
+   <div class="jo-form"><div class="jo-drop"><span class="jo-badge">${ic('js-cloud-upload.svg',36)}</span><b>Click or drag file to this area to upload</b><i>Supported formats: PDF, JPG, or PNG. Max size: 5MB.</i><span class="jo-btn-o">Browse File</span></div>
+     <div class="jo-item" id="joFile"><span class="jo-ib">${ic('js-file-text.svg',16)}</span><div><b>John_Doe_Resume.pdf</b><span>1.2 MB • Uploaded just now</span></div><span class="jo-tr">${ic('js-trash.svg',16)}</span></div></div>
+   ${joActs(`Upload and Scan ur CV${ic('js-upload.svg',16)}`,true,'joUp')}`,
+  `<div class="jo-h"><h3>Personal Information</h3><p>Let's start with the basics. This helps employers know who you are.</p></div>
+   <div class="jo-photo"><div class="jo-ph">${ic('js-photo-user.svg',32)}<span class="jo-pen">${ic('js-pencil.svg',16)}</span></div><span>Upload profile photo</span></div>
+   <div class="jo-form"><div class="jo-row">${joField('First Name',1,joIn('js-user.svg','Johnathan'))}${joField('Last Name',1,joIn('js-user.svg','Doe'))}</div>
+     ${joField('Phone Number',1,`<div class="jo-row" style="gap:12px"><div class="jo-sel">+1 (US)${ic('js-chevron-down.svg',16)}</div><div style="flex:1">${joIn('js-phone.svg','555-0123')}</div></div>`)}
+     ${joField('Current Location',1,joIn('js-map-pin.svg','e.g. San Francisco, CA'))}
+     ${joField('Professional Headline',1,joIn('js-briefcase.svg','e.g. Senior Frontend Developer'))}
+     ${joField('Professional Summary',0,`<div class="jo-ta"><p>A highly motivated Information Technology student specializing in UI/UX Design and Frontend Development, looking to...</p>${ic('js-resizable.svg',7.70711)}</div>`)}</div>
+   <div class="jo-acts"><span class="jo-btn-p" id="joSave2" style="opacity:.5">Save &amp; Continue</span></div>`,
+  `<div class="jo-h"><h3>Education &amp; Experience</h3><p>Share your educational background and any professional experience you have.</p></div>
+   <div class="jo-sec"><div class="jo-sh">${ic('js-grad-cap.svg',22)}Education</div><div class="jo-list"><div class="jo-acc">${ic('js-grip.svg',16)}<b>Bachelor Degree in Polytechnic Negeri Bali</b>${ic('js-trash-red.svg',16)}${ic('js-chevron-down.svg',16)}</div><div class="jo-add">${ic('js-circle-plus.svg',16)}Add education</div></div></div>
+   <div class="jo-div"></div>
+   <div class="jo-sec"><div class="jo-sh">${ic('js-briefcase-biz.svg',22)}Work Experience</div><div class="jo-list"><div class="jo-acc">${ic('js-grip.svg',16)}<b>UI/UX Designer in PT. Genuine Solutions</b>${ic('js-trash-red.svg',16)}${ic('js-chevron-down.svg',16)}</div><div class="jo-add">${ic('js-circle-plus.svg',16)}Add work experience</div></div></div>
+   ${joActs('Save &amp; Continue',true,'joSave3')}`,
+  `<div class="jo-h"><h3>Skills &amp; Portfolio</h3><p>Highlight your core technical skills and provide a link to your portfolio.</p></div>
+   <div class="jo-form"><div>${joField('Add Skills',1,joIn('js-search.svg','Search and select skills...'))}<p class="jo-help">Please select at least 3 core skills</p>
+     <div class="jo-chips" style="margin-top:12px">${['React.js','Tailwind CSS','TypeScript'].map(s=>`<span class="jo-chip">${s}${ic('js-x12.svg',12)}</span>`).join('')}</div></div>
+     ${joField('LinkedIn',0,joIn('js-linkedin.svg','e.g. https://linkedin.com/in/johndoe'))}
+     ${joField('Portfolio Link',0,joIn('js-link.svg','e.g. https://yourportfolio.com'))}</div>
+   ${joActs('Save &amp; Continue',true,'joSave4')}`];
+const vOnb=`<div class="js-view" id="jOnb">
+  <aside class="jo-left"><div><div class="jo-logo"><b>Genuine</b> Solutions</div>
+    <div class="jo-title"><h4>Build Your Talent Profile</h4><p>Complete your details to unlock exclusive job matches tailored just for you.</p></div>
+    <div class="jo-steps">${JO_STEPS.map(([t,s],i)=>`<div class="jo-st${i===0?' act':''}" data-jst="${i}"><div class="jo-trk"><span class="jo-dot">${i+1}${ic('js-step-check.svg',24)}</span><span class="jo-con"></span></div><div class="jo-txt"><b>${t.replace('&','&amp;')}</b><span>${s}</span></div></div>`).join('')}</div></div>
+    <div class="jo-foot"><div class="jo-alert"><span>${ic('js-lightbulb.svg',16,20)}</span>Pro-tip: Candidates with 100% complete profiles are 3x more likely to be prioritized by our matching team.</div><span class="jo-logout" id="joOut">Log Out${ic('js-logout.svg',16)}</span></div></aside>
+  <div class="jo-right">${joPanes.map((p,i)=>`<div class="jo-pane" data-jp="${i}"><div class="jo-c">${p}</div></div>`).join('')}</div></div>`;
+// shared pieces for the signed-in candidate pages
+const jdTop=a=>`<header class="jd-top"><div class="jd-l"><div class="jd-logo"><b>Genuine</b> Solutions</div><nav class="jd-nav">${['Dashboard','My Applications','Profile'].map(t=>`<span class="jd-tab${t===a?' act':''}">${t}</span>`).join('')}</nav></div><div class="jd-r"><div class="ga-bell">${ic('js-bell.svg',16)}<i></i></div><div class="ga-user">${av(32)}${ic('js-chevron-down.svg',16)}</div></div></header>`;
+const jdGs=(z,r,fs)=>`<span class="jd-gs" style="width:${z}px;height:${z}px;border-radius:${r}px;font-size:${fs}px">GS</span>`;
+// pipeline: states string, one char per node — d(one) c(urrent) t(odo), rendered as pd/pc/pt
+const jpipe=(labels,states,id='')=>`<div class="jp"${id?` id="${id}"`:''}>${labels.map((l,i)=>`<div class="jp-n p${states[i]}"><div class="jp-row"><i></i><span class="jp-ic">${ic('js-node-done.svg',32).replace('<img','<img class="i-d"')}${ic('js-node-current.svg',32).replace('<img','<img class="i-c"')}${ic('js-node-todo.svg',32).replace('<img','<img class="i-t"')}</span><i></i></div><span>${l}</span></div>`).join('')}</div>`;
+const JP6=['Matched','Screening','Interview','Recommended','Company Interview','Hired'];
+const jdInt=(meet,date,who,note,dim)=>`<div class="jd-card jd-int"><div class="jd-ih"><span class="jd-meet">${ic(meet,25.3335,20.845)}</span><span class="jd-vr"></span>${jdGs(42,10.5,14.7)}<div><b>Frontend Developer</b><span>PT Genuine Solutions</span></div></div><div class="jd-hr"></div>
+  <div class="jd-ib"><div><h4>Interview - Frontend Developer</h4><div class="jd-meta"><span>${ic('js-calendar.svg',16)}${date}</span><span>${ic('js-clock.svg',16)}10.00 - 11.00 AM</span></div><div class="jd-meta" style="gap:8px">${ic('js-user-sm.svg',16)}Interview with ${who}</div></div>
+  ${note?`<div class="jd-note"><p>${note}</p><b>Read More</b></div>`:''}<span class="jd-btnp"${dim?' style="opacity:.5"':''}>${ic('js-video.svg',16)}Join Meeting</span></div></div>`;
+const NOTE="Hi Udin, in this interview, we will dive deeper into your technical skills for the Frontend Developer position. Please have your portfolio or a recent project ready to share on screen. See you soon!";
+const vDash=`<div class="js-view" id="jDash">${jdTop('Dashboard')}<div class="jd-body"><div class="jd-c">
+  <div><h1>Welcome back, Udin Surudin 👋</h1><p class="jd-sub">Our matching team is actively reviewing your profile to find the best opportunities for you.</p></div>
+  <div class="jd-main"><div class="jd-col">
+    <div class="jd-stats">${[['Active Pipelines','js-stat-pipelines.svg','#eff6ff',4,'In Matched & Screening'],['Upcoming Interviews','js-stat-interviews.svg','#eeeef8',1,'Scheduled for you'],['Recommended Roles','js-stat-recommended.svg','#f0fdf4',2,'Shortlisted by employers']].map(([t,i,bg,n,s])=>`<div class="jd-card jd-stat"><div class="jd-st"><span class="jd-si" style="background:${bg}">${ic(i,20)}</span>${t}</div><div class="jd-sv"><b>${n}</b><span>${s.replace('&','&amp;')}</span></div></div>`).join('')}</div>
+    <div><div class="jd-lh">Recent Applications<span>View All</span></div><div class="jd-apps">
+      ${[['Interview','#6363ae','ddcttt'],['Matched','#2563eb','cttttt']].map(([b,c,st],k)=>`<div class="jd-card jd-app"${k===0?' id="jdApp1"':''}><div class="jd-at"><div class="jd-who">${jdGs(46,11.5,16.1)}<div><b>Frontend Developer</b><span>PT Genuine Solutions • Sydney, NSW 2000</span></div></div><span class="jd-pill" style="background:${c}"${k===0?' id="jdPill1"':''}>${b}</span></div>${jpipe(JP6,st)}</div>`).join('')}
+      <div class="jd-card jd-empty"><span class="jd-eb">${ic('js-curating.svg',24)}</span><div><b>Curating Your Matches</b><p>Our staff is reviewing your profile to find the perfect match. We'll notify you once you're shortlisted.</p></div></div></div></div></div>
+    <div class="jd-side" style="width:320px"><div class="jd-card jd-prof"><div><b>Good Start, Udin!</b><p>Basic profile active. Add more details to help staff match you faster.</p></div>
+      <div class="jd-ring">${ic('js-ring-bg.svg',120).replace('<img','<img style="left:0"')}<img id="jRingArc" src="${FA}js-ring-arc.svg" width="112.488" height="120" alt=""><span><b id="jPct" style="font-weight:500">70</b>%</span></div>
+      <div class="jd-plus">${ic('js-circle-check.svg',16)}Add work experience for +10%</div><span class="jd-btnp">Complete Profile</span></div>
+      <div class="jd-sch">Upcoming Schedule</div>
+      <div class="jd-card jd-nos"><span class="jd-eb">${ic('js-no-schedule.svg',24)}</span>No interviews scheduled yet. Keep an eye on your Active Pipelines!</div>
+      ${jdInt('js-meet.svg','Wednesday, 29 Apr','Rusdi Staff',NOTE)}${jdInt('js-meet.svg','Thursday, 15 May','Sarah Staff','',1)}</div></div></div></div></div>`;
+const JA_ACT=[['Today, 14:30 PM','Interview scheduled','Date set for May 15, 10:00 AM.',''],['Yesterday, 14:30 PM','Application stage updated','',[['Screening','#ca8a04'],['Interview','#6363ae']]],['26 May, 10:30 AM','Application stage updated','',[['Matched','#2563eb'],['Screening','#ca8a04']]],['26 May, 08:30 AM','Profile matched by staff','Curated based on your specific skills and experience.',[['Unmatched'],['Matched','#2563eb']]]];
+const vApp=`<div class="js-view" id="jApp">${jdTop('My Applications')}<div class="jd-body"><div class="jd-c" id="jaScroll">
+  <span class="ja-back">${ic('js-arrow-left.svg',16)}Back to Dashboard</span>
+  <div class="jd-card ja-head">${`<span class="jd-gs" style="width:82px;height:82px;border-radius:14px;border:2.1px solid #e5e5e5;font-size:28.7px">GS</span>`}<div><small>PT. Genuine Solutions</small><h3>Frontend Developer</h3>
+    <div class="ja-meta">${[['js-ad-map-pin.svg','Sydney, NSW'],['js-building.svg','Full-time'],['js-ad-briefcase.svg','Remote'],['js-banknote.svg','A$5,000.00 - A$7,000.00'],['js-ad-clock.svg','Applied 3 days ago']].map(([i,t])=>`<span>${ic(i,16)}${t}</span>`).join('')}</div></div></div>
+  <div class="jd-main"><div class="jd-col">
+    <div class="jd-card ja-stage"><span class="ja-t">Application Stage</span>${jpipe(['Matched','Screening','Interview','Recommended','Company','Hired'],'dctttt','jaPipe')}</div>
+    <div class="jd-card ja-desc"><div><p class="ja-t" style="color:#0a0a0a">Required Skills</p><div class="ga-tags">${[['React JS'],['Tailwind CSS'],['Next.js']].map(tag).join('')}</div></div>
+      <div><p class="ja-t" style="color:#0a0a0a">Job Description</p><p>We are looking for a passionate Frontend Developer to join our growing engineering team. You will be responsible for translating design wireframes into high-quality code.</p>
+      <ul><li>Develop and maintain responsive web interfaces using modern frameworks.</li><li>Collaborate with UI/UX designers to implement design vision.</li><li>Optimize performance for maximum speed and scalability across devices.</li><li>Conduct code reviews and maintain high documentation standards.</li></ul></div></div>
+    <div class="ja-two"><div class="jd-card ja-ov"><span class="ja-t">Job Overview</span><div class="ja-kv">${[['Level','Senior'],['Employment Type','Full-time'],['Workplace Type','Remote'],['Location','Sydney'],['State','NSW 2000'],['Source','www.sourcedata.com']].map(([k,v])=>`<div><span>${k}</span><span>${v}</span></div>`).join('')}</div></div>
+      <div class="jd-card ja-ov"><span class="ja-t">Compensation &amp; Sponsorship</span><div><p style="color:#404040">Salary Range</p><p class="ja-money" style="margin-top:12px"><b>A$5,000.00 - A$7,000.00</b> / Monthly</p></div><div><p style="color:#404040">Visa / Sponsorship</p><span class="ga-active" style="margin-top:12px">Available</span></div></div></div></div>
+  <div class="jd-side" style="width:360px">${jdInt('js-ad-meet.svg','Wednesday, 29 Apr','Rusdi Staff',NOTE)}
+    <div class="jd-card ja-closed"><span class="ja-t">Application Closed</span><div class="jd-note"><p>Hi Udin, thank you for your time. At the moment, PT InterBiz has decided to move forward with another candidate who specializes in Next.js. However, you are a great culture fit! We will look for other frontend opportunities that match your React.js stack soon.</p><b>Read More</b></div><span class="jd-btno">Browse Other Matches</span></div>
+    <div class="jd-card ja-act"><span class="ja-t">Recent Activity</span><div class="ja-tl">${JA_ACT.map(([d,t,p,chg],i)=>`<div class="ja-ti${i===0?' now':''}"${i===0?' id="jaNew"':''}><div class="ja-rail"><i></i><u></u></div><div class="ja-tb"><div><small>${d}</small><b>${t}</b>${p?`<p>${p}</p>`:''}</div>${chg?`<div class="ja-chg">${chg.map(([l,c])=>c?`<span class="ja-bdg" style="background:${c}">${l}</span>`:l).join(ic('js-arrow-right.svg',16))}</div>`:''}</div></div>`).join('')}</div></div></div></div></div></div></div>`;
+const JS_APP=`<div id="app2">${vOnb}${vDash}${vApp}
+  <div id="bring"></div><svg id="bcur" viewBox="0 0 40 40"><path d="M6 3 L6 33 L14 25 L19 37 L25 34.5 L20 23 L31 23 Z" fill="#0A0A0A" stroke="#fff" stroke-width="2.4" stroke-linejoin="round"/></svg></div>`;
+
+
+document.getElementById('scenes').innerHTML=`
+<section class="scene" id="s1">${spk(SPK1)}
+  <div class="c"><h1 class="t" id="h1a">Hiring overseas talent in Australia?</h1></div>
+  <div class="c"><h1 class="t" id="h1b">Finding them is half the job.</h1></div>
+  <div class="c"><h1 class="t" id="h1c">Proving you <em>needed</em> them is the other half.</h1></div>
+</section>
+<section class="scene" id="s2">
+  <div class="c" id="c2"><div id="logo2">${LOGO}</div><div class="tag" id="tag2">Workforce &amp; Compliance</div></div>
+</section>
+<section class="scene" id="s3">
+  <div class="c" id="c3a">
+    <h2 class="t" id="h3a" style="font-size:48px">Compliance reports that <em>hold up.</em></h2>
+    <div class="slot glass" id="slotA">${['Labour Market Testing','Skills Shortage Assessment','Genuine Need of Position','407 Training Plans'].map(s=>`<span>${s}</span>`).join('')}</div>
+  </div>
+  <div class="c" id="c3b">
+    <h2 class="t" id="h3b" style="font-size:48px">Talent that <em>fits.</em></h2>
+    <div class="slot glass" id="slotB">${['Candidate & Employer Sourcing','CV & Interview Preparation'].map(s=>`<span>${s.replace('&','&amp;')}</span>`).join('')}</div>
+    <div class="badges">${['Reports in 14 business days','5–7 day fast-track','Free amendments','Alongside your migration agent'].map(b=>`<span class="badge">${st()}${b}</span>`).join('')}</div>
+  </div>
+</section>
+<section class="scene" id="s4">
+  <div class="c"><h1 class="t" id="op">One platform. <em>Both sides of hiring.</em></h1></div>
+  <div id="cam">${GA_APP}</div>
+  <div class="c"><h1 class="t" id="m4">Matched<em>.</em></h1></div>
+  <div class="hlw">
+    <h2 class="pill" id="p4a">Matched on salary, visa and <em>skills.</em></h2>
+    <h2 class="pill" id="p4b">The best fit <em>rises to the top.</em></h2>
+    <h2 class="pill" id="p5a">Screened and interviewed <em>by our team.</em></h2>
+    <h2 class="pill" id="p5b">Recommended, <em>with the full profile.</em></h2>
+  </div>
+</section>
+<section class="scene" id="s6">
+  <div id="cam2">${JS_APP}</div>
+  <div class="hlw">
+    <h2 class="pill" id="p6a">Build one <em>profile.</em></h2>
+    <h2 class="pill" id="p6b">Get <em>matched.</em></h2>
+    <h2 class="pill" id="p6c">Track every <em>step.</em></h2>
+  </div>
+</section>
+<section class="scene" id="s7">${spk(SPK7)}
+  <div class="c"><h1 class="t" id="b7">Your workforce <span class="w" style="width:48px;height:48px;vertical-align:middle;color:#41FF95">${STAR}</span> <em>genuinely solved.</em></h1></div>
+  <div class="c endstack" id="end7">
+    <div id="logo7" style="opacity:0">${LOGO}</div>
+    <div class="btns" id="btns"><span class="gbtn f">I'm hiring</span><span class="gbtn o glass">${st()}I'm looking for work</span></div>
+  </div>
+</section>`;
+
+// split words
+function split(el){
+  const walk=n=>{[...n.childNodes].forEach(c=>{
+    if(c.nodeType===3){const f=document.createDocumentFragment();c.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(t))}else{const s=document.createElement('span');s.className='w';s.textContent=t;f.appendChild(s)}});c.replaceWith(f)}
+    else if(c.nodeType===1&&!c.classList.contains('w'))walk(c)})};
+  walk(el);return el.querySelectorAll('.w');
+}
+
+const stage=document.getElementById('stage'),vp=document.getElementById('viewport');
+let SCALE=1;
+function fit(){SCALE=vp.clientWidth/1080;stage.style.transform=`scale(${SCALE})`}
+window.addEventListener('resize',fit);fit();
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>[...r.querySelectorAll(s)];
+
+const DUR=60;
+const VO=[[0,6.4,"Hiring overseas talent in Australia isn't just about finding the right person. You have to prove you needed them."],[6.4,10.3,"Meet Genuine Solutions."],[10.3,19.4,"We handle the compliance behind employer sponsorship: Labour Market Testing, Skills Shortage, Genuine Need of Position and 407 Training Plans. Plus sourcing and interview prep."],[19.4,21.6,"And it all runs on one platform."],[21.6,28.5,"Every role is matched on salary, visa and skills, and the best-fit candidates rise to the top."],[30.7,35.7,"Our team screens and interviews every candidate,"],[35.7,41.6,"so you only see a recommended shortlist, with the full profile."],[41.6,51.8,"Job seekers build one profile, get matched, and track every step, all the way to hired."],[51.8,60,"Your workforce, genuinely solved. Genuine Solutions."]];
+const SCN=[[0,'1. Hook'],[6.4,'2. Brand'],[10.3,'3. Services'],[19.4,'4. One platform'],[21.6,'5. Find candidates'],[28.5,'6. Matched'],[30.7,'7. Pipeline'],[35.7,'8. Shortlist'],[41.6,'9. Job seeker'],[51.8,'10. End card']];
+
+function build(){
+  // measurements first (before any from-tweens move things), in #app's own 1440×1024 space
+  const app=$('#app'),SCROLL=-230;
+  const posA=(el,dx=0,dy=0)=>{const r=el.getBoundingClientRect(),a=app.getBoundingClientRect(),k=a.width/1440;return{x:(r.left-a.left+r.width/2)/k+dx,y:(r.top-a.top+r.height/2)/k+dy}};
+  const fJohn=$('[data-fc="2"]'),fAli=$('[data-fc="3"]'),kJohn=$('[data-k="john"]'),kAli=$('[data-k="ali"]');
+  const M={chk1:posA($('.ga-chk',fJohn),0,SCROLL),chk2:posA($('.ga-chk',fAli),0,SCROLL),add2:posA($('#fab .ga-btnps')),
+    kell:posA($('.ga-kell',kJohn)),move:posA($('#m1 .mv')),scr:posA($('#m2 [data-st="Screening"]')),udin:posA($('[data-k="udin"] b'),-20,10)};
+
+  const tl=gsap.timeline({paused:true,defaults:{ease:'power3.out'}});
+  const show=(el,t,d=.5,v={})=>tl.to(el,{autoAlpha:1,duration:d,...v},t);
+  const hide=(el,t,d=.4,v={})=>tl.to(el,{autoAlpha:0,duration:d,...v},t);
+  const words=(el,t,stag=.08)=>{const w=split(el);tl.fromTo(w,{autoAlpha:0,y:24,filter:'blur(10px)'},{autoAlpha:1,y:0,filter:'blur(0px)',duration:.7,stagger:stag},t);return w};
+  const out=(el,t,d=.45)=>tl.to(el,{autoAlpha:0,y:-16,filter:'blur(8px)',duration:d,ease:'power2.in'},t);
+  const twinkle=(scope,t0,t1)=>$$('.spk',$(scope)).forEach((s,i)=>{const a=.35+(i%3)*.2;
+    tl.fromTo(s,{autoAlpha:0,scale:.3,rotation:0},{autoAlpha:a,scale:1,rotation:90,duration:1.1,ease:'sine.inOut',repeat:Math.max(0,Math.floor((t1-t0-i*.25)/1.1)-1),yoyo:true},t0+i*.25)});
+
+
+  /* 1 Hook 0–6.4 */
+  tl.set('#s1',{autoAlpha:1},0);
+  twinkle('#s1',.2,6.3);
+  words($('#h1a'),.3);out('#h1a',2.0);
+  words($('#h1b'),2.35,.08);out('#h1b',3.85);
+  words($('#h1c'),4.2,.07);out('#h1c',6.0);
+  hide('#s1',6.5,.1);
+
+  /* 2 Brand 6.4–10.3 */
+  show('#s2',6.4,.1);
+  tl.fromTo('#bigstar',{autoAlpha:0,scale:.2,rotation:-120},{autoAlpha:1,scale:1,rotation:0,duration:.6,ease:'back.out(2)'},6.45);
+  tl.to('#bigstar',{autoAlpha:0,scale:0,rotation:180,duration:.45,ease:'power2.in'},7.1);
+  tl.fromTo('#arc',{autoAlpha:0,y:0},{autoAlpha:1,y:-380,duration:1.6},6.5);
+  tl.fromTo('#logo2 .lw',{autoAlpha:0,y:20,letterSpacing:'.1em',filter:'blur(10px)'},{autoAlpha:1,y:0,letterSpacing:'-.03em',filter:'blur(0px)',duration:1.0},7.25);
+  tl.fromTo('#logo2 .star',{scale:0,rotation:-180},{scale:1,rotation:0,duration:.6,ease:'back.out(3)',stagger:.12},7.75);
+  tl.fromTo('#logo2 .ls',{autoAlpha:0,y:12},{autoAlpha:1,y:0,duration:.6},7.85);
+  tl.fromTo('#tag2',{autoAlpha:0,y:12},{autoAlpha:1,y:0,duration:.6},8.2);
+  out('#c2',9.85,.4);
+  tl.to('#arc',{autoAlpha:0,y:0,duration:.6,ease:'power2.in'},9.85);
+  hide('#s2',10.35,.1);
+
+  /* 3 Services 10.3–19.4 */
+  show('#s3',10.3,.1);
+  tl.fromTo('#halo',{autoAlpha:0,x:0},{autoAlpha:1,x:700,duration:31,ease:'none'},10.3);
+  const slot=(id,t0,step)=>{const it=$$(id+' span');
+    tl.fromTo(id,{autoAlpha:0,y:30,scale:.95},{autoAlpha:1,y:0,scale:1,duration:.6},t0);
+    tl.fromTo(it[0],{autoAlpha:0,y:40},{autoAlpha:1,y:0,duration:.45},t0+.1);
+    it.slice(1).forEach((el,k)=>{const t=t0+.1+step*(k+1);
+      tl.to(it[k],{autoAlpha:0,y:-40,duration:.35,ease:'power2.in'},t);
+      tl.fromTo(el,{autoAlpha:0,y:40},{autoAlpha:1,y:0,duration:.45},t+.15)})};
+  words($('#h3a'),10.45,.07);slot('#slotA',10.9,.95);
+  out('#c3a',14.75);
+  words($('#h3b'),15.25,.08);slot('#slotB',15.6,1.1);
+  tl.fromTo('#s3 .badge',{autoAlpha:0,y:16},{autoAlpha:1,y:0,duration:.5,stagger:.15},17.0);
+  out('#c3b',18.95);
+  hide('#s3',19.45,.1);
+
+  /* 4 One platform 19.4–21.6, then the product walkthrough 21.6–41.6 (app UI from Figma) */
+  const AC=$('#acur'),AR=$('#aring');
+  const amove=(p,t,d=.6)=>tl.to(AC,{x:p.x-6,y:p.y-3,duration:d,ease:'power2.inOut'},t);
+  const aclick=(p,t)=>{tl.to(AC,{scale:.85,duration:.09,transformOrigin:'15% 10%'},t).to(AC,{scale:1,duration:.16},t+.09);tl.set(AR,{x:p.x,y:p.y,scale:.2,autoAlpha:1},t).to(AR,{scale:1.3,autoAlpha:0,duration:.5,ease:'power2.out'},t)};
+  // camera: put app point (cx,cy) at stage (960,560) with scale s
+  const camTo=(t,s,cx,cy,d=1)=>tl.to('#cam',{scale:s,x:540-cx*s,y:1000-cy*s,duration:d,ease:'power3.inOut'},t);
+  const pill=(id,t,tOut)=>{tl.fromTo(id,{autoAlpha:0,y:-12},{autoAlpha:1,y:0,duration:.45},t);words($(id),t+.1,.06);
+    tl.to(id,{autoAlpha:0,y:-12,filter:'blur(6px)',duration:.35,ease:'power2.in'},tOut)};
+  const setCls=(el,cls,t)=>tl.set(el,{attr:{class:cls}},t);
+  gsap.set(AC,{x:1180,y:900});
+
+  show('#s4',19.4,.1);
+  words($('#op'),19.55,.08);out('#op',21.3,.4);
+  tl.fromTo('#cam',{autoAlpha:0,scale:.72,x:21.6,y:811},{autoAlpha:1,y:631,duration:1.1},21.5);
+  // Find Candidates: criteria, then the ranked list
+  pill('#p4a',21.8,24.95);
+  camTo(22.9,1.6,471,455,1.2);
+  tl.to('#fCrit',{boxShadow:'0 0 0 2px #6363ae,0 16px 40px rgba(99,99,174,.18)',duration:.4},23.4);
+  tl.to('#fCrit',{boxShadow:'0 0 0 0 rgba(99,99,174,0),0 0 0 rgba(0,0,0,0)',duration:.4},24.8);
+  pill('#p4b',25.15,28.35);
+  camTo(24.9,1.45,1063,640,1.2);
+  tl.to('#fScroll',{y:SCROLL,duration:1.2,ease:'power3.inOut'},24.9);
+  tl.set(AC,{x:M.chk1.x+160,y:M.chk1.y+140},25.85);show(AC,25.9,.2);
+  amove(M.chk1,25.95,.55);aclick(M.chk1,26.5);setCls(fJohn,'ga-fcard sel',26.55);
+  amove(M.chk2,26.7,.4);aclick(M.chk2,27.1);setCls(fAli,'ga-fcard sel',27.15);
+  tl.fromTo('#fab',{autoAlpha:0,y:20},{autoAlpha:1,y:0,duration:.35},27.15);
+  amove(M.add2,27.3,.45);aclick(M.add2,27.8);
+  tl.to('#fab .ga-btnps',{scale:.95,duration:.08},27.8).to('#fab .ga-btnps',{scale:1,duration:.15},27.88);
+  setCls(fJohn,'ga-fcard added',27.95);setCls(fAli,'ga-fcard added',27.95);
+  hide('#fab',28.0,.25);hide(AC,28.1,.2);
+  // "Matched." beat while the app swaps to the Candidates tab
+  tl.to('#cam',{autoAlpha:0,filter:'blur(10px)',duration:.5,ease:'power2.in'},28.45);
+  tl.fromTo('#m4',{autoAlpha:0,scale:1.15,filter:'blur(20px)'},{autoAlpha:1,scale:1,filter:'blur(0px)',duration:.6},28.85);
+  tl.fromTo('#bigstar',{autoAlpha:0,scale:.1,rotation:0,x:300,y:-130},{autoAlpha:1,scale:.32,rotation:180,duration:.6,ease:'back.out(2)'},29.1);
+  tl.to('#bigstar',{autoAlpha:0,scale:0,rotation:300,duration:.4},29.95);
+  out('#m4',30.2,.4);
+  tl.set('#vFind',{autoAlpha:0},29.0);tl.set('#vKan',{autoAlpha:1},29.0);
+  tl.set('#cam',{scale:.72,x:21.6,y:691},29.5);
+  tl.to('#cam',{autoAlpha:1,y:631,filter:'blur(0px)',duration:.8},30.55);
+  // Kanban: move a candidate to Screening
+  pill('#p5a',30.9,35.55);
+  camTo(31.4,1.5,590,560,1.1);
+  tl.set(AC,{x:M.kell.x+200,y:M.kell.y+160},32.0);show(AC,32.05,.2);
+  amove(M.kell,32.1,.55);aclick(M.kell,32.7);
+  tl.fromTo('#m1',{autoAlpha:0,scale:.96,transformOrigin:'90% 0'},{autoAlpha:1,scale:1,duration:.2},32.75);
+  amove(M.move,33.0,.4);setCls($('#m1 .mv'),'ga-mit mv hov',33.4);
+  tl.fromTo('#m2',{autoAlpha:0,scale:.96,transformOrigin:'0 0'},{autoAlpha:1,scale:1,duration:.2},33.45);
+  amove(M.scr,33.6,.4);setCls($('#m2 [data-st="Matched"]'),'ga-mit',33.95);setCls($('#m2 [data-st="Screening"]'),'ga-mit hov',33.95);
+  aclick(M.scr,34.2);hide('#m1,#m2',34.25,.15);hide(AC,34.35,.2);
+  tl.to(kJohn,{x:COL_X,y:CARD_Y,boxShadow:'0 24px 48px rgba(0,0,0,.14)',rotation:2,duration:.8,ease:'power3.inOut'},34.35);
+  tl.to(kJohn,{rotation:0,boxShadow:'0 0 0 rgba(0,0,0,0)',duration:.25},35.15);
+  tl.to(kAli,{y:-CARD_Y,duration:.5,ease:'power3.inOut'},34.6);
+  [0,1].forEach(k=>{const b=$$(`[data-cnt="${k}"] b`);tl.set(b[0],{autoAlpha:0},34.9);tl.set(b[1],{autoAlpha:1},34.9)});
+  // Resume sheet for a recommended candidate
+  camTo(35.5,.72,720,512,.9);
+  pill('#p5b',35.9,41.1);
+  tl.set(AC,{x:M.udin.x-180,y:M.udin.y+160},35.8);show(AC,35.85,.2);
+  amove(M.udin,35.9,.5);aclick(M.udin,36.45);hide(AC,36.55,.2);
+  tl.fromTo('#gaBd',{autoAlpha:0},{autoAlpha:.8,duration:.4},36.5);
+  tl.fromTo('#gaSheet',{x:680},{x:0,duration:.7,ease:'power3.out'},36.5);
+  camTo(37.2,1.6,1120,520,1.2);
+  tl.to('#gaRec',{scale:1.08,duration:.25,yoyo:true,repeat:1,ease:'power2.inOut'},37.7);
+  camTo(38.5,1.68,1120,640,2.4);
+  tl.to('#cam',{autoAlpha:0,y:'+=60',duration:.45,ease:'power2.in'},41.1);
+  hide('#s4',41.65,.1);
+
+  /* 9 Job seeker 41.6–51.8 (job-seeker app from Figma) */
+  const app2=$('#app2'),JA_SCROLL=-380;
+  const posB=(el,dx=0,dy=0)=>{const r=el.getBoundingClientRect(),a=app2.getBoundingClientRect(),k=a.width/1440;return{x:(r.left-a.left+r.width/2)/k+dx,y:(r.top-a.top+r.height/2)/k+dy}};
+  const MB={up:posB($('#joUp')),s2:posB($('#joSave2')),s3:posB($('#joSave3')),s4:posB($('#joSave4')),app1:posB($('#jdApp1 .jd-who b'))};
+  const BC=$('#bcur'),BR=$('#bring');
+  const bmove=(p,t,d=.5)=>tl.to(BC,{x:p.x-6,y:p.y-3,duration:d,ease:'power2.inOut'},t);
+  const bclick=(p,t)=>{tl.to(BC,{scale:.85,duration:.09,transformOrigin:'15% 10%'},t).to(BC,{scale:1,duration:.16},t+.09);tl.set(BR,{x:p.x,y:p.y,scale:.2,autoAlpha:1},t).to(BR,{scale:1.3,autoAlpha:0,duration:.5,ease:'power2.out'},t)};
+  const cam2To=(t,s,cx,cy,d=1,ease='power3.inOut')=>tl.to('#cam2',{scale:s,x:540-cx*s,y:1000-cy*s,duration:d,ease},t);
+  gsap.set(BC,{x:1200,y:900});
+
+  show('#s6',41.6,.1);
+  tl.fromTo('#cam2',{autoAlpha:0,scale:.72,x:21.6,y:811},{autoAlpha:1,y:631,duration:1.0},41.65);
+  // Build one profile: four onboarding steps
+  pill('#p6a',41.9,45.85);
+  cam2To(42.2,1.55,960,512,3.6,'sine.inOut');
+  const jst=$$('#jOnb .jo-st'),jpn=$$('#jOnb .jo-pane');
+  const setStep=(i,t)=>jst.forEach((s,k)=>setCls(s,k<i?'jo-st done':k===i?'jo-st act':'jo-st',t));
+  const nextPane=(i,t)=>{tl.to(jpn[i-1],{autoAlpha:0,x:-30,duration:.3,ease:'power2.in'},t);tl.fromTo(jpn[i],{autoAlpha:0,x:30},{autoAlpha:1,x:0,duration:.4},t+.1);setStep(i,t+.05)};
+  tl.fromTo('#joFile',{autoAlpha:0,y:10},{autoAlpha:1,y:0,duration:.35},42.2);
+  tl.set(BC,{x:MB.up.x+160,y:MB.up.y+140},42.3);show(BC,42.35,.2);
+  bmove(MB.up,42.4,.45);bclick(MB.up,42.85);
+  nextPane(1,42.95);tl.set('#joOut',{autoAlpha:1},43.0);
+  tl.to('#joSave2',{opacity:1,duration:.25},43.45);
+  bmove(MB.s2,43.3,.4);bclick(MB.s2,43.8);
+  nextPane(2,43.9);
+  tl.fromTo('#jOnb [data-jp="2"] .jo-list',{autoAlpha:0,y:12},{autoAlpha:1,y:0,duration:.35,stagger:.12},44.05);
+  bmove(MB.s3,44.3,.4);bclick(MB.s3,44.75);
+  nextPane(3,44.85);tl.set('#joOut',{autoAlpha:0},44.9);
+  tl.fromTo('#jOnb .jo-chip',{autoAlpha:0,scale:.6},{autoAlpha:1,scale:1,duration:.3,stagger:.1,ease:'back.out(2.5)'},45.05);
+  bmove(MB.s4,45.25,.4);bclick(MB.s4,45.65);hide(BC,45.8,.15);
+  // Get matched: candidate dashboard
+  hide('#jOnb',45.9,.35);show('#jDash',46.0,.4);
+  cam2To(45.9,.72,720,512,.6);
+  pill('#p6b',46.1,48.6);
+  tl.fromTo('#jDash .jd-stat',{autoAlpha:0,y:16},{autoAlpha:1,y:0,duration:.4,stagger:.08},46.1);
+  tl.fromTo('#jRingArc',{'--p':0},{'--p':70,duration:1.2,ease:'power2.out'},46.4);
+  tl.fromTo('#jPct',{textContent:0},{textContent:70,snap:{textContent:1},duration:1.2,ease:'power2.out'},46.4);
+  cam2To(47.0,1.25,548,470,1.0);
+  tl.to('#jdPill1',{scale:1.12,duration:.22,yoyo:true,repeat:1,ease:'power2.inOut'},47.5);
+  tl.set(BC,{x:MB.app1.x+180,y:MB.app1.y+150},47.85);show(BC,47.9,.2);
+  bmove(MB.app1,47.95,.45);bclick(MB.app1,48.4);hide(BC,48.55,.15);
+  // Track every step: application detail
+  hide('#jDash',48.5,.3);show('#jApp',48.6,.35);
+  cam2To(48.5,.72,720,512,.5);
+  pill('#p6c',48.85,51.25);
+  cam2To(49.0,1.3,528,400,1.0);
+  const jp=$$('#jaPipe .jp-n');
+  setCls(jp[1],'jp-n pd',49.55);setCls(jp[2],'jp-n pc',49.55);
+  tl.fromTo(jp[2],{scale:1},{scale:1.08,duration:.2,yoyo:true,repeat:1,ease:'power2.inOut'},49.55);
+  tl.set('#jaNew',{autoAlpha:0},48.6);
+  tl.to('#jaScroll',{y:JA_SCROLL,duration:1.0,ease:'power3.inOut'},50.1);
+  cam2To(50.1,1.7,1132,560,1.0);
+  tl.fromTo('#jaNew',{autoAlpha:0,x:-16},{autoAlpha:1,x:0,duration:.4},50.75);
+  tl.to('#cam2',{autoAlpha:0,y:'+=60',duration:.45,ease:'power2.in'},51.25);
+  tl.to('#halo',{autoAlpha:0,duration:.6},51.1);
+  hide('#s6',51.85,.1);
+
+  /* 10 End card 51.8–60 */
+  show('#s7',51.75,.1);
+  tl.fromTo('#arc',{autoAlpha:0,y:0},{autoAlpha:1,y:-300,duration:1.8},51.8);
+  words($('#b7'),52.0,.1);
+  tl.fromTo('#b7 svg',{rotation:-120},{rotation:0,duration:.9},52.2);
+  out('#b7',54.4,.45);
+  tl.fromTo('#logo7',{autoAlpha:0,y:24,filter:'blur(10px)'},{autoAlpha:1,y:0,filter:'blur(0px)',duration:.8},54.75);
+  tl.fromTo('#logo7 .star',{scale:0,rotation:-180},{scale:1,rotation:0,duration:.6,ease:'back.out(3)',stagger:.12},55.05);
+  tl.fromTo('#btns',{autoAlpha:0,y:20},{autoAlpha:1,y:0,duration:.6},55.5);
+  twinkle('#s7',54.8,DUR);
+  tl.to({},{duration:.01},DUR);
+  return tl;
+}
+
+let TL;
+const playBtn=$('#play'),scrub=$('#scrub'),timeEl=$('#time'),vo=$('#vo'),sn=$('#sceneName');
+const fmt=t=>`${Math.floor(t/60)}:${String(Math.floor(t%60)).padStart(2,'0')}`;
+const setPlayLabel=l=>{playBtn.textContent=l;playBtn.setAttribute('aria-label',l)};
+function ui(){const t=TL.time();scrub.value=t;timeEl.textContent=`${fmt(t)} / ${fmt(DUR)}`;
+  const v=VO.find(x=>t>=x[0]&&t<x[1]);vo.textContent=v?v[2]:'';
+  let n=SCN[0][1];SCN.forEach(s=>{if(t>=s[0])n=s[1]});sn.textContent=n;}
+document.getElementById('marks').innerHTML=SCN.slice(1).map(s=>`<i style="left:${s[0]/DUR*100}%"></i>`).join('');
+document.fonts.ready.then(()=>{
+  fit();TL=build();TL.eventCallback('onUpdate',ui);
+  TL.eventCallback('onComplete',()=>setPlayLabel('Replay'));
+  TL.seek(0);ui();
+  if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){TL.play();setPlayLabel('Pause')}
+});
+playBtn.onclick=()=>{if(!TL)return;
+  if(TL.progress()>=1){TL.restart();}
+  else if(TL.paused()){TL.play();}
+  else{TL.pause();}
+  setPlayLabel(!TL.paused()&&TL.progress()<1?'Pause':'Play')};
+scrub.oninput=()=>{if(!TL)return;TL.pause();TL.seek(+scrub.value);setPlayLabel('Play');ui()};
+$('#cc').onclick=e=>{const on=e.currentTarget.getAttribute('aria-pressed')!=='true';e.currentTarget.setAttribute('aria-pressed',on);vo.classList.toggle('on',on)};
+document.addEventListener('keydown',e=>{if(e.code==='Space'&&e.target===document.body){e.preventDefault();playBtn.click()}});
+</script>
+</body>
+</html>
