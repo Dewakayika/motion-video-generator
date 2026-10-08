@@ -2,6 +2,10 @@
 
 Product explainers, promos and bumpers built as HTML + GSAP and rendered to MP4. Explainers use real screenshots of the apps, a moving camera, spotlights, callouts and captions, with an optional AI voiceover (ElevenLabs).
 
+[![Interlace Studies 30 s promo, made in this repo](docs/media/interlace-promo-preview.gif)](projects/interlace-promo/output/interlace-30s-1080p.mp4)
+
+*Interlace Studies 30 s promo ([full-quality MP4](projects/interlace-promo/output/interlace-30s-1080p.mp4), source: [projects/interlace-promo/interlace-30s.html](projects/interlace-promo/interlace-30s.html)).*
+
 New here? Read **[docs/HOW-TO.md](docs/HOW-TO.md)**. With Claude Code, the `explainer-video` skill in `.claude/` does the whole process the same way every time.
 
 ## What is in the repo
