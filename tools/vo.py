@@ -11,8 +11,9 @@ Run from the repo root:
        Places every clip at its retimed caption start and writes output/<page>-vo-1080p.mp4 and <page>-vo.wav.
 
 --fix: JSON {"caption text": "spoken text"} for lines that should be read differently from how they are shown.
+       Default: vo-fixes.json next to the page, if it exists.
 """
-import argparse, html, json, os, pathlib, re, subprocess, sys, urllib.request
+import argparse, html, json, os, pathlib, re, subprocess, sys, urllib.error, urllib.request
 
 API = "https://api.elevenlabs.io/v1/text-to-speech/{voice}?output_format=mp3_44100_128"
 DEFAULT_VOICE = "IKne3meq5aSn9XLyUdCD"  # Charlie, Australian English
@@ -41,14 +42,28 @@ def tts(text, voice, key, prev, nxt):
             "voice_settings": {"stability": 0.5, "similarity_boost": 0.75, "style": 0.0, "use_speaker_boost": True, "speed": SPEED}}
     req = urllib.request.Request(API.format(voice=voice), data=json.dumps(body).encode(), method="POST",
                                  headers={"xi-api-key": key, "Content-Type": "application/json"})
-    with urllib.request.urlopen(req, timeout=120) as r:
-        return r.read()
+    try:
+        with urllib.request.urlopen(req, timeout=120) as r:
+            return r.read()
+    except urllib.error.HTTPError as e:
+        # show ElevenLabs' own reason (quota_exceeded, invalid key, missing permission, ...)
+        try:
+            detail = json.loads(e.read().decode()).get("detail", {})
+            reason = f"{detail.get('status', '')}: {detail.get('message', '')}" if isinstance(detail, dict) else str(detail)
+        except Exception:
+            reason = e.reason
+        raise SystemExit(f"ElevenLabs refused the request (HTTP {e.code}) {reason}\n"
+                         "Clips made so far are kept; run the same command again once this is fixed.")
 
 def gen(a):
     key = os.environ.get("ELEVENLABS_API_KEY") or sys.exit("ELEVENLABS_API_KEY is not set")
     page = pathlib.Path(a.page)
-    fixes = json.loads(pathlib.Path(a.fix).read_text(encoding="utf-8")) if a.fix else {}
+    fix = pathlib.Path(a.fix) if a.fix else page.parent / "vo-fixes.json"   # per-project pronunciation fixes
+    fixes = json.loads(fix.read_text(encoding="utf-8")) if fix.exists() else {}
     src, dur, caps = captions(page)
+    unused = set(fixes) - {spoken(t, {}) for _, _, t in caps}
+    if unused:
+        sys.exit("vo-fixes.json keys that match no caption (fix the spelling):\n  " + "\n  ".join(sorted(unused)))
     if "const WARP=" not in src:
         sys.exit(f"{page.name} has no `const WARP=[]` (retiming support): copy it from templates/explainer/explainer.html")
     vo = page.parent / "vo"; vo.mkdir(exist_ok=True)
@@ -66,7 +81,8 @@ def gen(a):
             cache[f"{i:02d}"] = {"text": text, "voice": a.voice, "speed": SPEED}
         cache[f"{i:02d}"]["len"] = round(length(out), 3)
         lens.append(cache[f"{i:02d}"]["len"])
-    cache_file.write_text(json.dumps(cache, indent=1), encoding="utf-8")
+        # save after every clip, so a failed run never pays for the same clip twice
+        cache_file.write_text(json.dumps(cache, indent=1), encoding="utf-8")
 
     # anchors: every caption start moves later if the voice before it needs more room
     warp, new = [[0, 0]], 0.0

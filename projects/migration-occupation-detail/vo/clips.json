@@ -1,0 +1,212 @@
+{
+ "00": {
+  "text": "A quick guide to the Occupation Detail page.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 2.972
+ },
+ "01": {
+  "text": "For one occupation, the page shows how every visa stream treats it.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.412
+ },
+ "02": {
+  "text": "Is the stream inviting? What score was enough? How often does it invite?",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.108
+ },
+ "03": {
+  "text": "SkillSelect streams sit at the top. Labour market analytics follow below.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.712
+ },
+ "04": {
+  "text": "Three filters: Period, State or Territory, and Visa Subclass.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.433
+ },
+ "05": {
+  "text": "One visa at a time. The default is subclass one-ninety.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.737
+ },
+ "06": {
+  "text": "The filter bar stays at the top while you scroll.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 2.879
+ },
+ "07": {
+  "text": "The header names the occupation and its J-S-A shortage rating.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.598
+ },
+ "08": {
+  "text": "The ring compares invitations with the pool: about one percent here.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.69
+ },
+ "09": {
+  "text": "The KPIs follow the filters. Here: subclass one-ninety, all states, the last 12 months.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 7.245
+ },
+ "10": {
+  "text": "Estimated Invitations adds up monthly snapshots, so one invitation can count twice.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.805
+ },
+ "11": {
+  "text": "Live Job Ads and 2030 Growth are for all of Australia and ignore the filters.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.433
+ },
+ "12": {
+  "text": "Each card is one stream: one state and one visa.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.365
+ },
+ "13": {
+  "text": "Latest Cutoff: the lowest invited score at the most recent invitation, with its month.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.944
+ },
+ "14": {
+  "text": "Invited in 9 of the last 12 months shows how regularly the state invites.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.108
+ },
+ "15": {
+  "text": "Status is Active, Quiet, or No invitations. The info icon explains why.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 7.291
+ },
+ "16": {
+  "text": "The Northern Territory invited at 70 points in August. New South Wales has the largest pool, but has been quiet since April.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 8.081
+ },
+ "17": {
+  "text": "Switch to Table to compare every stream in one view.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 3.808
+ },
+ "18": {
+  "text": "Pick one month and each card shows whether the state invited in that month.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.598
+ },
+ "19": {
+  "text": "June 2026: 7 of 8 states invited. New South Wales invited nobody.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 6.269
+ },
+ "20": {
+  "text": "Pick a state, and the KPIs follow: South Australia, one invitation, from a pool of 3,846.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 8.127
+ },
+ "21": {
+  "text": "Subclass one-eighty-nine and four-ninety-one Family are national: one card, and the state filter is disabled.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 7.848
+ },
+ "22": {
+  "text": "Detailed Analytics has four tabs. E-O-I and Invitations comes first.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 6.362
+ },
+ "23": {
+  "text": "These are the same charts as the E-O-I Analysis page, for this occupation only.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.923
+ },
+ "24": {
+  "text": "Over a period, Invited adds up every month. The most invited score here is 95 points.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 6.455
+ },
+ "25": {
+  "text": "Demand and Vacancies: is there a labour shortage in Australia?",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.087
+ },
+ "26": {
+  "text": "J-S-A rates Software Engineer as No Shortage. The D-E-W-R shortage list had it in all 8 states up to 2024.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 10.681
+ },
+ "27": {
+  "text": "Online job ads: 3,049 last month, down one percent, and 95 percent in major cities.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 8.081
+ },
+ "28": {
+  "text": "Workforce and Demographics: who does this job in Australia?",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 4.969
+ },
+ "29": {
+  "text": "195,400 people are employed, and the number is growing. Employers get 61 applicants per vacancy, but only 6 are suitable.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 10.728
+ },
+ "30": {
+  "text": "Most workers are 25 to 44. J-S-A expects 15.7 percent growth by 2030.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 7.616
+ },
+ "31": {
+  "text": "Regional and A-I Forecasts: where the jobs are, and where shortages may come.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.294
+ },
+ "32": {
+  "text": "About 9.5 percent of Software Engineers work outside the major cities.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.294
+ },
+ "33": {
+  "text": "The A-I forecast is a model estimate of shortage risk per state, up to 2030.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.944
+ },
+ "34": {
+  "text": "Cutoffs have a date. Invitations are snapshots. National data ignores the filters.",
+  "voice": "IKne3meq5aSn9XLyUdCD",
+  "speed": 1.0,
+  "len": 5.526
+ }
+}

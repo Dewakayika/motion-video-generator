@@ -569,7 +569,7 @@ function build(){
 
 // Voiceover retiming, written by vo.py: [[original time, new time], ...]. Empty = original timing.
 // Each stretch between two anchors plays the original animation slower, so the scene waits for the voice.
-const WARP=[];
+const WARP=[[0,0],[0.6,0.6],[5.8,5.8],[10.4,10.562],[15.3,16.02],[21.2,22.082],[25.8,27.865],[28.6,32.952],[31.3,36.181],[34.4,41.129],[37.3,46.169],[41.4,53.764],[45.4,59.919],[49.3,65.702],[53.6,70.417],[57.8,76.711],[61.0,82.169],[64.3,89.81],[68.6,98.241],[73.3,102.941],[77.8,107.889],[81.6,114.508],[85.3,122.985],[91.3,131.183],[95.6,137.895],[99.0,143.168],[102.3,149.973],[106.6,154.41],[110.8,165.441],[116.2,173.872],[120.4,179.191],[124.8,190.269],[129.3,198.235],[133.4,203.879],[137.4,209.523],[142.3,215.817],[148.0,222.143]];
 const OUT=WARP.length?WARP[WARP.length-1][1]:DUR;
 function unwarp(t){if(!WARP.length)return t;
   for(let i=0;i<WARP.length-1;i++){const[a,na]=WARP[i],[b,nb]=WARP[i+1];if(t<=nb)return a+(b-a)*Math.max(0,t-na)/(nb-na)}

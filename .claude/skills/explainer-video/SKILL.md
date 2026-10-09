@@ -73,7 +73,7 @@ python tools/vo.py gen projects/<p>/<page>.html      # person runs this (needs t
 python tools/render.py projects/<p>/<page>.html      # re-render with the new timing
 python tools/vo.py mux projects/<p>/<page>.html projects/<p>/output/<page>-1080p.mp4
 ```
-`gen` speaks at natural speed and stretches the timeline (`WARP`) wherever a line needs more room, so the video follows the voice. Clips are cached in `vo/clips.json`: only changed captions are generated again. Pronunciation fixes go in a `--fix` JSON (`{"caption": "spoken text"}`). Default voice: Charlie (Australian English); `--voice <id>` to change.
+`gen` speaks at natural speed and stretches the timeline (`WARP`) wherever a line needs more room, so the video follows the voice. Clips are cached in `vo/clips.json`: only changed captions are generated again. Before `gen`, write `projects/<p>/vo-fixes.json` (`{"caption as shown": "spoken text"}`) for every caption with abbreviations, subclass numbers, symbols or UI shorthand: "NSW" → "New South Wales", "190" → "one-ninety", "Est." → "Estimated", "(i)" → "the info icon", "%" → "percent", acronyms read as letters → "J-S-A". `vo.py` loads it automatically and refuses keys that match no caption. See `projects/migration-occupation-detail/vo-fixes.json`. Default voice: Charlie (Australian English); `--voice <id>` to change.
 
 ## 8. Hand over
 Write the project `README.md` (from the template: scenes with times, where to edit, render and voiceover commands), then tell the person: the output path, length, what is drawn rather than captured, anything in the app that looked wrong, and the voiceover text if they need it.
