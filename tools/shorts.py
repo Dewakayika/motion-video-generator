@@ -3,6 +3,7 @@
 Run from the repo root:
   python tools/shorts.py new <name> --voice <voice.mp3> [--presenter <clip.mp4>]   # projects/<name>/
   python tools/shorts.py config <name> --interactive   # project setup questions (asked first; answers saved in config.json)
+  python tools/shorts.py backdrop <name> [--video] [--from-video clip.mp4]   # free backdrop, no account needed
   python tools/shorts.py segments <name>          # find the spoken lines in voice.mp3 -> segments.js
   python tools/shorts.py sheet <name>             # QA contact sheet of every scene -> projects/<name>/qa/sheet.jpg
   python tools/shorts.py render <name> [--music bg.mp3] [--fps 30]   # -> projects/<name>/output/<name>-1080x1920.mp4
@@ -37,13 +38,13 @@ def duration(path):
 CONFIG_QUESTIONS = [
     ("voice_language", "What language is the voiceover?", ["nepali", "english", "nepali + english mix"], "nepali + english mix"),
     ("caption_language", "What language should the on-screen captions be?", ["english", "nepali", "same as the voice"], "english"),
-    ("voice_source", "Where does the voiceover come from?", ["i provide an audio file", "generate it with ElevenLabs", "the presenter's own audio"], "i provide an audio file"),
-    ("voice_name", "ElevenLabs voice name (only if generating; leave blank otherwise)", None, ""),
+    ("voice_source", "Where does the voiceover come from?", ["i provide an audio file", "generate it with a voice service I have (e.g. ElevenLabs)", "the presenter's own audio", "no voice (captions and music only)"], "i provide an audio file"),
+    ("voice_name", "Voice name (only if generating; leave blank otherwise)", None, ""),
     ("presenter", "Is there a person on camera?", ["no", "yes, footage provided"], "no"),
     ("look", "Visual look", ["interlace", "dark", "warm"], "interlace"),
     ("backdrop_mode", "Backdrops behind the scenes", ["images", "video clips", "mixed images and video", "none (plain background)"], "images"),
-    ("backdrop_tool", "Make the backdrops with", ["kling", "elevenlabs", "higgsfield", "bloom", "my own files"], "kling"),
-    ("backdrop_budget", "Spend limit for generated media (say the number and the unit, e.g. '1 USD' or '100 Kling credits')", None, "ask me before spending"),
+    ("backdrop_tool", "Where do the backdrops come from? Nothing here is compulsory: 'auto' uses whatever image or video generators this session has, and falls back to free options if there are none", ["auto (use what I have)", "my own files", "free built-in gradients (no account)", "frames from my footage", "kling", "elevenlabs", "higgsfield", "bloom", "other"], "auto (use what I have)"),
+    ("backdrop_budget", "Spend limit for generated media (number and unit, e.g. '1 USD' or '100 credits'), or 'free only'", None, "free only"),
     ("length_seconds", "Target length in seconds", None, "45-60"),
     ("music", "Background music", ["none", "my own licensed track"], "none"),
     ("logo", "Logo file inside the project folder", None, "logo.png"),
@@ -117,6 +118,51 @@ def cmd_config(a):
     cfg, missing = configure(p, interactive=a.interactive, sets=a.set or [], redo=a.redo)
     if missing:
         sys.exit(1)
+
+
+# ---------- free backdrops (no account, no credits) ----------
+def _hex(c):
+    c = c.lstrip("#")
+    return tuple(int(c[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def cmd_backdrop(a):
+    """Make a backdrop without any generator: a soft colour-mesh image, an animated gradient video, or a still from your own footage."""
+    p = proj(a.project)
+    media = p / "media"
+    media.mkdir(exist_ok=True)
+    name = a.name or ("backdrop-" + ("frame" if a.from_video else "video" if a.video else "mesh"))
+    if a.from_video:
+        out = media / (name + ".jpg")
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-ss", str(a.at), "-i", a.from_video, "-frames:v", "1",
+                        "-vf", "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920", "-q:v", "2", str(out)], check=True)
+        print("wrote %s  (use blur: 14 in the backdrop entry to soften it)" % out)
+        return
+    colors = [c.strip() for c in a.colors.split(",") if c.strip()]
+    if a.video:
+        out = media / (name + ".mp4")
+        cs = "".join(":c%d=0x%s" % (i, c.lstrip("#")) for i, c in enumerate(colors[:8]))
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "lavfi", "-i",
+                        "gradients=size=1080x1920:rate=30:duration=%s:speed=0.015:nb_colors=%d%s:seed=%d" % (a.seconds, min(len(colors), 8), cs, a.seed),
+                        "-c:v", "libx264", "-crf", "16", "-pix_fmt", "yuv420p", str(out)], check=True)
+        print("wrote %s  (loops to fill its slot)" % out)
+        return
+    import numpy as np
+    from PIL import Image
+    rng = np.random.default_rng(a.seed)
+    H, W = 1920, 1080
+    yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+    rgb = [np.array(_hex(c), np.float32) for c in colors]
+    img = np.zeros((H, W, 3), np.float32) + rgb[0]
+    for c in (rgb[1:] * 2):
+        cx, cy, r = rng.uniform(0, W), rng.uniform(0, H), rng.uniform(0.18, 0.38) * H
+        w = np.exp(-(((xx - cx) ** 2 + (yy - cy) ** 2) / (2 * r * r)))[..., None]
+        img = img * (1 - 0.85 * w) + c * 0.85 * w
+    vig = 1 - 0.35 * (((xx - W / 2) / (W / 2)) ** 2 + ((yy - H / 2) / (H / 2)) ** 2) / 2
+    img = img * vig[..., None] + rng.normal(0, 2.2, img.shape)
+    out = media / (name + ".png")
+    Image.fromarray(np.clip(img, 0, 255).astype(np.uint8)).save(out)
+    print("wrote %s  (add it to backdrops in script.js)" % out)
 
 
 # ---------- new ----------
@@ -559,11 +605,17 @@ def main():
     cf.add_argument("--interactive", action="store_true", help="ask the setup questions")
     cf.add_argument("--set", action="append", metavar="KEY=VALUE", help="set one answer (repeatable)")
     cf.add_argument("--redo", action="store_true", help="ask every question again, even answered ones")
+    bk = sub.add_parser("backdrop", help="make a free backdrop (no account needed)"); bk.add_argument("project")
+    bk.add_argument("--name"); bk.add_argument("--seed", type=int, default=7)
+    bk.add_argument("--colors", default="#0B1F3F,#1E4E8C,#3B82C4,#0A1530", help="comma-separated hex colours (default: deep blues)")
+    bk.add_argument("--video", action="store_true", help="animated gradient clip instead of a still")
+    bk.add_argument("--seconds", type=int, default=12)
+    bk.add_argument("--from-video", dest="from_video", help="use a still from this footage instead"); bk.add_argument("--at", type=float, default=1.0)
     fr = sub.add_parser("frames"); fr.add_argument("project"); fr.add_argument("video")
     fr.add_argument("--every", type=float, default=1.0, help="seconds between reference frames (default 1)")
     a = ap.parse_args()
     {"new": cmd_new, "segments": cmd_segments, "sheet": cmd_sheet, "render": cmd_render,
-     "capture": cmd_capture, "frames": cmd_frames, "config": cmd_config}[a.cmd](a)
+     "capture": cmd_capture, "frames": cmd_frames, "config": cmd_config, "backdrop": cmd_backdrop}[a.cmd](a)
 
 
 main()

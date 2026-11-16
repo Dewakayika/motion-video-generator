@@ -52,7 +52,7 @@ Every new project asks its setup questions before anything else (voice language,
 ```
 python tools/shorts.py new my-topic --voice voice.mp3      # asks the questions in a terminal
 python tools/shorts.py config my-topic --interactive       # ask (or ask the rest) later
-python tools/shorts.py config my-topic --set backdrop_tool=kling --set backdrop_budget="100 Kling credits"
+python tools/shorts.py config my-topic --set "backdrop_tool=free built-in gradients (no account)" --set backdrop_budget="free only"
 ```
 The `shorts-director` agent reads `config.json` first, asks you anything still unanswered in the chat, and never spends beyond the limit you set.
 
@@ -62,3 +62,15 @@ The `shorts-director` agent reads `config.json` first, asks you anything still u
 { t: 12, end: 18, type: 'photo', style: 'card', items: [{ src: 'media/a.png' }, { src: 'media/b.png' }] }              // 2-3 photo collage
 ```
 Photos and short video clips drop in with a tilt and float gently. For the most professional look, put the same picture behind it as a **blurred backdrop** (`blur: 14`), so the framed photo sits on its own colours.
+
+## Works with whatever you have (nothing is compulsory)
+No single service is required. Each optional piece has a free fallback:
+
+| You do not have | What happens instead |
+|---|---|
+| An image or video generator (Kling, ElevenLabs, Higgsfield, Bloom, ...) or credits | Your own photos or footage in `media/`; `python tools/shorts.py backdrop <name>` (colour-mesh image, `--video` for an animated gradient, `--from-video clip.mp4` for a still of your footage). No account. |
+| A voice service | Supply your own `voice.mp3`, use the presenter's own audio, or make a captions-only video. |
+| A browser or web search | No source screenshots; the video states only what you give it and the unverified claims are listed so you can add links. |
+| The cut-out model | Presenter videos still render (graphics on top, cards in the lower third); only "graphics behind the person" and the shrink move need it. |
+
+The setup questions (`python tools/shorts.py config <name> --interactive`) default to **auto: use what I have**, and **free only** for spend.
