@@ -1,0 +1,590 @@
+<!doctype html>
+<!--
+  Portrait short (1080x1920) in the "talking-head explainer" style: bold two-line captions,
+  big stat numbers, stat cards, compare cards, pill lists, recap badges, document B-roll and a CTA.
+  Works WITH a presenter (presenter.mp4 in this folder, set SCRIPT.presenter) or WITHOUT one
+  (designed background). All content lives in script.js; timing comes from segments.js
+  (written by `python tools/shorts.py segments <project>`). Render: `python tools/shorts.py render <project>`.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Short</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<style>
+:root{
+  --bg1:#F1E6D8; --bg2:#D8C2A6; --blob1:#F6C89A; --blob2:#E9B98C;
+  --ink:#1E1A16; --muted:#6D6052; --accent:#FF7A1A; --accent2:#FFB547; --onaccent:#1E1A16;
+  --card:#FFFFFF; --cardline:rgba(30,26,22,.08); --dark:#1E1A16; --ondark:#FFFFFF;
+  --capink:var(--ink); --capshadow:none; --numondark:var(--accent); --numfont:Poppins,system-ui,sans-serif; --good:#1F9D55; --bad:#E5484D;
+}
+[data-look="dark"]{
+  --bg1:#17120F; --bg2:#2B211A; --blob1:#5A3A22; --blob2:#3B2A1E;
+  --ink:#FFFFFF; --muted:#C9BBAA; --card:#231C17; --cardline:rgba(255,255,255,.08); --dark:#0F0C0A;
+}
+/* Interlace Studies brand: primary #3267AD, accent #1E96E0, pastel blue tint, Playfair Display numbers */
+[data-look="interlace"]{
+  --bg1:#FFFFFF; --bg2:#EAF2FA; --blob1:#CFE3F7; --blob2:#BCD9F4;
+  --ink:#0F2440; --muted:#5B6B80; --accent:#3267AD; --accent2:#BFE3FF; --onaccent:#FFFFFF;
+  --card:#FFFFFF; --cardline:#DCE4EF; --dark:#3267AD; --ondark:#FFFFFF; --numondark:#FFFFFF;
+  --numfont:"Playfair Display",Georgia,serif;
+}
+[data-presenter="1"]{ --capink:#FFFFFF; --capshadow:0 4px 24px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.6); }
+
+*{box-sizing:border-box}
+body{margin:0;background:#0d0d0d;display:flex;flex-direction:column;align-items:center;gap:14px;padding:18px;font-family:Poppins,system-ui,sans-serif}
+#viewport{width:min(430px,92vw);aspect-ratio:9/16;position:relative;overflow:hidden;border-radius:18px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;transform-origin:0 0;overflow:hidden;background:var(--bg1);color:var(--ink)}
+
+/* background (no presenter) */
+#bg{position:absolute;inset:0;background:radial-gradient(120% 80% at 50% 0%,var(--bg1) 0%,var(--bg2) 100%)}
+.blob{position:absolute;border-radius:50%;opacity:.75}  /* soft edge from the gradient, not a per-frame blur */
+#b1{width:1300px;height:1300px;left:-500px;top:-400px;background:radial-gradient(circle,var(--blob1) 0%,transparent 68%)}
+#b2{width:1200px;height:1200px;right:-520px;bottom:-360px;background:radial-gradient(circle,var(--blob2) 0%,transparent 68%)}
+#grain{position:absolute;inset:0;opacity:.06;pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+/* presenter */
+#pwrap{position:absolute;inset:0;overflow:hidden;display:none}
+#pwrap video{width:100%;height:100%;object-fit:cover;display:block}
+[data-presenter="1"] #pwrap{display:block}
+[data-presenter="1"] #bg .blob{display:none}
+#pshade{position:absolute;left:0;right:0;bottom:0;height:55%;background:linear-gradient(transparent,rgba(0,0,0,.45))}
+
+/* layers */
+.layer{position:absolute;inset:0;pointer-events:none}
+.abs{position:absolute;left:0;right:0}
+
+/* brand */
+#brand img{height:78px;display:inline-block}
+#brand{position:absolute;top:70px;left:0;right:0;text-align:center;font-weight:600;font-size:30px;letter-spacing:.06em;color:var(--capink);opacity:.8;text-shadow:var(--capshadow)}
+
+/* caption: small lead + big key */
+.cap{position:absolute;left:60px;right:60px;top:1240px;text-align:center;color:var(--capink);text-shadow:var(--capshadow)}
+.cap .lead{font-weight:500;font-size:50px;line-height:1.2;margin-bottom:14px}
+.cap .key{display:inline-block;font-weight:800;font-size:112px;line-height:1.02;text-transform:uppercase;letter-spacing:-.01em}
+.cap .key.hl{background:var(--accent);color:var(--onaccent);padding:6px 30px 10px;border-radius:12px;text-shadow:none}
+.cap .key .w{display:inline-block}
+.cap.top{top:300px}
+.cap.mid{top:780px}
+
+/* kicker */
+.kicker{display:inline-block;font-weight:700;font-size:30px;letter-spacing:.14em;text-transform:uppercase;padding:10px 24px;border-radius:999px;background:var(--dark);color:var(--ondark)}
+
+/* big number */
+.bignum{top:250px;text-align:center}
+.bignum .num{font-family:var(--numfont);font-weight:900;font-size:340px;line-height:.95;letter-spacing:-.04em;color:var(--accent);text-shadow:var(--capshadow)}
+.bignum .unit{font-weight:600;font-size:64px;color:var(--capink);text-shadow:var(--capshadow);margin-top:6px}
+.bignum .kicker{margin-bottom:26px}
+.badges-row{display:flex;justify-content:center;gap:26px;margin-top:40px}
+.chip{display:inline-flex;align-items:center;gap:12px;background:var(--card);color:var(--ink);border:1px solid var(--cardline);border-radius:999px;padding:14px 28px;font-weight:700;font-size:34px;box-shadow:0 10px 30px rgba(0,0,0,.12)}
+.chip .dot{width:20px;height:20px;border-radius:50%;background:var(--good)}
+
+/* stat card */
+.stat{top:640px;display:flex;justify-content:center}
+.stat .box{width:820px;background:var(--dark);color:var(--ondark);border-radius:40px;padding:56px 60px;text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.28)}
+.stat .v{font-family:var(--numfont);font-weight:900;font-size:200px;line-height:1;color:var(--numondark)}
+.stat .l{font-weight:600;font-size:48px;line-height:1.25;margin-top:16px}
+
+/* compare cards */
+.compare{top:520px;display:flex;justify-content:center;gap:40px}
+.ccard{width:440px;background:var(--card);border:1px solid var(--cardline);border-radius:36px;padding:44px 36px;text-align:center;box-shadow:0 24px 60px rgba(0,0,0,.14)}
+.ccard .ico{font-size:120px;line-height:1}
+.ccard .n{font-weight:700;font-size:44px;margin-top:18px;color:var(--ink)}
+.ccard .val{display:inline-block;margin-top:22px;background:var(--accent);color:var(--onaccent);font-weight:800;font-size:46px;padding:10px 26px;border-radius:16px}
+.ccard .sub{font-weight:500;font-size:30px;color:var(--muted);margin-top:14px}
+
+/* pills */
+.pills{top:640px;text-align:center}
+.pills .title{display:inline-block;max-width:940px;font-weight:900;font-size:52px;letter-spacing:.02em;text-transform:uppercase;color:var(--bad);background:var(--card);padding:10px 30px;border-radius:14px;margin-bottom:34px}
+.pills .row{display:flex;flex-wrap:wrap;justify-content:center;gap:22px;padding:0 60px}
+.pill{display:inline-flex;align-items:center;gap:14px;background:var(--card);color:var(--ink);border:1px solid var(--cardline);border-radius:999px;padding:18px 34px;font-weight:700;font-size:42px;box-shadow:0 10px 30px rgba(0,0,0,.14)}
+.pill .x{width:40px;height:40px;border-radius:50%;background:var(--bad);color:#fff;display:inline-grid;place-items:center;font-size:26px;font-weight:900}
+.pill .x.ok{background:var(--good)}
+
+/* recap badges */
+.badges{top:560px;display:flex;justify-content:center;gap:44px}
+.badge{width:300px;height:300px;border-radius:50%;background:var(--dark);color:var(--ondark);display:flex;flex-direction:column;align-items:center;justify-content:center;border:10px solid var(--accent);box-shadow:0 24px 60px rgba(0,0,0,.25)}
+.badge .v{font-family:var(--numfont);font-weight:900;font-size:120px;line-height:1}
+.badge .l{font-weight:600;font-size:28px;letter-spacing:.1em;text-transform:uppercase;margin-top:6px;color:var(--accent2)}
+
+/* chart: animated bars */
+.chart{top:330px;padding:0 70px;text-align:center}
+.chart .title{font-weight:800;font-size:64px;margin-bottom:40px;color:var(--capink);text-shadow:var(--capshadow)}
+.chart .bars{height:700px;display:flex;align-items:flex-end;justify-content:center;gap:34px;border-bottom:4px solid var(--ink)}
+.chart .col{width:190px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+.chart .bar{width:100%;border-radius:18px 18px 0 0;transform-origin:50% 100%}
+.chart .val{font-weight:900;font-size:48px;color:var(--ink);margin-bottom:10px;text-shadow:none}
+.chart .nm{position:absolute;margin-top:14px;font-weight:600;font-size:30px;color:var(--muted);line-height:1.2;width:200px}
+.chart .names{display:flex;justify-content:center;gap:34px;margin-top:14px}
+.chart .names div{width:190px;font-weight:600;font-size:30px;color:var(--muted);line-height:1.2}
+.chart .note{font-weight:600;font-size:34px;color:var(--muted);margin-top:26px}
+
+/* do / don't */
+.dds{top:300px;padding:0 50px}
+.dds .title{font-weight:900;font-size:70px;text-align:center;margin-bottom:44px;color:var(--capink);text-shadow:var(--capshadow)}
+.dds .cols{display:flex;gap:30px}
+.dd{flex:1;background:var(--card);border-radius:34px;padding:34px 30px;box-shadow:0 24px 60px rgba(0,0,0,.14);border-top:12px solid}
+.dd.do{border-color:var(--good)} .dd.dont{border-color:var(--bad)}
+.dd .hd{font-weight:900;font-size:54px;display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.dd.do .hd{color:var(--good)} .dd.dont .hd{color:var(--bad)}
+.dd .ic{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;color:#fff;font-size:38px}
+.dd.do .ic{background:var(--good)} .dd.dont .ic{background:var(--bad)}
+.dd .it{font-weight:600;font-size:34px;line-height:1.25;color:var(--ink);padding:18px 0;border-top:1px solid var(--cardline)}
+
+/* stamp: REFUSED / GRANTED slammed on screen */
+.stamp{top:600px;text-align:center}
+.stamp .s{display:inline-block;font-weight:900;font-size:150px;letter-spacing:.05em;text-transform:uppercase;padding:18px 54px;border:16px solid;border-radius:26px;transform:rotate(-8deg);color:var(--bad);border-color:var(--bad);background:rgba(255,255,255,.6);box-shadow:0 20px 60px rgba(0,0,0,.18)}
+.stamp.good .s{color:var(--good);border-color:var(--good)}
+.stamp .sub{margin-top:46px;font-weight:700;font-size:56px;color:var(--capink);text-shadow:var(--capshadow)}
+.stamp .flash{position:absolute;inset:-200px -100px;background:radial-gradient(circle,rgba(255,255,255,.9),transparent 60%);opacity:0;pointer-events:none}
+
+/* quote card: a sentence from an official source with the key phrase highlighted */
+.quote{top:440px;padding:0 60px}
+.quote .card{background:var(--card);border:1px solid var(--cardline);border-radius:38px;padding:54px 56px 46px;box-shadow:0 30px 80px rgba(15,36,64,.2)}
+.quote .src{display:inline-block;font-weight:700;font-size:28px;letter-spacing:.1em;text-transform:uppercase;padding:10px 22px;border-radius:999px;background:var(--dark);color:var(--ondark)}
+.quote .qt{font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:64px;line-height:1.22;color:var(--ink);margin-top:34px}
+.quote .qt .hl{background:linear-gradient(rgba(255,214,10,.6),rgba(255,214,10,.6)) no-repeat left;background-size:0% 100%;padding:0 6px}
+.quote .by{margin-top:32px;font-weight:600;font-size:34px;color:var(--muted)}
+.quote .url{margin-top:10px;font-weight:500;font-size:28px;color:var(--accent)}
+
+/* photo: framed picture(s) dropped on screen (polaroid or card), over a blurred backdrop */
+.photo{top:300px;display:flex;justify-content:center}
+.photo .pf{position:relative;background:#fff;padding:24px 24px 30px;border-radius:10px;width:640px;box-shadow:0 40px 90px rgba(0,0,0,.45),0 6px 18px rgba(0,0,0,.25)}
+.photo .pf.polaroid{padding-bottom:112px}
+.photo .pf img,.photo .pf video{display:block;width:100%;height:760px;object-fit:cover;background:#ddd}
+.photo .pf .cp{position:absolute;left:0;right:0;bottom:28px;text-align:center;font-family:"Playfair Display",Georgia,serif;font-weight:700;font-size:46px;color:#1E1A16}
+.photo .pf.polaroid::before{content:"";position:absolute;top:-26px;left:50%;width:170px;height:52px;margin-left:-85px;background:rgba(255,236,170,.8);transform:rotate(-3deg);box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.photo .pf.card{border-radius:44px;padding:14px}
+.photo .pf.card img,.photo .pf.card video{border-radius:32px}
+.photo.multi{top:240px;height:1100px;display:block}
+.photo.multi .pf{position:absolute;width:560px}
+.photo.multi .pf img,.photo.multi .pf video{height:640px}
+.photo.multi .pf.polaroid{padding-bottom:110px}
+[data-presenter="1"] .photo{top:1100px;transform:scale(.55);transform-origin:50% 0}
+
+/* list */
+.list{top:420px;padding:0 90px}
+.list .title{font-weight:800;font-size:72px;line-height:1.1;margin-bottom:40px;color:var(--capink);text-shadow:var(--capshadow)}
+.li{display:flex;align-items:center;gap:30px;background:var(--card);border:1px solid var(--cardline);border-radius:28px;padding:30px 36px;margin-bottom:24px;box-shadow:0 14px 40px rgba(0,0,0,.12)}
+.li .i{flex:none;width:84px;height:84px;border-radius:22px;background:var(--accent);color:var(--onaccent);display:grid;place-items:center;font-weight:900;font-size:46px}
+.li .t{font-weight:700;font-size:46px;line-height:1.15;color:var(--ink)}
+
+/* document / B-roll */
+.doc{top:220px;display:flex;justify-content:center}
+.doc .paper{width:820px;height:900px;background:#FBFAF6;border-radius:10px;box-shadow:0 40px 100px rgba(0,0,0,.35);overflow:hidden;position:relative}
+.doc .paper img{width:100%;height:100%;object-fit:cover}
+.doc .ph{padding:70px 70px}
+.doc .ph .seal{width:120px;height:120px;border-radius:50%;border:8px solid #C0392B;margin:0 auto 26px}
+.doc .ph .ln{height:22px;border-radius:6px;background:#D9D4C8;margin:18px 0}
+.doc .ph .ln.h{height:34px;background:#B9B2A2;width:70%;margin:0 auto 40px}
+.doc .ph .ln.s{width:60%}
+.doc .mark{position:absolute;left:50px;right:50px;height:60px;background:rgba(255,200,40,.45);mix-blend-mode:multiply;transform-origin:0 50%}
+.broll{inset:0}
+.broll img,.broll video{width:100%;height:100%;object-fit:cover}
+
+/* emoji hero */
+.hero{top:480px;text-align:center}
+.hero .e{font-size:360px;line-height:1}
+
+/* CTA */
+.cta{top:640px;text-align:center;padding:0 70px}
+.cta .e{font-size:200px;line-height:1}
+.cta .t{font-weight:900;font-size:96px;line-height:1.05;text-transform:uppercase;margin-top:30px;color:var(--capink);text-shadow:var(--capshadow)}
+.cta .s{display:inline-block;margin-top:36px;background:var(--accent);color:var(--onaccent);font-weight:800;font-size:48px;padding:18px 40px;border-radius:999px}
+
+/* web page B-roll: browser window, slow scroll, highlighter on the line being spoken */
+.web{top:180px;display:flex;justify-content:center}
+.web .win{width:940px;background:#fff;border-radius:34px;overflow:hidden;box-shadow:0 40px 100px rgba(15,36,64,.30);border:1px solid rgba(15,36,64,.08)}
+.web .bar{height:86px;display:flex;align-items:center;gap:14px;padding:0 28px;background:#F1F4F9;border-bottom:1px solid #DCE4EF}
+.web .bar i{width:18px;height:18px;border-radius:50%;background:#D5DCE6;display:inline-block}
+.web .url{flex:1;margin-left:10px;height:52px;border-radius:999px;background:#fff;border:1px solid #DCE4EF;display:flex;align-items:center;gap:12px;padding:0 24px;font:500 28px Poppins;color:#33465F;white-space:nowrap;overflow:hidden}
+.web .url b{color:#1F9D55;font-size:24px}
+.web .vp{height:1060px;overflow:hidden;position:relative;background:#fff}
+.web .pg{position:absolute;left:0;top:0;width:940px}
+.web .pg img{width:940px;display:block}
+.web .hl{position:absolute;left:14px;right:14px;background:rgba(255,214,10,.42);mix-blend-mode:multiply;border-radius:10px;transform-origin:0 50%}
+.web .ring{position:absolute;left:8px;right:8px;border:7px solid #FFC400;border-radius:16px;box-shadow:0 0 0 5px rgba(255,196,0,.35),0 0 30px rgba(255,196,0,.55)}
+.cap.low{top:1440px}
+
+/* layered render: 'back' pass = graphics BEHIND the presenter, 'front' pass = graphics in front (tools/shorts.py composites them) */
+body[data-layer="back"] .front, body[data-layer="front"] .back{display:none!important}
+body[data-alpha] #bg, body[data-alpha] #pwrap, body[data-alpha] #grain{display:none!important}
+body[data-alpha] #stage{background:transparent!important}
+/* presenter zones: A = above the head (text and numbers behind the person), B = lower third (cards in front); the face stays clear */
+.cap.ptop{top:230px}
+.cap.plow{top:1500px}
+[data-presenter="1"] .hero{top:170px}
+[data-presenter="1"] .hero .e{font-size:270px}
+[data-presenter="1"] .bignum{top:190px}
+[data-presenter="1"] .bignum .num{font-size:260px}
+[data-presenter="1"] .bignum .unit{font-size:52px}
+[data-presenter="1"] .bignum .badges-row{position:absolute;left:28px;top:600px;flex-direction:column;align-items:flex-start;gap:14px;margin:0;justify-content:flex-start}
+[data-presenter="1"] .badges{top:150px}
+[data-presenter="1"] .badge{width:230px;height:230px;border-width:8px}
+[data-presenter="1"] .badge .v{font-size:88px}
+[data-presenter="1"] .stat{top:1160px}
+[data-presenter="1"] .stat .box{padding:36px 40px}
+[data-presenter="1"] .stat .v{font-size:150px}
+[data-presenter="1"] .web{top:1120px}
+[data-presenter="1"] .web .vp{height:650px}
+[data-presenter="1"] .list{top:1100px;transform:scale(.8);transform-origin:50% 0}
+[data-presenter="1"] .compare{top:1200px;transform:scale(.72);transform-origin:50% 0}
+[data-presenter="1"] .pills{top:1260px}
+[data-presenter="1"] .dds{top:1080px;transform:scale(.78);transform-origin:50% 0}
+[data-presenter="1"] .chart{top:1040px;transform:scale(.6);transform-origin:50% 0}
+[data-presenter="1"] .doc{top:1100px;transform:scale(.55);transform-origin:50% 0}
+[data-presenter="1"] .cta{top:1180px;transform:scale(.7);transform-origin:50% 0}
+
+/* presenter "anchor" move: the person shrinks to the bottom corner (cut out), graphics get the space above, behind them */
+[data-presenter="1"] .anchor.web{top:150px}
+[data-presenter="1"] .anchor.web .vp{height:760px}
+[data-presenter="1"] .anchor.list{top:200px;transform:scale(.95)}
+[data-presenter="1"] .anchor.stat{top:260px}
+[data-presenter="1"] .anchor.compare{top:240px;transform:scale(.9)}
+[data-presenter="1"] .anchor.dds{top:170px;transform:scale(.92)}
+[data-presenter="1"] .anchor.chart{top:130px;transform:scale(.72)}
+[data-presenter="1"] .anchor.pills{top:380px}
+[data-presenter="1"] .anchor.cta{top:260px;transform:scale(.85)}
+[data-presenter="1"] .anchor.hero{top:240px}
+[data-presenter="1"] .anchor.bignum{top:240px}
+[data-presenter="1"] .anchor.badges{top:300px}
+/* backdrop: an image or video behind everything (replaces the blank gradient; next to a presenter it replaces the room) */
+#bds{position:absolute;inset:0;overflow:hidden}
+.bd-item{position:absolute;inset:0;overflow:hidden}
+.bd-item img,.bd-item video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%}
+.bd-item .bd-dim{position:absolute;inset:0}
+[data-presenter="1"] #bds{display:none}
+body[data-alpha] #bds{display:block!important}
+body[data-layer="back"] #bds, body[data-layer="front"] #bds{display:none!important}
+body[data-layer="bd"] #vis, body[data-layer="bd"] #caps, body[data-layer="bd"] #brand{display:none!important}
+[data-bd="1"]{ --capink:#FFFFFF; --capshadow:0 4px 24px rgba(0,0,0,.55),0 2px 6px rgba(0,0,0,.6); }
+[data-bd="1"] .bignum .num{color:#fff;text-shadow:var(--capshadow)}
+[data-bd="1"] #brand{color:#fff;text-shadow:var(--capshadow)}
+
+#controls{display:flex;gap:10px;align-items:center;color:#ddd;font:14px system-ui;width:min(430px,92vw)}
+#controls button{background:#333;color:#fff;border:0;border-radius:8px;padding:8px 14px;cursor:pointer}
+#controls input{flex:1}
+</style>
+</head>
+<body>
+<div id="viewport">
+  <div id="stage">
+    <div id="bg"><div class="blob" id="b1"></div><div class="blob" id="b2"></div></div>
+    <div id="pwrap"><video id="pvideo" muted playsinline preload="auto"></video><div id="pshade"></div></div>
+    <div id="bds"></div>
+    <div id="grain"></div>
+    <div class="layer" id="vis"></div>
+    <div class="layer" id="caps"></div>
+    <div id="brand" class="front"></div>
+  </div>
+</div>
+<div id="controls"><button id="play">Play</button><input id="scrub" type="range" min="0" max="1000" value="0"><span id="time">0.0s</span></div>
+<audio id="voice" preload="auto"></audio>
+
+<script>window.SEGMENTS = window.SEGMENTS || []; window.AUDIO_DURATION = window.AUDIO_DURATION || 0;</script>
+<script src="segments.js" onerror="0"></script>
+<script src="script.js"></script>
+<script>
+const S = window.SCRIPT, SEG = window.SEGMENTS;
+const stage = document.getElementById('stage'), vis = document.getElementById('vis'), caps = document.getElementById('caps');
+stage.dataset.look = S.look || 'warm';
+const Q = new URLSearchParams(location.search);
+if (Q.get('alpha')) document.body.dataset.alpha = '1';   // transparent layer render (see tools/shorts.py)
+if (S.presenter) { stage.dataset.presenter = '1'; document.getElementById('pvideo').src = S.presenter; }
+const brandEl = document.getElementById('brand');
+if (S.logo) brandEl.innerHTML = `<img src="${S.logo}">`; else brandEl.textContent = S.brand || '';
+if (S.audio) document.getElementById('voice').src = S.audio;
+
+const h = (html) => { const d = document.createElement('div'); d.innerHTML = html.trim(); return d.firstChild; };
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// ---- timing: scene.t (seconds) or scene.seg (index or [from,to]) into SEGMENTS ----
+function startOf(sc){ if (sc.t != null) return sc.t; const i = Array.isArray(sc.seg) ? sc.seg[0] : sc.seg; return SEG[i] ? SEG[i][0] : 0; }
+function endOf(sc){ if (sc.end != null) return sc.end; if (sc.seg == null) return null; const j = Array.isArray(sc.seg) ? sc.seg[1] : sc.seg; return SEG[j] ? SEG[j][1] : null; }
+const DUR = window.DUR = S.duration || window.AUDIO_DURATION || Math.max(...S.scenes.map(sc => (endOf(sc) ?? startOf(sc) + 3))) + 0.6;
+
+// ---- builders: each returns {el, inn(tl,t), out(tl,t)} ----
+const B = {
+  cap(sc){
+    const words = esc(sc.key).split(' ').map(w => `<span class="w">${w}</span>`).join(' ');
+    const el = h(`<div class="cap ${sc.pos||''}">${sc.lead?`<div class="lead">${esc(sc.lead)}</div>`:''}<div class="key ${sc.hl?'hl':''}">${words}</div></div>`);
+    return { el, inn(tl,t){
+      tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      if (sc.lead) tl.fromTo(el.querySelector('.lead'),{y:30,autoAlpha:0},{y:0,autoAlpha:1,duration:.35,ease:'power2.out'},t);
+      if (sc.hl) tl.fromTo(el.querySelector('.key'),{scale:.6,autoAlpha:0},{scale:1,autoAlpha:1,duration:.4,ease:'back.out(2)'},t+.12);
+      else tl.fromTo(el.querySelectorAll('.w'),{y:60,autoAlpha:0,scale:.9},{y:0,autoAlpha:1,scale:1,duration:.32,stagger:.07,ease:'back.out(1.8)'},t+.1);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,y:-20,duration:.2},t-.2); } };
+  },
+  title(sc){ return B.cap({...sc, pos: sc.pos || 'mid'}); },
+  bignum(sc){
+    const num = String(sc.value), n = parseFloat(num.replace(/,/g,'')), isNum = !isNaN(n) && /^[\d.,]+$/.test(num);
+    const el = h(`<div class="abs bignum">${sc.kicker?`<div class="kicker">${esc(sc.kicker)}</div>`:''}<div class="num">${esc(num)}</div>${sc.unit?`<div class="unit">${esc(sc.unit)}</div>`:''}${sc.badges?`<div class="badges-row">${sc.badges.map(b=>`<span class="chip"><span class="dot"></span>${esc(b)}</span>`).join('')}</div>`:''}</div>`);
+    if (num.length > 4) el.querySelector('.num').style.fontSize = Math.min(340, 960 / (num.length * .62)) + 'px';  // long values fit the width
+    return { el, inn(tl,t){
+      tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelector('.num'),{scale:.4,autoAlpha:0},{scale:1,autoAlpha:1,duration:.55,ease:'back.out(1.7)'},t);
+      if (isNum){ const o={v:0}, dec=(num.split('.')[1]||'').length, node=el.querySelector('.num');
+        tl.to(o,{v:n,duration:.9,ease:'power2.out',onUpdate(){ node.textContent = o.v.toLocaleString('en-US',{minimumFractionDigits:dec,maximumFractionDigits:dec}); }},t); }
+      tl.fromTo(el.querySelectorAll('.unit,.kicker'),{y:24,autoAlpha:0},{y:0,autoAlpha:1,duration:.35,stagger:.1},t+.25);
+      tl.fromTo(el.querySelectorAll('.chip'),{y:30,autoAlpha:0,scale:.8},{y:0,autoAlpha:1,scale:1,duration:.35,stagger:.15,ease:'back.out(2)'},t+.6);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,scale:.92,duration:.25},t-.25); } };
+  },
+  stat(sc){
+    const el = h(`<div class="abs stat"><div class="box"><div class="v">${esc(sc.value)}</div><div class="l">${esc(sc.label)}</div></div></div>`);
+    return { el, inn(tl,t){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelector('.box'),{y:120,scale:.85,autoAlpha:0},{y:0,scale:1,autoAlpha:1,duration:.5,ease:'back.out(1.6)'},t);
+      tl.fromTo(el.querySelector('.l'),{autoAlpha:0},{autoAlpha:1,duration:.3},t+.3);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,y:-40,duration:.25},t-.25); } };
+  },
+  compare(sc){
+    const el = h(`<div class="abs compare">${sc.items.map(i=>`<div class="ccard">${i.icon?`<div class="ico">${i.icon}</div>`:''}<div class="n">${esc(i.name)}</div><div class="val">${esc(i.value)}</div>${i.sub?`<div class="sub">${esc(i.sub)}</div>`:''}</div>`).join('')}</div>`);
+    return { el, inn(tl,t){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelectorAll('.ccard'),{y:140,autoAlpha:0,rotation:i=>i%2?6:-6},{y:0,autoAlpha:1,rotation:0,duration:.55,stagger:.25,ease:'back.out(1.5)'},t);
+      tl.fromTo(el.querySelectorAll('.val'),{scale:0},{scale:1,duration:.35,stagger:.25,ease:'back.out(2.5)'},t+.45);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,duration:.25},t-.25); } };
+  },
+  pills(sc){
+    const el = h(`<div class="abs pills"><div class="title">${esc(sc.title)}</div><div class="row">${sc.items.map(i=>`<span class="pill"><span class="x ${sc.ok?'ok':''}">${sc.ok?'✓':'✕'}</span>${esc(i)}</span>`).join('')}</div></div>`);
+    return { el, card:true, inn(tl,t){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelector('.title'),{scale:.5,autoAlpha:0},{scale:1,autoAlpha:1,duration:.4,ease:'back.out(2)'},t+.1);
+      tl.fromTo(el.querySelectorAll('.pill'),{y:40,autoAlpha:0},{y:0,autoAlpha:1,duration:.35,stagger:.3,ease:'back.out(1.8)'},t+.45);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,duration:.25},t-.25); } };
+  },
+  chart(sc){
+    // items: [{ name, value, label?, hl? }]; bars scale to the largest value; hl bar is the accent colour
+    const max = Math.max(...sc.items.map(i => i.value));
+    const el = h(`<div class="abs chart">${sc.title?`<div class="title">${esc(sc.title)}</div>`:''}<div class="bars">${sc.items.map(i=>`<div class="col"><div class="val">${esc(i.label ?? i.value)}</div><div class="bar" style="height:${Math.round(i.value/max*560)}px;background:${i.hl?'var(--accent)':'var(--dark)'};opacity:${sc.items.some(x=>x.hl)&&!i.hl?.4:1}"></div></div>`).join('')}</div><div class="names">${sc.items.map(i=>`<div>${esc(i.name)}</div>`).join('')}</div>${sc.note?`<div class="note">${esc(sc.note)}</div>`:''}</div>`);
+    return { el, inn(tl,t){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelectorAll('.title'),{y:30,autoAlpha:0},{y:0,autoAlpha:1,duration:.35},t);
+      tl.fromTo(el.querySelectorAll('.bar'),{scaleY:0},{scaleY:1,duration:.7,stagger:.2,ease:'power3.out'},t+.3);
+      tl.fromTo(el.querySelectorAll('.val'),{autoAlpha:0,y:20},{autoAlpha:1,y:0,duration:.3,stagger:.2},t+.7);
+      tl.fromTo(el.querySelectorAll('.names div,.note'),{autoAlpha:0},{autoAlpha:1,duration:.3,stagger:.1},t+.4);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,duration:.25},t-.25); } };
+  },
+  dosdonts(sc){
+    // dos / donts: short phrases (3-4 each reads best)
+    const col = (cls, ic, label, items) => `<div class="dd ${cls}"><div class="hd"><span class="ic">${ic}</span>${label}</div>${items.map(x=>`<div class="it">${esc(x)}</div>`).join('')}</div>`;
+    const el = h(`<div class="abs dds">${sc.title?`<div class="title">${esc(sc.title)}</div>`:''}<div class="cols">${col('do','✓','DO',sc.dos||[])}${col('dont','✕','DON’T',sc.donts||[])}</div></div>`);
+    return { el, inn(tl,t){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelectorAll('.title'),{y:30,autoAlpha:0},{y:0,autoAlpha:1,duration:.35},t);
+      tl.fromTo(el.querySelectorAll('.dd'),{y:120,autoAlpha:0},{y:0,autoAlpha:1,duration:.5,stagger:.25,ease:'back.out(1.6)'},t+.1);
+      el.querySelectorAll('.dd').forEach((colEl, c) => colEl.querySelectorAll('.it').forEach((it, i) =>   // DO, DON'T, DO, DON'T ...
+        tl.fromTo(it,{x:-40,autoAlpha:0},{x:0,autoAlpha:1,duration:.35},t+.6+(i*2+c)*(sc.gap ?? .45))));
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,duration:.25},t-.25); } };
+  },
+  stamp(sc){
+    // text: 'REFUSED' | 'GRANTED'; good:true = green; sub: line under the stamp
+    const el = h(`<div class="abs stamp ${sc.good ? 'good' : ''}"><div class="flash"></div><div class="s">${esc(sc.text)}</div>${sc.sub ? `<div class="sub">${esc(sc.sub)}</div>` : ''}</div>`);
+    return { el, inn(tl,t){ const s = el.querySelector('.s');
+      tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(s,{scale:2.8,autoAlpha:0,rotation:-24},{scale:1,autoAlpha:1,rotation:-8,duration:.26,ease:'power4.in'},t);
+      tl.fromTo(el,{x:-18,y:10},{x:0,y:0,duration:.5,ease:'elastic.out(1.3,.25)'},t+.26);       // impact shake
+      tl.fromTo(el.querySelector('.flash'),{opacity:.9},{opacity:0,duration:.35},t+.26);
+      tl.fromTo(el.querySelectorAll('.sub'),{y:30,autoAlpha:0},{y:0,autoAlpha:1,duration:.4},t+.55);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,scale:.92,duration:.25},t-.25); } };
+  },
+  quote(sc){
+    // source: who/when; text: the sentence (keep it short); mark: phrase to highlight; url: where it is published
+    const body = esc(sc.text).replace(esc(sc.mark || '\u0000'), m => `<span class="hl">${m}</span>`);
+    const el = h(`<div class="abs quote"><div class="card"><div class="src">${esc(sc.source)}</div><div class="qt">${body}</div>${sc.by ? `<div class="by">${esc(sc.by)}</div>` : ''}${sc.url ? `<div class="url">${esc(sc.url)}</div>` : ''}</div></div>`);
+    return { el, inn(tl,t){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelector('.card'),{y:160,autoAlpha:0,scale:.94},{y:0,autoAlpha:1,scale:1,duration:.6,ease:'power3.out'},t);
+      tl.fromTo(el.querySelectorAll('.hl'),{backgroundSize:'0% 100%'},{backgroundSize:'100% 100%',duration:.7,ease:'power2.inOut'},t+(sc.at ?? 1.0));
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,y:-40,duration:.25},t-.25); } };
+  },
+  photo(sc){
+    // src (or items:[{src, caption, tilt, x, y}] for a collage), style:'polaroid'|'card', caption (polaroid), tilt in degrees
+    const items = sc.items || [{src: sc.src, caption: sc.caption, tilt: sc.tilt}];
+    const multi = items.length > 1, style = sc.style || 'polaroid';
+    const layout = [[-170, 0, -5], [170, 330, 4], [-110, 680, -3]];
+    const mk = (it, i) => {
+      const media = /\.(mp4|webm|mov|m4v)$/i.test(it.src) ? `<video src="${esc(it.src)}" muted playsinline preload="auto" loop></video>` : `<img src="${esc(it.src)}">`;
+      const L = layout[i] || [0, 0, 0];
+      const pos = multi ? ` style="left:calc(50% + ${it.x ?? L[0]}px - 280px);top:${it.y ?? L[1]}px"` : '';
+      return `<div class="pf ${style}" data-tilt="${it.tilt ?? (multi ? L[2] : -4)}"${pos}>${media}${style === 'polaroid' && it.caption ? `<div class="cp">${esc(it.caption)}</div>` : ''}</div>`;
+    };
+    const el = h(`<div class="abs photo ${multi ? 'multi' : ''}">${items.map(mk).join('')}</div>`);
+    return { el, inn(tl,t,end){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      window.MEDIA_EXTRA = window.MEDIA_EXTRA || [];
+      el.querySelectorAll('video').forEach(v => window.MEDIA_EXTRA.push({v, t0: t, t1: end}));
+      el.querySelectorAll('.pf').forEach((f, i) => { const tilt = parseFloat(f.dataset.tilt);
+        tl.fromTo(f,{y:700,rotation:tilt+14,scale:.8,autoAlpha:0},{y:0,rotation:tilt,scale:1,autoAlpha:1,duration:.65,ease:'back.out(1.5)'},t+i*.35);
+        tl.to(f,{rotation:tilt+1.2,y:-12,duration:Math.max(.5,end-t-1.2),ease:'sine.inOut'},t+.9+i*.35);   // gentle float
+      });
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,y:-60,duration:.3},t-.3); } };
+  },
+  badges(sc){
+    const el = h(`<div class="abs badges">${sc.items.map(i=>`<div class="badge"><div class="v">${esc(i.value)}</div><div class="l">${esc(i.label)}</div></div>`).join('')}</div>`);
+    return { el, inn(tl,t){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelectorAll('.badge'),{scale:0,rotation:-90},{scale:1,rotation:0,duration:.55,stagger:.35,ease:'back.out(1.6)'},t);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,scale:.9,duration:.25},t-.25); } };
+  },
+  list(sc){
+    const el = h(`<div class="abs list">${sc.title?`<div class="title">${esc(sc.title)}</div>`:''}${sc.items.map((i,k)=>`<div class="li"><div class="i">${sc.icons?sc.icons[k]:k+1}</div><div class="t">${esc(i)}</div></div>`).join('')}</div>`);
+    return { el, inn(tl,t){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelectorAll('.title'),{y:30,autoAlpha:0},{y:0,autoAlpha:1,duration:.35},t);
+      const gap = sc.gap ?? .8; tl.fromTo(el.querySelectorAll('.li'),{x:-120,autoAlpha:0},{x:0,autoAlpha:1,duration:.45,stagger:gap,ease:'power3.out'},t+.3);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,duration:.25},t-.25); } };
+  },
+  doc(sc){
+    const inner = sc.img ? `<img src="${esc(sc.img)}">` : `<div class="ph"><div class="seal"></div><div class="ln h"></div>${'<div class="ln"></div>'.repeat(5)}<div class="ln s"></div>${'<div class="ln"></div>'.repeat(6)}<div class="ln s"></div></div>`;
+    const el = h(`<div class="abs doc"><div class="paper">${inner}${(sc.marks||[]).map(y=>`<div class="mark" style="top:${y}px"></div>`).join('')}</div></div>`);
+    return { el, inn(tl,t,end){ const p = el.querySelector('.paper');
+      tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(p,{y:900,rotation:-8},{y:0,rotation:-2,duration:.7,ease:'power3.out'},t);
+      tl.to(p,{scale:1.08,rotation:0,duration:Math.max(.5,end-t-.9),ease:'none'},t+.7);
+      tl.fromTo(el.querySelectorAll('.mark'),{scaleX:0},{scaleX:1,duration:.5,stagger:.6,ease:'power2.inOut'},t+1.0);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,y:-60,duration:.3},t-.3); } };
+  },
+  web(sc){
+    // sc.img: full-page screenshot (any width, scaled to 940); sc.from/sc.to: source-pixel y to scroll between;
+    // sc.marks: [{y, h, at}] source-pixel boxes to highlight, `at` seconds after the scene starts
+    const k = 940 / (sc.srcWidth || 1290);
+    const el = h(`<div class="abs web"><div class="win"><div class="bar"><i></i><i></i><i></i><div class="url"><b>🔒</b>${esc(sc.url)}</div></div><div class="vp"><div class="pg"><img src="${esc(sc.img)}">${(sc.marks||[]).map(m=>`<div class="${m.ring?'ring':'hl'}" style="top:${m.y*k-8}px;height:${m.h*k+16}px"></div>`).join('')}</div></div></div></div>`);
+    return { el, inn(tl,t,end){ const pg = el.querySelector('.pg'), win = el.querySelector('.win');
+      tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(win,{y:700,scale:.9,rotation:-3},{y:0,scale:1,rotation:0,duration:.65,ease:'power3.out'},t);
+      // centre the first highlight in the visible window (the window is shorter next to a presenter); `from`/`to` only set the drift
+      const vh = (S.presenter ? (sc.anchor ? 760 : 650) : 1060) / k, mk = (sc.marks||[])[0];
+      const s0 = mk ? Math.max(0, mk.y + mk.h/2 - vh*.4) : (sc.from||0), s1 = mk ? s0 + ((sc.to ?? sc.from ?? 0) - (sc.from||0)) : (sc.to ?? sc.from ?? 0);
+      const a = -s0*k, b = -s1*k;
+      tl.fromTo(pg,{y:a},{y:b,duration:Math.max(.5,(sc.scrollFor ?? (end-t-1.2))),ease:'power2.inOut'},t+.7);
+      (sc.marks||[]).forEach((m,i)=>{ const node = el.querySelectorAll('.hl,.ring')[i];
+        tl.fromTo(node, m.ring?{autoAlpha:0,scale:1.08}:{scaleX:0}, m.ring?{autoAlpha:1,scale:1,duration:.35}:{scaleX:1,duration:.55,ease:'power2.inOut'}, t+(m.at ?? 1.6)); });
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,y:-60,duration:.3},t-.3); } };
+  },
+  broll(sc){
+    const media = /\.(mp4|webm|mov)$/i.test(sc.src) ? `<video src="${esc(sc.src)}" muted playsinline></video>` : `<img src="${esc(sc.src)}">`;
+    const el = h(`<div class="abs broll">${media}</div>`);
+    return { el, inn(tl,t,end){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.3},t);
+      tl.fromTo(el.firstChild,{scale:1.15},{scale:1,duration:Math.max(.5,end-t),ease:'none'},t);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,duration:.3},t-.3); } };
+  },
+  hero(sc){
+    const el = h(`<div class="abs hero"><div class="e">${sc.icon}</div></div>`);
+    return { el, inn(tl,t,end){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelector('.e'),{scale:0,rotation:-20},{scale:1,rotation:0,duration:.55,ease:'back.out(2)'},t);
+      const bob = Math.floor((end - t - .8) / .8); if (bob > 0) tl.to(el.querySelector('.e'),{y:-20,duration:.8,yoyo:true,repeat:bob - 1,ease:'sine.inOut'},t+.55);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,scale:.8,duration:.25},t-.25); } };
+  },
+  cta(sc){
+    const el = h(`<div class="abs cta">${sc.icon?`<div class="e">${sc.icon}</div>`:''}<div class="t">${esc(sc.text)}</div>${sc.sub?`<div class="s">${esc(sc.sub)}</div>`:''}</div>`);
+    return { el, card:true, inn(tl,t){ tl.fromTo(el,{autoAlpha:0},{autoAlpha:1,duration:.01},t);
+      tl.fromTo(el.querySelectorAll('.e'),{scale:0},{scale:1,duration:.5,ease:'back.out(2.2)'},t);
+      tl.fromTo(el.querySelector('.t'),{y:60,autoAlpha:0},{y:0,autoAlpha:1,duration:.45,ease:'back.out(1.6)'},t+.2);
+      tl.fromTo(el.querySelectorAll('.s'),{scale:.6,autoAlpha:0},{scale:1,autoAlpha:1,duration:.4,ease:'back.out(2)'},t+.6);
+    }, out(tl,t){ tl.to(el,{autoAlpha:0,duration:.25},t-.25); } };
+  },
+};
+
+// ---- timeline ----
+const TL = gsap.timeline({paused:true});
+TL.set({}, {}, DUR);   // fixes the length
+TL.fromTo('#b1',{x:0,y:0},{x:260,y:420,duration:DUR,ease:'sine.inOut'},0);
+TL.fromTo('#b2',{x:0,y:0},{x:-240,y:-380,duration:DUR,ease:'sine.inOut'},0);
+
+const lanes = {cap:[], vis:[]};
+S.scenes.forEach(sc => {
+  (sc.type === 'cap' || sc.type === 'title' ? lanes.cap : lanes.vis).push(sc);
+  if (sc.cap) lanes.cap.push({pos: sc.type === 'web' && !S.presenter ? 'low' : '', ...sc.cap, type:'cap', t:sc.t, seg:sc.seg, end:sc.cap.end ?? sc.end});
+});
+const pw = document.getElementById('pwrap');
+// a caption ends when the next scene of either lane starts; a visual ends when the next visual starts
+const allStarts = S.scenes.map(startOf).sort((a,b) => a-b);
+// presenter mode: captions go above the head (behind the person), unless a number/emoji/badge scene already uses that space
+const BACK_TYPES = ['cap','title','bignum','hero','badges'];
+// S.moves: [{ t, end, mode:'anchor', scale:.6, side:'right'|'left'|'center' }, { t, mode:'punch', amount:.12 }]  (tools/shorts.py applies them to the footage)
+const MOVES = S.moves || [];
+const inAnchor = tt => MOVES.some(m => m.mode === 'anchor' && tt >= m.t && tt < m.end);
+const visSorted = [...lanes.vis].sort((a,b) => startOf(a) - startOf(b));
+if (S.presenter) lanes.cap.forEach(sc => {
+  if (sc.pos && !['mid','low'].includes(sc.pos)) return;   // old 'low'/'mid' positions are for the no-presenter layout
+  const t0 = startOf(sc);
+  const v = visSorted.find((x, i) => startOf(x) <= t0 + .01 && t0 < (endOf(x) ?? (visSorted[i+1] ? startOf(visSorted[i+1]) : DUR)));  // the visual on screen right now
+  sc.pos = (v && ['bignum','hero','badges'].includes(v.type)) || inAnchor(t0) ? 'plow' : 'ptop';
+});
+for (const [lane, list] of Object.entries(lanes)) {
+  list.sort((a,b) => startOf(a) - startOf(b));
+  list.forEach((sc, i) => {
+    const t = startOf(sc);
+    sc.anchor = !!(S.presenter && inAnchor(t));
+    const b = B[sc.type](sc);
+    b.el.classList.add(sc.depth || ((sc.type === 'cap' || sc.type === 'title') ? (sc.pos === 'plow' ? 'front' : 'back') : (BACK_TYPES.includes(sc.type) ? 'back' : 'front')));
+    const next = lane === 'cap' ? (allStarts.find(s => s > t + .01) ?? DUR) : (list[i+1] ? startOf(list[i+1]) : DUR);
+    const end = Math.min(endOf(sc) ?? next, next, DUR);
+    (lane === 'cap' ? caps : vis).appendChild(b.el);
+    gsap.set(b.el, {autoAlpha:0});
+    const kk = (sc.type === 'cap' || sc.type === 'title') && b.el.querySelector('.key');   // long key words shrink so they stay on one line
+    if (kk) { const n = (sc.key || '').length; kk.style.fontSize = (n <= 9 ? 112 : n <= 12 ? 96 : n <= 15 ? 80 : 66) + 'px'; }
+    if (sc.anchor) { b.el.classList.add('anchor'); if (sc.type !== 'cap' && sc.type !== 'title') { b.el.classList.remove('front'); b.el.classList.add('back'); } }   // graphics go behind the shrunken person
+    b.inn(TL, t, end);
+    if (end < DUR - .05 || lane === 'cap') b.out(TL, Math.max(t + .5, end));
+    // with a presenter, list/CTA scenes shrink the footage into a rounded card (like the reference)
+    if (b.card && S.presenter && sc.shrink === true) {
+      TL.to(pw,{scale:.56,y:-330,borderRadius:60,duration:.55,ease:'power3.inOut'},t);
+      TL.to(pw,{scale:1,y:0,borderRadius:0,duration:.5,ease:'power3.inOut'},Math.max(t+.6,end-.3));
+    }
+  });
+}
+
+// ---- backdrops: S.backdrops = [{ src, t, end, zoom:[1,1.14], pan:'left'|'right'|'up'|'down', dim:.38, blur:0, fadeIn:.45, fadeOut:.45 }] ----
+const bdsEl = document.getElementById('bds'), BDV = [];
+(S.backdrops || []).forEach(bd => {
+  const t0 = bd.t ?? 0, t1 = bd.end ?? DUR, isVid = /\.(mp4|webm|mov|m4v)$/i.test(bd.src);
+  const item = h(`<div class="bd-item">${isVid ? `<video src="${esc(bd.src)}" muted playsinline preload="auto" loop></video>` : `<img src="${esc(bd.src)}">`}<div class="bd-dim"></div></div>`);
+  bdsEl.appendChild(item);
+  const m = item.querySelector('img,video'), z = bd.zoom || [1, 1.14], pan = bd.pan || 'none';
+  item.querySelector('.bd-dim').style.background = `rgba(6,16,36,${bd.dim ?? 0.38})`;
+  if (bd.blur) m.style.filter = `blur(${bd.blur}px)`;
+  gsap.set(item, {autoAlpha: 0});
+  const fi = bd.fadeIn ?? 0.45, fo = bd.fadeOut ?? 0.45;
+  TL.fromTo(item, {autoAlpha: 0}, {autoAlpha: 1, duration: fi}, t0);
+  TL.to(item, {autoAlpha: 0, duration: fo}, Math.max(t0 + fi, t1 - fo));
+  const dx = pan === 'left' ? [3, -3] : pan === 'right' ? [-3, 3] : [0, 0], dy = pan === 'up' ? [3, -3] : pan === 'down' ? [-3, 3] : [0, 0];
+  TL.fromTo(m, {scale: z[0], xPercent: dx[0], yPercent: dy[0]}, {scale: z[1], xPercent: dx[1], yPercent: dy[1], duration: Math.max(0.5, t1 - t0), ease: 'none'}, t0);
+  // focus: [from, to] in % = slow sideways drift across a wide (landscape) image so it fills the tall frame
+  if (bd.focus) TL.fromTo(m, {objectPosition: bd.focus[0] + '% 50%'}, {objectPosition: bd.focus[1] + '% 50%', duration: Math.max(0.5, t1 - t0), ease: 'none'}, t0);
+  // light-on-dark text while any backdrop is on screen
+  TL.set(stage, {attr: {'data-bd': '1'}}, t0);
+  const covered = tt => (S.backdrops || []).some(o => o !== bd && (o.t ?? 0) <= tt && (o.end ?? DUR) > tt);
+  if (!covered(t1)) TL.set(stage, {attr: {'data-bd': '0'}}, t1);
+  if (isVid) BDV.push({v: m, t0, t1});
+});
+
+// ---- presenter + audio sync for preview; the renderer seeks the video itself ----
+const pv = document.getElementById('pvideo'), voice = document.getElementById('voice');
+window.seekMedia = (t) => {
+  const seekV = (v, target) => new Promise(res => {
+    if (Math.abs(v.currentTime - target) < 0.001) return res();
+    const done = () => { v.removeEventListener('seeked', done); res(); };
+    v.addEventListener('seeked', done); v.pause(); v.currentTime = target; setTimeout(done, 3000);
+  });
+  const jobs = [];
+  if (S.presenter && !document.body.dataset.alpha) jobs.push(seekV(pv, Math.max(0, t + (S.presenterOffset || 0))));
+  [...BDV, ...(window.MEDIA_EXTRA || [])].forEach(b => { if (t >= b.t0 - 0.05 && t <= b.t1 + 0.05 && b.v.duration) jobs.push(seekV(b.v, ((t - b.t0) % b.v.duration + b.v.duration) % b.v.duration)); });
+  return Promise.all(jobs);
+};
+
+function fit(){ const vp = document.getElementById('viewport'); stage.style.transform = `scale(${vp.offsetWidth/1080})`; }
+window.addEventListener('resize', fit); fit();
+
+const scrub = document.getElementById('scrub'), tm = document.getElementById('time'), playBtn = document.getElementById('play');
+let playing = false, raf;
+function tick(){ const t = voice.src && !voice.paused ? voice.currentTime : TL.time();
+  TL.seek(t); scrub.value = t/DUR*1000; tm.textContent = t.toFixed(1)+'s';
+  if (S.presenter && Math.abs(pv.currentTime - t) > .25) pv.currentTime = t;
+  if (t >= DUR) stop(); else raf = requestAnimationFrame(tick); }
+function stop(){ playing=false; playBtn.textContent='Play'; voice.pause(); pv.pause(); TL.pause(); cancelAnimationFrame(raf); }
+playBtn.onclick = () => { if (playing) return stop(); playing = true; playBtn.textContent='Pause';
+  if (TL.time() >= DUR - .05) TL.seek(0);
+  if (S.audio){ voice.currentTime = TL.time(); voice.play(); } else TL.play();
+  if (S.presenter) pv.play(); tick(); };
+scrub.oninput = () => { const t = scrub.value/1000*DUR; TL.seek(t); voice.currentTime = t; if (S.presenter) pv.currentTime = t; tm.textContent=t.toFixed(1)+'s'; };
+TL.seek(0);
+</script>
+</body>
+</html>

@@ -1,2 +1,7 @@
 playwright>=1.45
 Pillow>=10.0
+
+# presenter cut-out and shorts tooling (optional)
+numpy>=1.26
+opencv-python>=4.9
+onnxruntime>=1.18

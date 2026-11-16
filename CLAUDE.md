@@ -9,3 +9,4 @@ HTML + GSAP animations rendered to MP4. Explainer videos of app pages are built 
 - API keys (ElevenLabs) live only in the person's environment (`ELEVENLABS_API_KEY`). Never put a key in a command, a file or a commit; if one is pasted in chat, ask the person to regenerate it.
 - `_archive/` holds third-party reference videos: do not use them in outputs or share them.
 - Captions are the voiceover script: English unless the person asks otherwise, real numbers only, exact UI labels.
+- Portrait shorts (TikTok/Reels, with or without a presenter, image/video backdrops, setup questions first): `templates/shorts/` + `tools/shorts.py` (config / new / segments / capture / sheet / render) and `tools/matte.py` (presenter cut-out). See `templates/shorts/README.md`; agent brief in `.claude/agents/shorts-director.md`.

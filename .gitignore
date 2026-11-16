@@ -15,3 +15,6 @@ __pycache__/
 *.pyc
 .DS_Store
 Thumbs.db
+
+# model weights for tools/matte.py (download separately, see templates/shorts/README.md)
+tools/models/
